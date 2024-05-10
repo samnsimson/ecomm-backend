@@ -2,61 +2,48 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Profile {
-  id: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  firstName: String!
-  lastName: String
-  addressOne: String!
-  addressTwo: String
-  city: String!
-  state: String!
-  country: String!
-  zipcode: String!
+type User {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type User {
-  id: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  username: String!
-  email: String!
-  phone: String!
-  profile: Profile
+type Profile {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 type Query {
-  listUsers: [User!]!
-  getUserById(id: String!): User
-  getProfileById(id: String!): Profile!
+  user(id: Int!): User!
+  profile(id: Int!): Profile!
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): User!
-  createProfile(input: CreateProfileInput!): Profile!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(id: Int!): User!
+  createProfile(createProfileInput: CreateProfileInput!): Profile!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  removeProfile(id: Int!): Profile!
 }
 
 input CreateUserInput {
-  username: String!
-  email: String!
-  phone: String!
-  password: String!
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input CreateProfileInput {
-  userId: String!
-  firstName: String!
-  lastName: String
-  addressOne: String!
-  addressTwo: String
-  city: String!
-  state: String!
-  country: String!
-  zipcode: String!
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProfileInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

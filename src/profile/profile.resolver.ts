@@ -1,20 +1,35 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Profile } from './profile.model';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateProfileInput } from 'src/utils/libs/entities/profile.entity';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { ProfileService } from './profile.service';
+import { Profile } from './entities/profile.entity';
+import { CreateProfileInput } from './dto/create-profile.input';
+import { UpdateProfileInput } from './dto/update-profile.input';
 
-@Resolver()
+@Resolver(() => Profile)
 export class ProfileResolver {
-	constructor(@InjectRepository(Profile) private profileRepository: Repository<Profile>) {}
+  constructor(private readonly profileService: ProfileService) {}
 
-	@Query(() => Profile)
-	getProfileById(@Args('id') id: string): Promise<Profile> {
-		return this.profileRepository.findOneBy({ id });
-	}
+  @Mutation(() => Profile)
+  createProfile(@Args('createProfileInput') createProfileInput: CreateProfileInput) {
+    return this.profileService.create(createProfileInput);
+  }
 
-	@Mutation(() => Profile)
-	createProfile(@Args('input') input: CreateProfileInput): Promise<Profile> {
-		return this.profileRepository.save({ ...input });
-	}
+  @Query(() => [Profile], { name: 'profile' })
+  findAll() {
+    return this.profileService.findAll();
+  }
+
+  @Query(() => Profile, { name: 'profile' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.profileService.findOne(id);
+  }
+
+  @Mutation(() => Profile)
+  updateProfile(@Args('updateProfileInput') updateProfileInput: UpdateProfileInput) {
+    return this.profileService.update(updateProfileInput.id, updateProfileInput);
+  }
+
+  @Mutation(() => Profile)
+  removeProfile(@Args('id', { type: () => Int }) id: number) {
+    return this.profileService.remove(id);
+  }
 }
