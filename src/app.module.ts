@@ -7,6 +7,11 @@ import { User } from './user/user.model';
 import { UserModule } from './user/user.module';
 import { ProfileModule } from './profile/profile.module';
 import { Profile } from './profile/profile.model';
+import { ProductModule } from './product/product.module';
+import { CategoryModule } from './category/category.module';
+import { ImageModule } from './image/image.module';
+import { OrderModule } from './order/order.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
 	imports: [
@@ -27,6 +32,11 @@ import { Profile } from './profile/profile.model';
 		}),
 		UserModule,
 		ProfileModule,
+		ProductModule,
+		CategoryModule,
+		ImageModule,
+		OrderModule,
+		ReviewModule,
 	],
 	controllers: [],
 	providers: [],
