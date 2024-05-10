@@ -9,17 +9,17 @@ export class ProfileResolver {
 	constructor(private readonly profileService: ProfileService) {}
 
 	@Mutation(() => Profile)
-	createProfile(@Args('createProfileInput') createProfileInput: CreateProfileInput) {
-		return this.profileService.create(createProfileInput);
+	createProfile(@Args('userId') userId: string, @Args('createProfileInput') createProfileInput: CreateProfileInput) {
+		return this.profileService.create(userId, createProfileInput);
 	}
 
-	@Query(() => [Profile], { name: 'profile' })
-	findAll() {
-		return this.profileService.findAll();
+	@Query(() => [Profile], { name: 'listProfiles' })
+	findAll(@Args('take', { type: () => Int, nullable: true }) take: number, @Args('skip', { type: () => Int, nullable: true }) skip: number) {
+		return this.profileService.findAll(take, skip);
 	}
 
 	@Query(() => Profile, { name: 'profile' })
-	findOne(@Args('id', { type: () => Int }) id: number) {
+	findOne(@Args('id') id: string) {
 		return this.profileService.findOne(id);
 	}
 
@@ -29,7 +29,7 @@ export class ProfileResolver {
 	}
 
 	@Mutation(() => Profile)
-	removeProfile(@Args('id', { type: () => Int }) id: number) {
+	removeProfile(@Args('id') id: string) {
 		return this.profileService.remove(id);
 	}
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,7 +14,7 @@ export class UserService {
 	}
 
 	findAll() {
-		return this.user.find({ take: 10, skip: 0 });
+		return this.user.find({ take: 10, skip: 0, relations: { profile: true } });
 	}
 
 	findOne(id: string) {
@@ -25,7 +25,9 @@ export class UserService {
 		return this.user.update(id, updateUserInput);
 	}
 
-	remove(id: number) {
-		return this.user.delete(id);
+	async remove(id: string) {
+		const result = await this.user.delete(id);
+		if (result.affected === 0) throw new HttpException(`id ${id} not found!`, HttpStatus.NOT_FOUND);
+		return { id };
 	}
 }
