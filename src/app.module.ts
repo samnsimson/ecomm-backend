@@ -5,6 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { ProfileModule } from './profile/profile.module';
+import { User } from './user/entities/user.entity';
 
 @Module({
 	imports: [
@@ -20,7 +21,7 @@ import { ProfileModule } from './profile/profile.module';
 			username: 'root',
 			password: 'root',
 			database: 'ecommerce-project',
-			entities: [],
+			entities: [User],
 			synchronize: true,
 		}),
 		UserModule,
