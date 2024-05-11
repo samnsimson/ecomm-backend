@@ -13,7 +13,7 @@ export class ProfileResolver {
 		return this.profileService.create(userId, createProfileInput);
 	}
 
-	@Query(() => [Profile], { name: 'listProfiles' })
+	@Query(() => [Profile], { name: 'profiles' })
 	findAll(@Args('take', { type: () => Int, nullable: true }) take: number, @Args('skip', { type: () => Int, nullable: true }) skip: number) {
 		return this.profileService.findAll(take, skip);
 	}

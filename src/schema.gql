@@ -29,11 +29,29 @@ type DeltedUser {
   id: ID!
 }
 
+type Review {
+  id: ID!
+}
+
+type Product {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
-  listUsers: [User!]!
+  users(options: FindManyUserOptions!): [User!]!
   user(id: String!): User!
-  listProfiles(take: Int, skip: Int): [Profile!]!
+  profiles(take: Int, skip: Int): [Profile!]!
   profile(id: String!): Profile!
+  products: [Product!]!
+  product(id: Int!): Product!
+  reviews: [Review!]!
+  review(id: Int!): Review!
+}
+
+input FindManyUserOptions {
+  take: Float!
+  skip: Float!
 }
 
 type Mutation {
@@ -43,6 +61,12 @@ type Mutation {
   createProfile(userId: String!, createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   removeProfile(id: String!): Profile!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  updateReview(updateReviewInput: UpdateReviewInput!): Review!
+  removeReview(id: Int!): Review!
 }
 
 input CreateUserInput {
@@ -82,5 +106,24 @@ input UpdateProfileInput {
   country: String
   zipcode: String
   profileImage: String
+  id: String!
+}
+
+input CreateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateProductInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateReviewInput {
+  id: String!
+}
+
+input UpdateReviewInput {
   id: String!
 }

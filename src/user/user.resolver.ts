@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { DeltedUser, User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { FindManyUserOptions } from './dto/user-options.input';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -13,9 +14,9 @@ export class UserResolver {
 		return this.userService.create(createUserInput);
 	}
 
-	@Query(() => [User], { name: 'listUsers' })
-	findAll() {
-		return this.userService.findAll();
+	@Query(() => [User], { name: 'users' })
+	findAll(@Args('options', { type: () => FindManyUserOptions }) options: FindManyUserOptions) {
+		return this.userService.findAll(options);
 	}
 
 	@Query(() => User, { name: 'user' })

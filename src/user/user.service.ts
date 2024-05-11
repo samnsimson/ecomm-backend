@@ -3,7 +3,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -13,8 +13,9 @@ export class UserService {
 		return this.user.save(createUserInput);
 	}
 
-	findAll() {
-		return this.user.find({ take: 10, skip: 0, relations: { profile: true } });
+	findAll(options: FindManyOptions<User> = {}) {
+		const { take = 10, skip = 0, ...rest } = options;
+		return this.user.find({ take, skip, ...rest });
 	}
 
 	findOne(id: string) {
