@@ -39,7 +39,7 @@ type Product {
 }
 
 type Query {
-  users(options: FindManyUserOptions!): [User!]!
+  users(take: Int = 10, skip: Int = 0): [User!]!
   user(id: String!): User!
   profiles(take: Int, skip: Int): [Profile!]!
   profile(id: String!): Profile!
@@ -47,11 +47,6 @@ type Query {
   product(id: Int!): Product!
   reviews: [Review!]!
   review(id: Int!): Review!
-}
-
-input FindManyUserOptions {
-  take: Float!
-  skip: Float!
 }
 
 type Mutation {
