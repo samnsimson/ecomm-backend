@@ -1,8 +1,7 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { FindManyOptions } from 'typeorm';
 
 @ArgsType()
-export class FindManyArgs<T> implements FindManyOptions<T> {
+export class FindManyArgs {
 	@Field(() => Int, { nullable: true, defaultValue: 10 })
 	take?: number;
 

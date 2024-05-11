@@ -1,12 +1,20 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { ProfileService } from './profile.service';
 import { Profile } from './entities/profile.entity';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
+import { User } from 'src/user/entities/user.entity';
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { Repository } from 'typeorm';
+import { UserService } from 'src/user/user.service';
 
 @Resolver(() => Profile)
 export class ProfileResolver {
-	constructor(private readonly profileService: ProfileService) {}
+	constructor(
+		// @InjectRepository(User) private readonly user: Repository<User>,
+		private readonly profileService: ProfileService,
+		private readonly userService: UserService,
+	) {}
 
 	@Mutation(() => Profile)
 	createProfile(@Args('userId') userId: string, @Args('createProfileInput') createProfileInput: CreateProfileInput) {
@@ -31,5 +39,10 @@ export class ProfileResolver {
 	@Mutation(() => Profile)
 	removeProfile(@Args('id') id: string) {
 		return this.profileService.remove(id);
+	}
+
+	@ResolveField('createdBy', () => User, { nullable: true })
+	createdBy(@Parent() profile: Profile) {
+		return this.userService.findOneBy({ profile: { id: profile.id } });
 	}
 }

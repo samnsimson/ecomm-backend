@@ -32,8 +32,8 @@ export class User {
 	@Column({ default: false, nullable: true })
 	phoneVerified?: boolean;
 
-	@OneToOne(() => Profile)
 	@Field(() => Profile, { nullable: true })
+	@OneToOne(() => Profile, (profile) => profile.user)
 	@JoinColumn()
 	profile: Profile;
 }

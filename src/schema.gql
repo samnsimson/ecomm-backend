@@ -13,6 +13,8 @@ type Profile {
   country: String!
   zipcode: String!
   profileImage: String
+  user: User!
+  createdBy: User
 }
 
 type User {

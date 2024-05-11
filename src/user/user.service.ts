@@ -4,6 +4,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { FindManyOptions, Repository } from 'typeorm';
+import { FindByArgs } from 'src/libs/types';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,10 @@ export class UserService {
 
 	findOne(id: string) {
 		return this.user.findOneBy({ id });
+	}
+
+	findOneBy(args: FindByArgs<User>) {
+		return this.user.findOneBy(args);
 	}
 
 	update(id: string, updateUserInput: UpdateUserInput) {
