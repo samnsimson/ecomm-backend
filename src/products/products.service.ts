@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from './entities/product.entity';
+import { FindManyOptions, Repository } from 'typeorm';
+import { FindByArgs } from 'src/libs/types';
 
 @Injectable()
 export class ProductsService {
+	constructor(@InjectRepository(Product) private readonly product: Repository<Product>) {}
+
 	create(createProductInput: CreateProductInput) {
-		return 'This action adds a new product';
+		const product = this.product.create(createProductInput);
+		return this.product.save(product);
 	}
 
-	findAll() {
-		return `This action returns all products`;
+	async findAll(args: FindManyOptions<Product>) {
+		return await this.product.find(args);
 	}
 
-	findOne(id: number) {
+	findOne(id: string) {
 		return `This action returns a #${id} product`;
 	}
 
-	update(id: number, updateProductInput: UpdateProductInput) {
+	update(id: string, updateProductInput: UpdateProductInput) {
 		return `This action updates a #${id} product`;
 	}
 
-	remove(id: number) {
+	remove(id: string) {
 		return `This action removes a #${id} product`;
 	}
 }

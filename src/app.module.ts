@@ -10,6 +10,9 @@ import { Profile } from './profile/entities/profile.entity';
 import { ProductsModule } from './products/products.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { Review } from './reviews/entities/review.entity';
+import { Product } from './products/entities/product.entity';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
 
 @Module({
 	imports: [
@@ -25,13 +28,14 @@ import { Review } from './reviews/entities/review.entity';
 			username: 'root',
 			password: 'root',
 			database: 'ecommerce-project',
-			entities: [User, Profile, Review],
+			entities: [User, Profile, Review, Product, Category],
 			synchronize: true,
 		}),
 		UserModule,
 		ProfileModule,
 		ProductsModule,
 		ReviewsModule,
+		CategoriesModule,
 	],
 	controllers: [],
 	providers: [],

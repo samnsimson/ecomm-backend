@@ -16,7 +16,7 @@ export class UserResolver {
 
 	@Query(() => [User], { name: 'users' })
 	findAll(@Args() options: FindManyArgs) {
-		return this.userService.findAll(options);
+		return this.userService.findAll({ ...options, relations: { profile: true } });
 	}
 
 	@Query(() => User, { name: 'user' })

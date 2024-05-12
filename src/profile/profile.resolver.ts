@@ -41,7 +41,7 @@ export class ProfileResolver {
 		return this.profileService.remove(id);
 	}
 
-	@ResolveField('createdBy', () => User, { nullable: true })
+	@ResolveField('user', () => User, { nullable: true })
 	createdBy(@Parent() profile: Profile) {
 		return this.userService.findOneBy({ profile: { id: profile.id } });
 	}
