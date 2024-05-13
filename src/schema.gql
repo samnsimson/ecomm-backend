@@ -2,8 +2,65 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Category {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String
+  products(take: Int = 10, skip: Int = 0): [Product!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Review {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  review: String!
+  rating: Float!
+  user: User!
+  product: Product!
+}
+
+type Order {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  products: [Product!]!
+}
+
+type Product {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String
+  slug: String
+  retailPrice: Float!
+  salePrice: Float!
+  categories: [Category!]
+  reviews(take: Int = 10, skip: Int = 0): [Review!]
+  carts: [Cart!]
+  orders: [Order!]
+}
+
+type Cart {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [Product!]!
+  user: User!
+}
+
 type Profile {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   firstName: String!
   lastName: String
   addressOne: String!
@@ -18,37 +75,26 @@ type Profile {
 
 type User {
   id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   username: String!
   email: String!
   phone: String!
   emailVerified: Boolean
   phoneVerified: Boolean
   profile: Profile
+  reviews: [Review!]!
+  cart: Cart
+  orders: [Order!]
 }
 
 type DeltedUser {
   id: ID!
 }
 
-type Review {
-  id: ID!
-}
-
-type Category {
-  id: ID!
-  title: String!
-  description: String
-  products(take: Int = 10, skip: Int = 0): [Product!]
-}
-
-type Product {
-  id: ID!
-  title: String!
-  description: String
-  slug: String
-  retailPrice: Float!
-  salePrice: Float!
-  categories: [Category!]
+type Payment {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
 type Query {
@@ -58,10 +104,16 @@ type Query {
   profile(id: String!): Profile!
   products(take: Int = 10, skip: Int = 0): [Product!]!
   product(id: String!): Product!
-  reviews: [Review!]!
+  reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
   categories(take: Int = 10, skip: Int = 0): [Category!]!
   category(id: Int!): Category!
+  orders: [Order!]!
+  order(id: Int!): Order!
+  payments: [Payment!]!
+  payment(id: Int!): Payment!
+  carts: [Cart!]!
+  cart(id: Int!): Cart!
 }
 
 type Mutation {
@@ -80,6 +132,15 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   removeCategory(id: Int!): Category!
+  createOrder(createOrderInput: CreateOrderInput!): Order!
+  updateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  removeOrder(id: Int!): Order!
+  createPayment(createPaymentInput: CreatePaymentInput!): Payment!
+  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
+  removePayment(id: Int!): Payment!
+  createCart(createCartInput: CreateCartInput!): Cart!
+  updateCart(updateCartInput: UpdateCartInput!): Cart!
+  removeCart(id: Int!): Cart!
 }
 
 input CreateUserInput {
@@ -156,4 +217,37 @@ input UpdateCategoryInput {
   description: String
   products: [ProductIds!]
   id: ID!
+}
+
+input CreateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateOrderInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreatePaymentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdatePaymentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCartInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCartInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

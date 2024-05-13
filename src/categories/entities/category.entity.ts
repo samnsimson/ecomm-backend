@@ -1,15 +1,11 @@
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { CoreEntity } from 'src/libs/entity/core.entity';
 import { Product } from 'src/products/entities/product.entity';
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'category' })
 export class Category extends CoreEntity {
-	@Field(() => ID)
-	@PrimaryGeneratedColumn('uuid')
-	id: number;
-
 	@Field()
 	@Column()
 	title: string;

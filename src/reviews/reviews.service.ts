@@ -3,7 +3,7 @@ import { CreateReviewInput } from './dto/create-review.input';
 import { UpdateReviewInput } from './dto/update-review.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ReviewsService {
@@ -13,8 +13,8 @@ export class ReviewsService {
 		return this.review.save(createReviewInput);
 	}
 
-	findAll(where: Record<string, any> = {}) {
-		return this.review.find({ where });
+	findAll(args: FindManyOptions<Review>) {
+		return this.review.find(args);
 	}
 
 	findOne(id: number) {

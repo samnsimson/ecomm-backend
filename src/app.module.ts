@@ -13,6 +13,11 @@ import { Review } from './reviews/entities/review.entity';
 import { Product } from './products/entities/product.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/entities/category.entity';
+import { OrdersModule } from './orders/orders.module';
+import { PaymentsModule } from './payments/payments.module';
+import { CartsModule } from './carts/carts.module';
+import { Cart } from './carts/entities/cart.entity';
+import { Order } from './orders/entities/order.entity';
 
 @Module({
 	imports: [
@@ -28,7 +33,7 @@ import { Category } from './categories/entities/category.entity';
 			username: 'root',
 			password: 'root',
 			database: 'ecommerce-project',
-			entities: [User, Profile, Review, Product, Category],
+			entities: [User, Profile, Review, Product, Category, Cart, Order],
 			synchronize: true,
 		}),
 		UserModule,
@@ -36,6 +41,9 @@ import { Category } from './categories/entities/category.entity';
 		ProductsModule,
 		ReviewsModule,
 		CategoriesModule,
+		OrdersModule,
+		PaymentsModule,
+		CartsModule,
 	],
 	controllers: [],
 	providers: [],

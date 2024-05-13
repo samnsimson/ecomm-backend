@@ -1,15 +1,14 @@
-import { ObjectType, Field, ID, PickType } from '@nestjs/graphql';
+import { ObjectType, Field, PickType } from '@nestjs/graphql';
+import { Cart } from 'src/carts/entities/cart.entity';
 import { CoreEntity } from 'src/libs/entity/core.entity';
+import { Order } from 'src/orders/entities/order.entity';
 import { Profile } from 'src/profile/entities/profile.entity';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Review } from 'src/reviews/entities/review.entity';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'user' })
 export class User extends CoreEntity {
-	@Field(() => ID)
-	@PrimaryGeneratedColumn('uuid')
-	id: string;
-
 	@Field()
 	@Column()
 	username: string;
@@ -37,6 +36,19 @@ export class User extends CoreEntity {
 	@OneToOne(() => Profile, (profile) => profile.user)
 	@JoinColumn()
 	profile: Profile;
+
+	@Field(() => [Review])
+	@OneToMany(() => Review, (review) => review.user)
+	reviews: Review[];
+
+	@Field(() => Cart, { nullable: true })
+	@OneToOne(() => Cart, (cart) => cart.user)
+	@JoinColumn()
+	cart: Cart;
+
+	@Field(() => [Order], { nullable: true })
+	@OneToMany(() => Order, (order) => order.user)
+	orders: Order[];
 }
 
 @ObjectType()
