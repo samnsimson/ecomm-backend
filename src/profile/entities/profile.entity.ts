@@ -1,10 +1,11 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { CoreEntity } from 'src/libs/entity/core.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'profile' })
-export class Profile {
+export class Profile extends CoreEntity {
 	@Field(() => ID)
 	@PrimaryGeneratedColumn('uuid')
 	id: string;

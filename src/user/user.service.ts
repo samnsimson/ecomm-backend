@@ -3,8 +3,7 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { FindManyOptions, Repository } from 'typeorm';
-import { FindByArgs } from 'src/libs/types';
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -23,7 +22,7 @@ export class UserService {
 		return this.user.findOneBy({ id });
 	}
 
-	findOneBy(args: FindByArgs<User>) {
+	findOneBy(args: FindOptionsWhere<User>) {
 		return this.user.findOneBy(args);
 	}
 

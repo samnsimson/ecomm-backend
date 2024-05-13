@@ -3,10 +3,11 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, PrimaryGenerate
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
 import { Category } from 'src/categories/entities/category.entity';
+import { CoreEntity } from 'src/libs/entity/core.entity';
 
 @ObjectType()
 @Entity({ name: 'product' })
-export class Product {
+export class Product extends CoreEntity {
 	@Field(() => ID)
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
