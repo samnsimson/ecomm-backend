@@ -26,12 +26,51 @@ type Review {
   product: Product!
 }
 
+type Payment {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  amount: Int!
+  type: PaymentType!
+  provider: PaymentProvider!
+  status: PaymentStatus!
+  order: Order!
+}
+
+enum PaymentType {
+  CARD
+  CASH
+}
+
+enum PaymentProvider {
+  STRIPE
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  PROCESSING
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
 type Order {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
   user: User!
   products: [Product!]!
+  total: Float!
+  quantity: Int!
+  status: OrderStatus!
+  payment: Payment!
+}
+
+enum OrderStatus {
+  PLACED
+  DELIVERED
+  CALCELLED
 }
 
 type Product {
@@ -90,11 +129,6 @@ type User {
 
 type DeltedUser {
   id: ID!
-}
-
-type Payment {
-  """Example field (placeholder)"""
-  exampleField: Int!
 }
 
 type Query {

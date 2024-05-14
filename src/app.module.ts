@@ -18,6 +18,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { CartsModule } from './carts/carts.module';
 import { Cart } from './carts/entities/cart.entity';
 import { Order } from './orders/entities/order.entity';
+import { Payment } from './payments/entities/payment.entity';
 
 @Module({
 	imports: [
@@ -33,7 +34,7 @@ import { Order } from './orders/entities/order.entity';
 			username: 'root',
 			password: 'root',
 			database: 'ecommerce-project',
-			entities: [User, Profile, Review, Product, Category, Cart, Order],
+			entities: [User, Profile, Review, Product, Category, Cart, Order, Payment],
 			synchronize: true,
 		}),
 		UserModule,
