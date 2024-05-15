@@ -21,7 +21,7 @@ export class OrdersService {
 
 	async create({ total, userId, productIds, quantity }: CreateOrderInput) {
 		return await this.entityManager.transaction(async (entityManager) => {
-			const user = await this.userService.findOne(userId);
+			const user = await this.userService.findOne(userId, { relations: { profile: true } });
 			const products = await this.productService.findAll({ where: { id: In(productIds) } });
 			const { id } = await this.paymentService.create({ amount: total });
 			const order = this.order.create({ total, quantity, status: OrderStatus.PLACED, user, products, payment: { id } });
@@ -30,7 +30,7 @@ export class OrdersService {
 	}
 
 	async findAll(args: FindManyOptions<Order>) {
-		return await this.order.find({ ...args, relations: { payment: true } });
+		return await this.order.find({ ...args });
 	}
 
 	async findOne(id: string, options?: FindOneOptions<Order>) {
