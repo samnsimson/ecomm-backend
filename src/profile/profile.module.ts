@@ -9,5 +9,6 @@ import { UserService } from 'src/user/user.service';
 @Module({
 	imports: [TypeOrmModule.forFeature([Profile, User])],
 	providers: [ProfileResolver, ProfileService, UserService],
+	exports: [ProfileService],
 })
 export class ProfileModule {}
