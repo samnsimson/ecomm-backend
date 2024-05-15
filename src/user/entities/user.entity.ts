@@ -1,10 +1,11 @@
 import { ObjectType, Field, PickType } from '@nestjs/graphql';
+import { genSaltSync, hashSync } from 'bcrypt';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { CoreEntity } from 'src/libs/entity/core.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Profile } from 'src/profile/entities/profile.entity';
 import { Review } from 'src/reviews/entities/review.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -49,6 +50,11 @@ export class User extends CoreEntity {
 	@Field(() => [Order], { nullable: true })
 	@OneToMany(() => Order, (order) => order.user)
 	orders: Order[];
+
+	@BeforeInsert()
+	hashPassword() {
+		this.password = hashSync(this.password, genSaltSync(10));
+	}
 }
 
 @ObjectType()
