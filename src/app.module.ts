@@ -31,6 +31,7 @@ import { PassportModule } from '@nestjs/passport';
 			driver: ApolloDriver,
 			playground: true,
 			autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+			context: (ctx) => ctx,
 		}),
 		TypeOrmModule.forRoot({
 			type: 'postgres',
