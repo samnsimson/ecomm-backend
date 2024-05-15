@@ -21,7 +21,7 @@ export class ProductsResolver {
 
 	@Query(() => [Product], { name: 'products' })
 	findAll(@Args() args: FindManyArgs) {
-		return this.productsService.findAll(args);
+		return this.productsService.findAll({ ...args });
 	}
 
 	@Query(() => Product, { name: 'product' })

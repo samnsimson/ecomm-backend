@@ -3,8 +3,7 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { FindManyOptions, Repository } from 'typeorm';
-import { FindByArgs } from 'src/libs/types';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductsService {
@@ -19,15 +18,15 @@ export class ProductsService {
 		return await this.product.find(args);
 	}
 
-	findOne(id: string) {
-		return `This action returns a #${id} product`;
+	findOne(id: string, options?: FindOneOptions<Product>) {
+		return this.product.findOne({ where: { id }, ...options });
 	}
 
 	update(id: string, updateProductInput: UpdateProductInput) {
-		return `This action updates a #${id} product`;
+		return this.product.update(id, updateProductInput);
 	}
 
 	remove(id: string) {
-		return `This action removes a #${id} product`;
+		return this.product.delete(id);
 	}
 }
