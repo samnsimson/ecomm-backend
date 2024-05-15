@@ -20,12 +20,13 @@ import { Cart } from './carts/entities/cart.entity';
 import { Order } from './orders/entities/order.entity';
 import { Payment } from './payments/entities/payment.entity';
 import { ConfigModule } from '@nestjs/config';
-
-console.log(process.env.NODE_ENV);
+import { AuthModule } from './auth/auth.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}` }),
+		PassportModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			playground: true,
@@ -39,7 +40,7 @@ console.log(process.env.NODE_ENV);
 			password: process.env.DB_PASSWORD,
 			database: process.env.DB_NAME,
 			entities: [User, Profile, Review, Product, Category, Cart, Order, Payment],
-			synchronize: true,
+			synchronize: process.env.NODE_ENV === 'dev',
 		}),
 		UserModule,
 		ProfileModule,
@@ -49,6 +50,7 @@ console.log(process.env.NODE_ENV);
 		OrdersModule,
 		PaymentsModule,
 		CartsModule,
+		AuthModule,
 	],
 	controllers: [],
 	providers: [],

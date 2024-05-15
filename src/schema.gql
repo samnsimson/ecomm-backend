@@ -132,6 +132,13 @@ type DeltedUser {
   id: ID!
 }
 
+type LoginResponse {
+  username: String!
+  email: String!
+  authenticated: Boolean!
+  jwt: String!
+}
+
 type Query {
   users(take: Int = 10, skip: Int = 0): [User!]!
   user(id: String!): User!
@@ -176,6 +183,7 @@ type Mutation {
   createCart(createCartInput: CreateCartInput!): Cart!
   updateCart(updateCartInput: UpdateCartInput!): Cart!
   removeCart(id: Int!): Cart!
+  login(credentials: LoginInput!): LoginResponse!
 }
 
 input CreateUserInput {
@@ -293,4 +301,9 @@ input UpdateCartInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }

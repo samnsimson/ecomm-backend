@@ -43,6 +43,6 @@ export class ProfileResolver {
 
 	@ResolveField('user', () => User, { nullable: true })
 	createdBy(@Parent() profile: Profile) {
-		return this.userService.findOneBy({ profile: { id: profile.id } });
+		return this.userService.findOneBy({ where: { profile: { id: profile.id } } });
 	}
 }
