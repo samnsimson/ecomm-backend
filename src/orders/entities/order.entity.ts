@@ -33,7 +33,7 @@ export class Order extends CoreEntity {
 	status: OrderStatus;
 
 	@Field(() => Payment)
-	@OneToOne(() => Payment, (payment) => payment.order)
+	@OneToOne(() => Payment, (payment) => payment.order, { eager: true })
 	@JoinColumn()
 	payment: Payment;
 }

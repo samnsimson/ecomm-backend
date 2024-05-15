@@ -34,7 +34,7 @@ export class User extends CoreEntity {
 	phoneVerified?: boolean;
 
 	@Field(() => Profile, { nullable: true })
-	@OneToOne(() => Profile, (profile) => profile.user)
+	@OneToOne(() => Profile, (profile) => profile.user, { eager: true })
 	@JoinColumn()
 	profile: Profile;
 
