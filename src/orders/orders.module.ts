@@ -1,18 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { OrdersResolver } from './orders.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { Order } from './entities/order.entity';
-import { UserService } from 'src/user/user.service';
 import { Payment } from 'src/payments/entities/payment.entity';
-import { PaymentsService } from 'src/payments/payments.service';
 import { Product } from 'src/products/entities/product.entity';
-import { ProductsService } from 'src/products/products.service';
+import { UserModule } from 'src/user/user.module';
+import { PaymentsModule } from 'src/payments/payments.module';
+import { ProductsModule } from 'src/products/products.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([User, Order, Payment, Product])],
-	providers: [OrdersResolver, OrdersService, UserService, PaymentsService, ProductsService],
+	imports: [TypeOrmModule.forFeature([User, Order, Payment, Product]), forwardRef(() => UserModule), forwardRef(() => PaymentsModule), forwardRef(() => ProductsModule)],
+	providers: [OrdersResolver, OrdersService],
 	exports: [OrdersService],
 })
 export class OrdersModule {}

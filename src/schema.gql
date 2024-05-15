@@ -142,47 +142,47 @@ type LoginResponse {
 type Query {
   users(take: Int = 10, skip: Int = 0): [User!]!
   user(id: String!): User!
-  profiles(take: Int, skip: Int): [Profile!]!
-  profile(id: String!): Profile!
-  products(take: Int = 10, skip: Int = 0): [Product!]!
-  product(id: String!): Product!
   reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
-  categories(take: Int = 10, skip: Int = 0): [Category!]!
-  category(id: Int!): Category!
+  carts: [Cart!]!
+  cart(id: Int!): Cart!
   orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: Int!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
   payment(id: Int!): Payment!
-  carts: [Cart!]!
-  cart(id: Int!): Cart!
+  products(take: Int = 10, skip: Int = 0): [Product!]!
+  product(id: String!): Product!
+  categories(take: Int = 10, skip: Int = 0): [Category!]!
+  category(id: Int!): Category!
+  profiles(take: Int, skip: Int): [Profile!]!
+  profile(id: String!): Profile!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): DeltedUser!
-  createProfile(userId: String!, createProfileInput: CreateProfileInput!): Profile!
-  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
-  removeProfile(id: String!): Profile!
-  createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(updateProductInput: UpdateProductInput!): Product!
-  removeProduct(id: String!): Product!
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
   removeReview(id: Int!): Review!
-  createCategory(createCategoryInput: CreateCategoryInput!): Category!
-  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
-  removeCategory(id: Int!): Category!
+  createCart(createCartInput: CreateCartInput!): Cart!
+  updateCart(updateCartInput: UpdateCartInput!): Cart!
+  removeCart(id: Int!): Cart!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: Int!): Order!
   createPayment(createPaymentInput: CreatePaymentInput!): Payment!
   updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
   removePayment(id: Int!): Payment!
-  createCart(createCartInput: CreateCartInput!): Cart!
-  updateCart(updateCartInput: UpdateCartInput!): Cart!
-  removeCart(id: Int!): Cart!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: String!): Product!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
+  removeCategory(id: Int!): Category!
+  createProfile(userId: String!, createProfileInput: CreateProfileInput!): Profile!
+  updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
+  removeProfile(id: String!): Profile!
   login(credentials: LoginInput!): LoginResponse!
 }
 
@@ -201,42 +201,6 @@ input UpdateUserInput {
   id: String!
 }
 
-input CreateProfileInput {
-  firstName: String!
-  lastName: String
-  addressOne: String!
-  addressTwo: String
-  city: String!
-  state: String!
-  country: String!
-  zipcode: String!
-  profileImage: String
-}
-
-input UpdateProfileInput {
-  firstName: String
-  lastName: String
-  addressOne: String
-  addressTwo: String
-  city: String
-  state: String
-  country: String
-  zipcode: String
-  profileImage: String
-  id: String!
-}
-
-input CreateProductInput {
-  title: String!
-  description: String!
-}
-
-input UpdateProductInput {
-  title: String
-  description: String
-  id: ID!
-}
-
 input CreateReviewInput {
   id: String!
 }
@@ -245,21 +209,15 @@ input UpdateReviewInput {
   id: String!
 }
 
-input CreateCategoryInput {
-  title: String!
-  description: String
-  products: [ProductIds!]
+input CreateCartInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
 }
 
-input ProductIds {
-  id: String!
-}
-
-input UpdateCategoryInput {
-  title: String
-  description: String
-  products: [ProductIds!]
-  id: ID!
+input UpdateCartInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input CreateOrderInput {
@@ -292,15 +250,57 @@ input UpdatePaymentInput {
   id: String!
 }
 
-input CreateCartInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+input CreateProductInput {
+  title: String!
+  description: String!
 }
 
-input UpdateCartInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input UpdateProductInput {
+  title: String
+  description: String
+  id: ID!
+}
+
+input CreateCategoryInput {
+  title: String!
+  description: String
+  products: [ProductIds!]
+}
+
+input ProductIds {
+  id: String!
+}
+
+input UpdateCategoryInput {
+  title: String
+  description: String
+  products: [ProductIds!]
+  id: ID!
+}
+
+input CreateProfileInput {
+  firstName: String!
+  lastName: String
+  addressOne: String!
+  addressTwo: String
+  city: String!
+  state: String!
+  country: String!
+  zipcode: String!
+  profileImage: String
+}
+
+input UpdateProfileInput {
+  firstName: String
+  lastName: String
+  addressOne: String
+  addressTwo: String
+  city: String
+  state: String
+  country: String
+  zipcode: String
+  profileImage: String
+  id: String!
 }
 
 input LoginInput {
