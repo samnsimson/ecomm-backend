@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveProperty, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { CategoriesService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { CreateCategoryInput } from './dto/create-category.input';
@@ -39,7 +39,7 @@ export class CategoriesResolver {
 		return this.categoriesService.remove(id);
 	}
 
-	@ResolveProperty(() => Product, { name: 'products' })
+	@ResolveField(() => Product, { name: 'products' })
 	async products(@Parent() category: Category, @Args() args: FindManyArgs) {
 		return await this.productService.findAll({ ...args, where: { categories: { id: category.id } } });
 	}

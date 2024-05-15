@@ -19,9 +19,13 @@ import { CartsModule } from './carts/carts.module';
 import { Cart } from './carts/entities/cart.entity';
 import { Order } from './orders/entities/order.entity';
 import { Payment } from './payments/entities/payment.entity';
+import { ConfigModule } from '@nestjs/config';
+
+console.log(process.env.NODE_ENV);
 
 @Module({
 	imports: [
+		ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}` }),
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			playground: true,
@@ -29,11 +33,11 @@ import { Payment } from './payments/entities/payment.entity';
 		}),
 		TypeOrmModule.forRoot({
 			type: 'postgres',
-			host: 'localhost',
-			port: 5432,
-			username: 'root',
-			password: 'root',
-			database: 'ecommerce-project',
+			host: process.env.DB_HOST,
+			port: parseInt(process.env.DB_PORT),
+			username: process.env.DB_USERNAME,
+			password: process.env.DB_PASSWORD,
+			database: process.env.DB_NAME,
 			entities: [User, Profile, Review, Product, Category, Cart, Order, Payment],
 			synchronize: true,
 		}),

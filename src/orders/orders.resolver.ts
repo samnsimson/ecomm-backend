@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveProperty, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 import { OrdersService } from './orders.service';
 import { Order } from './entities/order.entity';
 import { CreateOrderInput } from './dto/create-order.input';
@@ -39,7 +39,7 @@ export class OrdersResolver {
 		return this.ordersService.remove(id);
 	}
 
-	@ResolveProperty(() => Payment, { name: 'payment' })
+	@ResolveField(() => Payment, { name: 'payment' })
 	async payment(@Parent() order: Order) {
 		return await this.paymentService.findOne(order.payment.id);
 	}

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ResolveProperty, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
@@ -39,7 +39,7 @@ export class ProductsResolver {
 		return this.productsService.remove(id);
 	}
 
-	@ResolveProperty(() => Review, { name: 'reviews' })
+	@ResolveField(() => Review, { name: 'reviews' })
 	async reviews(@Parent() product: Product, @Args() args: FindManyArgs) {
 		return await this.reviewService.findAll({ ...args, where: { product: { id: product.id } } });
 	}
