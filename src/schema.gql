@@ -35,6 +35,7 @@ type Payment {
   provider: PaymentProvider!
   status: PaymentStatus!
   order: Order!
+  failedReason: String
 }
 
 enum PaymentType {
@@ -142,9 +143,9 @@ type Query {
   review(id: Int!): Review!
   categories(take: Int = 10, skip: Int = 0): [Category!]!
   category(id: Int!): Category!
-  orders: [Order!]!
+  orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: Int!): Order!
-  payments: [Payment!]!
+  payments(take: Int = 10, skip: Int = 0): [Payment!]!
   payment(id: Int!): Payment!
   carts: [Cart!]!
   cart(id: Int!): Cart!
@@ -254,25 +255,33 @@ input UpdateCategoryInput {
 }
 
 input CreateOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  userId: String!
+  productIds: [String!]!
+  total: Float!
+  quantity: Int!
 }
 
 input UpdateOrderInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  userId: String
+  productIds: [String!]
+  total: Float
+  quantity: Int
+  id: String!
 }
 
 input CreatePaymentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  amount: Float!
+  type: String
+  provider: String
+  status: String
 }
 
 input UpdatePaymentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  amount: Float
+  type: String
+  provider: String
+  status: String
+  id: String!
 }
 
 input CreateCartInput {

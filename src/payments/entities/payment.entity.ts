@@ -1,25 +1,8 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/libs/entity/core.entity';
+import { PaymentProvider, PaymentStatus, PaymentType } from 'src/libs/types';
 import { Order } from 'src/orders/entities/order.entity';
 import { Column, Entity, OneToOne } from 'typeorm';
-
-enum PaymentType {
-	CARD = 'card',
-	CASH = 'cash',
-}
-
-enum PaymentProvider {
-	STRIPE = 'stripe',
-}
-
-enum PaymentStatus {
-	PAID = 'paid',
-	PENDING = 'pending',
-	PROCESSING = 'processing',
-	FAILED = 'failed',
-	CANCELLED = 'cancelled',
-	REFUNDED = 'refunded',
-}
 
 registerEnumType(PaymentType, { name: 'PaymentType' });
 registerEnumType(PaymentProvider, { name: 'PaymentProvider' });
@@ -47,4 +30,8 @@ export class Payment extends CoreEntity {
 	@Field(() => Order)
 	@OneToOne(() => Order, (order) => order.payment)
 	order: Order;
+
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { default: null })
+	failedReason?: string;
 }
