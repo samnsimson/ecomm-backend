@@ -134,9 +134,9 @@ type DeltedUser {
 
 type LoginResponse {
   username: String!
-  email: String!
+  id: String!
   authenticated: Boolean!
-  jwt: String!
+  token: String!
 }
 
 type Query {
@@ -304,6 +304,6 @@ input UpdateProfileInput {
 }
 
 input LoginInput {
-  email: String!
+  username: String!
   password: String!
 }

@@ -6,11 +6,11 @@ export class LoginResponse {
 	username: string;
 
 	@Field()
-	email: string;
+	id: string;
 
 	@Field(() => Boolean)
 	authenticated: boolean;
 
 	@Field()
-	jwt: string;
+	token: string;
 }

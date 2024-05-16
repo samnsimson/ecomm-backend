@@ -4,6 +4,7 @@ import { DeltedUser, User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { FindManyArgs } from 'src/libs/dto/base.args';
+import { Public } from 'src/_decorator';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -14,6 +15,7 @@ export class UserResolver {
 		return this.userService.create(createUserInput);
 	}
 
+	@Public()
 	@Query(() => [User], { name: 'users' })
 	findAll(@Args() options: FindManyArgs) {
 		return this.userService.findAll({ ...options, relations: { profile: true } });

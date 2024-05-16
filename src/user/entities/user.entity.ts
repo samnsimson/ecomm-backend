@@ -22,7 +22,7 @@ export class User extends CoreEntity {
 	@Column()
 	phone: string;
 
-	@Column({ select: false })
+	@Column()
 	password: string;
 
 	@Field({ nullable: true })
