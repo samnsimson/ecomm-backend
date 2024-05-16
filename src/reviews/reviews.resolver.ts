@@ -3,7 +3,7 @@ import { ReviewsService } from './reviews.service';
 import { Review } from './entities/review.entity';
 import { CreateReviewInput } from './dto/create-review.input';
 import { UpdateReviewInput } from './dto/update-review.input';
-import { FindManyArgs } from 'src/libs/dto/base.args';
+import { FindManyArgs } from 'src/_libs/dto/base.args';
 
 @Resolver(() => Review)
 export class ReviewsResolver {

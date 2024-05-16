@@ -1,6 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
-import { PaymentProvider, PaymentStatus, PaymentType } from 'src/libs/types';
+import { PaymentProvider, PaymentStatus, PaymentType } from 'src/_libs/types';
 
 @InputType()
 export class CreatePaymentInput {

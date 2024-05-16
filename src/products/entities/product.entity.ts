@@ -3,7 +3,7 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany } fro
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
 import { Category } from 'src/categories/entities/category.entity';
-import { CoreEntity } from 'src/libs/entity/core.entity';
+import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Order } from 'src/orders/entities/order.entity';

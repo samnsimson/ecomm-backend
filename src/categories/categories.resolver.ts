@@ -3,7 +3,7 @@ import { CategoriesService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { CreateCategoryInput } from './dto/create-category.input';
 import { UpdateCategoryInput } from './dto/update-category.input';
-import { FindManyArgs } from 'src/libs/dto/base.args';
+import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Product } from 'src/products/entities/product.entity';
 import { ProductsService } from 'src/products/products.service';
 

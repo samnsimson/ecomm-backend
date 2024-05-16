@@ -1,5 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { CoreEntity } from 'src/libs/entity/core.entity';
+import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { Product } from 'src/products/entities/product.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 

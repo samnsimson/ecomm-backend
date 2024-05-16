@@ -1,7 +1,7 @@
 import { ObjectType, Field, PickType } from '@nestjs/graphql';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { Cart } from 'src/carts/entities/cart.entity';
-import { CoreEntity } from 'src/libs/entity/core.entity';
+import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Profile } from 'src/profile/entities/profile.entity';
 import { Review } from 'src/reviews/entities/review.entity';

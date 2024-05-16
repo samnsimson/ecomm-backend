@@ -3,7 +3,7 @@ import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
-import { FindManyArgs } from 'src/libs/dto/base.args';
+import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Review } from 'src/reviews/entities/review.entity';
 import { ReviewsService } from 'src/reviews/reviews.service';
 

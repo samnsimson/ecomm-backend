@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
-import { CoreEntity } from 'src/libs/entity/core.entity';
-import { PaymentProvider, PaymentStatus, PaymentType } from 'src/libs/types';
+import { CoreEntity } from 'src/_libs/entity/core.entity';
+import { PaymentProvider, PaymentStatus, PaymentType } from 'src/_libs/types';
 import { Order } from 'src/orders/entities/order.entity';
 import { Column, Entity, OneToOne } from 'typeorm';
 

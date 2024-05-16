@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { DeltedUser, User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { FindManyArgs } from 'src/libs/dto/base.args';
+import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Public } from 'src/_decorator';
 
 @Resolver(() => User)

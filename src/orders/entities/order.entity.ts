@@ -1,6 +1,6 @@
 import { ObjectType, Field, Float, Int, registerEnumType } from '@nestjs/graphql';
-import { CoreEntity } from 'src/libs/entity/core.entity';
-import { OrderStatus } from 'src/libs/types';
+import { CoreEntity } from 'src/_libs/entity/core.entity';
+import { OrderStatus } from 'src/_libs/types';
 import { Payment } from 'src/payments/entities/payment.entity';
 import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/user/entities/user.entity';

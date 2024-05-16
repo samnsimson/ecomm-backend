@@ -3,7 +3,7 @@ import { PaymentsService } from './payments.service';
 import { Payment } from './entities/payment.entity';
 import { CreatePaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
-import { FindManyArgs } from 'src/libs/dto/base.args';
+import { FindManyArgs } from 'src/_libs/dto/base.args';
 
 @Resolver(() => Payment)
 export class PaymentsResolver {
