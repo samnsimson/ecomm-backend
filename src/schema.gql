@@ -136,7 +136,12 @@ type LoginResponse {
   username: String!
   id: String!
   authenticated: Boolean!
-  token: String!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type RefreshTokenResponse {
+  accessToken: String!
 }
 
 type Query {
@@ -184,6 +189,7 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   removeProfile(id: String!): Profile!
   login(credentials: LoginInput!): LoginResponse!
+  refresh(refreshTokenInput: RefreshTokenInput!): RefreshTokenResponse!
 }
 
 input CreateUserInput {
@@ -306,4 +312,8 @@ input UpdateProfileInput {
 input LoginInput {
   username: String!
   password: String!
+}
+
+input RefreshTokenInput {
+  token: String!
 }

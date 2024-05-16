@@ -8,18 +8,12 @@ import { LocalStrategy } from './strategy/local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { RefreshJwtStrategy } from './strategy/refresh-jwt.strategy';
+import { jwtConfig } from 'src/_config/jwt.config';
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([User]),
-		PassportModule,
-		JwtModule.register({
-			secret: '4585f68ee4022360ee4d0f9c559ce7e81be371b777db07c350d05fa130718882',
-			signOptions: { expiresIn: '1h' },
-		}),
-		forwardRef(() => UserModule),
-	],
-	providers: [AuthResolver, AuthService, LocalStrategy, JwtStrategy],
+	imports: [TypeOrmModule.forFeature([User]), PassportModule, JwtModule.registerAsync(jwtConfig.asProvider()), forwardRef(() => UserModule)],
+	providers: [AuthResolver, AuthService, LocalStrategy, JwtStrategy, RefreshJwtStrategy],
 	exports: [AuthService],
 })
 export class AuthModule {}

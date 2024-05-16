@@ -12,5 +12,8 @@ export class LoginResponse {
 	authenticated: boolean;
 
 	@Field()
-	token: string;
+	accessToken: string;
+
+	@Field()
+	refreshToken: string;
 }

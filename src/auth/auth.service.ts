@@ -26,6 +26,13 @@ export class AuthService {
 		const user = await this.validateUser(username, password);
 		delete user.password;
 		const payload = { id: user.id, username: user.username };
-		return { ...payload, authenticated: true, token: this.jwtService.sign(payload) };
+		return { ...payload, authenticated: true, accessToken: this.jwtService.sign(payload), refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }) };
+	}
+
+	async refreshToken(_: string, id: string): Promise<Pick<LoginResponse, 'accessToken'>> {
+		const user = await this.userService.findOneBy({ where: { id } });
+		if (!user) throw new UnauthorizedException('User not found');
+		const payload = { id: user.id, username: user.username };
+		return { accessToken: this.jwtService.sign(payload) };
 	}
 }
