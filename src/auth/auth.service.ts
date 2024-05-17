@@ -5,6 +5,8 @@ import { compare } from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
 import { LoginResponse } from './dto/login-response.dto';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserInput } from 'src/user/dto/create-user.input';
+import { SignupResponse } from './dto/signup-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +29,12 @@ export class AuthService {
 		delete user.password;
 		const payload = { id: user.id, username: user.username };
 		return { ...payload, authenticated: true, accessToken: this.jwtService.sign(payload), refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }) };
+	}
+
+	async signup(createUserInput: CreateUserInput): Promise<Omit<SignupResponse, 'password'>> {
+		const user = await this.userService.create(createUserInput);
+		delete user.password;
+		return user;
 	}
 
 	async refreshToken(_: string, id: string): Promise<Pick<LoginResponse, 'accessToken'>> {

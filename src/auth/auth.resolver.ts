@@ -8,6 +8,8 @@ import { CurrentUser, Public, RefreshJWT } from 'src/_decorator';
 import { JwtPayload } from 'src/_libs/types';
 import { RefreshTokenResponse } from './dto/refresh-token-response.dto';
 import { RefreshTokenInput } from './dto/refresh-token-input.dto';
+import { SignupResponse } from './dto/signup-response.dto';
+import { CreateUserInput } from 'src/user/dto/create-user.input';
 
 @Resolver()
 export class AuthResolver {
@@ -18,6 +20,12 @@ export class AuthResolver {
 	@UseGuards(GqlAuthGuard)
 	async login(@Args('credentials') credentials: LoginInput): Promise<LoginResponse> {
 		return await this.authService.login(credentials);
+	}
+
+	@Public()
+	@Mutation(() => SignupResponse)
+	async signup(@Args('signupInput') signupInput: CreateUserInput) {
+		return await this.authService.signup(signupInput);
 	}
 
 	@RefreshJWT()

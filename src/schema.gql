@@ -144,6 +144,21 @@ type RefreshTokenResponse {
   accessToken: String!
 }
 
+type SignupResponse {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  username: String!
+  email: String!
+  phone: String!
+  emailVerified: Boolean
+  phoneVerified: Boolean
+  profile: Profile
+  reviews: [Review!]!
+  cart: Cart
+  orders: [Order!]
+}
+
 type Query {
   users(take: Int = 10, skip: Int = 0): [User!]!
   user(id: String!): User!
@@ -164,7 +179,6 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): DeltedUser!
   createReview(createReviewInput: CreateReviewInput!): Review!
@@ -189,14 +203,8 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   removeProfile(id: String!): Profile!
   login(credentials: LoginInput!): LoginResponse!
+  signup(signupInput: CreateUserInput!): SignupResponse!
   refresh(refreshTokenInput: RefreshTokenInput!): RefreshTokenResponse!
-}
-
-input CreateUserInput {
-  username: String!
-  email: String!
-  phone: String!
-  password: String!
 }
 
 input UpdateUserInput {
@@ -311,6 +319,13 @@ input UpdateProfileInput {
 
 input LoginInput {
   username: String!
+  password: String!
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  phone: String!
   password: String!
 }
 

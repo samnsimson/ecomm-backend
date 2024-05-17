@@ -1,25 +1,25 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, IsStrongPassword } from 'class-validator';
 
 @InputType()
 export class CreateUserInput {
 	@Field()
-	@IsString({ message: 'Input value must be a string' })
-	@IsNotEmpty({ message: 'Input value cannot be empty' })
+	@IsString()
+	@IsNotEmpty()
 	username: string;
 
 	@Field()
-	@IsString({ message: 'Input value must be a string' })
-	@IsNotEmpty({ message: 'Input value cannot be empty' })
+	@IsEmail()
+	@IsNotEmpty()
 	email: string;
 
 	@Field()
-	@IsString({ message: 'Input value must be a string' })
-	@IsNotEmpty({ message: 'Input value cannot be empty' })
+	@IsPhoneNumber('US')
+	@IsNotEmpty()
 	phone: string;
 
 	@Field()
-	@IsString({ message: 'Input value must be a string' })
-	@IsNotEmpty({ message: 'Input value cannot be empty' })
+	@IsStrongPassword()
+	@IsNotEmpty()
 	password: string;
 }
