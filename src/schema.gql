@@ -157,6 +157,8 @@ type SignupResponse {
   reviews: [Review!]!
   cart: Cart
   orders: [Order!]
+  accessToken: String
+  refreshToken: String
 }
 
 type Query {
@@ -203,7 +205,7 @@ type Mutation {
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   removeProfile(id: String!): Profile!
   login(credentials: LoginInput!): LoginResponse!
-  signup(signupInput: CreateUserInput!): SignupResponse!
+  signup(signupInput: CreateUserInput!, autoLogin: Boolean = false): SignupResponse!
   refresh(refreshTokenInput: RefreshTokenInput!): RefreshTokenResponse!
 }
 

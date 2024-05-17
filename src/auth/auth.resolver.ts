@@ -24,8 +24,11 @@ export class AuthResolver {
 
 	@Public()
 	@Mutation(() => SignupResponse)
-	async signup(@Args('signupInput') signupInput: CreateUserInput) {
-		return await this.authService.signup(signupInput);
+	async signup(@Args('signupInput') signupInput: CreateUserInput, @Args('autoLogin', { nullable: true, defaultValue: false }) autoLogin: boolean) {
+		const user = await this.authService.signup(signupInput);
+		if (!autoLogin) return { ...user, authenticated: false, accessToken: null, refreshToken: null };
+		const { accessToken, refreshToken, authenticated } = await this.login({ username: signupInput.username, password: signupInput.password });
+		return { ...user, authenticated, accessToken, refreshToken };
 	}
 
 	@RefreshJWT()

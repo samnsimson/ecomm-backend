@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,8 +9,12 @@ import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 export class UserService {
 	constructor(@InjectRepository(User) private user: Repository<User>) {}
 
-	create(createUserInput: CreateUserInput) {
-		return this.user.save(createUserInput);
+	async create(createUserInput: CreateUserInput) {
+		const { username, email, phone } = createUserInput;
+		const existingUser = await this.findOneBy({ where: [{ username }, { email }, { phone }] });
+		if (existingUser) throw new BadRequestException('Username/Email/Phone already exists');
+		const user = this.user.create(createUserInput);
+		return await this.user.save(user);
 	}
 
 	findAll(options: FindManyOptions<User> = {}) {
