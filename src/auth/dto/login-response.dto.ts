@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { UserRole } from 'src/_libs/types';
 
 @ObjectType()
 export class LoginResponse {
@@ -7,6 +8,9 @@ export class LoginResponse {
 
 	@Field()
 	id: string;
+
+	@Field()
+	role: UserRole;
 
 	@Field(() => Boolean)
 	authenticated: boolean;

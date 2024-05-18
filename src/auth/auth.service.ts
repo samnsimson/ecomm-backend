@@ -15,6 +15,10 @@ export class AuthService {
 		private readonly jwtService: JwtService,
 	) {}
 
+	private jwtPayload({ id, username, role }: User) {
+		return { id, username, role };
+	}
+
 	async validateUser(username: string, password: string): Promise<User | null> {
 		const user = await this.userService.findOneBy({ where: { username } });
 		if (!user) throw new UnauthorizedException('Username does not exist');
@@ -27,7 +31,7 @@ export class AuthService {
 	async login({ username, password }: LoginInput): Promise<LoginResponse> {
 		const user = await this.validateUser(username, password);
 		delete user.password;
-		const payload = { id: user.id, username: user.username };
+		const payload = this.jwtPayload(user);
 		return {
 			...payload,
 			authenticated: true,
@@ -45,7 +49,7 @@ export class AuthService {
 	async refreshToken(_: string, id: string): Promise<Pick<LoginResponse, 'accessToken'>> {
 		const user = await this.userService.findOneBy({ where: { id } });
 		if (!user) throw new UnauthorizedException('User not found');
-		const payload = { id: user.id, username: user.username };
+		const payload = this.jwtPayload(user);
 		return { accessToken: this.jwtService.sign(payload) };
 	}
 }

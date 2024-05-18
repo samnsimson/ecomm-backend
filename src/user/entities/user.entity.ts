@@ -1,4 +1,4 @@
-import { ObjectType, Field, PickType } from '@nestjs/graphql';
+import { ObjectType, Field, PickType, registerEnumType } from '@nestjs/graphql';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
@@ -6,6 +6,9 @@ import { Order } from 'src/orders/entities/order.entity';
 import { Profile } from 'src/profile/entities/profile.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { UserRole } from 'src/_libs/types';
+
+registerEnumType(UserRole, { name: 'UserRole' });
 
 @ObjectType()
 @Entity({ name: 'user' })
@@ -32,6 +35,10 @@ export class User extends CoreEntity {
 	@Field({ nullable: true })
 	@Column({ default: false, nullable: true })
 	phoneVerified?: boolean;
+
+	@Field(() => UserRole, { nullable: true, defaultValue: UserRole.USER })
+	@Column('enum', { enum: UserRole, default: UserRole.USER })
+	role?: UserRole;
 
 	@Field(() => Profile, { nullable: true })
 	@OneToOne(() => Profile, (profile) => profile.user, { eager: true })

@@ -122,10 +122,16 @@ type User {
   phone: String!
   emailVerified: Boolean
   phoneVerified: Boolean
+  role: UserRole
   profile: Profile
   reviews: [Review!]!
   cart: Cart
   orders: [Order!]
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
 
 type DeltedUser {
@@ -135,6 +141,7 @@ type DeltedUser {
 type LoginResponse {
   username: String!
   id: String!
+  role: Float!
   authenticated: Boolean!
   accessToken: String!
   refreshToken: String!
@@ -153,6 +160,7 @@ type SignupResponse {
   phone: String!
   emailVerified: Boolean
   phoneVerified: Boolean
+  role: UserRole
   profile: Profile
   reviews: [Review!]!
   cart: Cart
@@ -238,14 +246,12 @@ input UpdateCartInput {
 }
 
 input CreateOrderInput {
-  userId: String!
   productIds: [String!]!
   total: Float!
   quantity: Int!
 }
 
 input UpdateOrderInput {
-  userId: String
   productIds: [String!]
   total: Float
   quantity: Int

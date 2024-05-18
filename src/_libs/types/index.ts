@@ -26,7 +26,15 @@ export enum OrderStatus {
 	CALCELLED = 'cancelled',
 }
 
+export enum UserRole {
+	USER,
+	ADMIN,
+}
+
 export type JwtPayload = {
 	id: string;
 	username: string;
+	role: UserRole;
 };
+
+export type CurrentUserType = JwtPayload;

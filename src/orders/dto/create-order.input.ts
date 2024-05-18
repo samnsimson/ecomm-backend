@@ -3,11 +3,6 @@ import { IsArray, IsNotEmpty, IsNumber, IsUUID, Min } from 'class-validator';
 
 @InputType()
 export class CreateOrderInput {
-	@Field(() => String)
-	@IsUUID('4')
-	@IsNotEmpty({ message: 'userId is required' })
-	userId: string;
-
 	@Field(() => [String])
 	@IsArray()
 	@IsUUID('4', { each: true })
@@ -15,11 +10,13 @@ export class CreateOrderInput {
 
 	@Field(() => Float)
 	@IsNumber()
+	@IsNotEmpty()
 	@Min(0, { message: 'total cannot be a negative value' })
 	total: number;
 
 	@Field(() => Int)
 	@IsNumber()
+	@IsNotEmpty()
 	@Min(1, { message: 'quantity cannot be 0 or a negative value' })
 	quantity: number;
 }

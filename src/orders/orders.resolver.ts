@@ -6,6 +6,8 @@ import { UpdateOrderInput } from './dto/update-order.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Payment } from 'src/payments/entities/payment.entity';
 import { PaymentsService } from 'src/payments/payments.service';
+import { CurrentUser } from 'src/_decorator';
+import { CurrentUserType, UserRole } from 'src/_libs/types';
 
 @Resolver(() => Order)
 export class OrdersResolver {
@@ -15,13 +17,14 @@ export class OrdersResolver {
 	) {}
 
 	@Mutation(() => Order)
-	createOrder(@Args('createOrderInput') createOrderInput: CreateOrderInput) {
-		return this.ordersService.create(createOrderInput);
+	createOrder(@Args('createOrderInput') createOrderInput: CreateOrderInput, @CurrentUser() user: CurrentUserType) {
+		return this.ordersService.create({ ...createOrderInput, userId: user.id });
 	}
 
 	@Query(() => [Order], { name: 'orders' })
-	findAll(@Args() args: FindManyArgs) {
-		return this.ordersService.findAll({ ...args, relations: { user: { profile: true }, payment: true, products: true } });
+	findAll(@Args() args: FindManyArgs, @CurrentUser() user: CurrentUserType) {
+		if (user.role === UserRole.ADMIN) return this.ordersService.findAll({ ...args, relations: { user: { profile: true }, payment: true, products: true } });
+		return this.ordersService.findAll({ ...args, where: { user: { id: user.id } }, relations: { user: { profile: true }, payment: true, products: true } });
 	}
 
 	@Query(() => Order, { name: 'order' })

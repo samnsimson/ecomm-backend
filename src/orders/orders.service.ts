@@ -19,7 +19,7 @@ export class OrdersService {
 		private readonly userService: UserService,
 	) {}
 
-	async create({ total, userId, productIds, quantity }: CreateOrderInput) {
+	async create({ total, userId, productIds, quantity }: CreateOrderInput & { userId: string }) {
 		return await this.entityManager.transaction(async (entityManager) => {
 			const user = await this.userService.findOne(userId, { relations: { profile: true } });
 			const products = await this.productService.findAll({ where: { id: In(productIds) } });
