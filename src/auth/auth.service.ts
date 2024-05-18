@@ -28,7 +28,12 @@ export class AuthService {
 		const user = await this.validateUser(username, password);
 		delete user.password;
 		const payload = { id: user.id, username: user.username };
-		return { ...payload, authenticated: true, accessToken: this.jwtService.sign(payload), refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }) };
+		return {
+			...payload,
+			authenticated: true,
+			accessToken: this.jwtService.sign(payload),
+			refreshToken: this.jwtService.sign(payload, { expiresIn: '7d' }),
+		};
 	}
 
 	async signup(createUserInput: CreateUserInput): Promise<Omit<SignupResponse, 'password'>> {

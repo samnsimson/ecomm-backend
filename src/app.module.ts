@@ -24,6 +24,7 @@ import { DatabaseModule } from './database/database.module';
 			driver: ApolloDriver,
 			playground: true,
 			autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+			context: ({ req }) => ({ req }),
 		}),
 		UserModule,
 		ProfileModule,

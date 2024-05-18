@@ -157,6 +157,7 @@ type SignupResponse {
   reviews: [Review!]!
   cart: Cart
   orders: [Order!]
+  authenticated: Boolean
   accessToken: String
   refreshToken: String
 }

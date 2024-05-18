@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, ResolveField, Parent } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, ResolveField, Parent, Context } from '@nestjs/graphql';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
@@ -6,6 +6,7 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Review } from 'src/reviews/entities/review.entity';
 import { ReviewsService } from 'src/reviews/reviews.service';
+import { Request } from 'express';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -20,8 +21,10 @@ export class ProductsResolver {
 	}
 
 	@Query(() => [Product], { name: 'products' })
-	findAll(@Args() args: FindManyArgs) {
-		return this.productsService.findAll({ ...args });
+	async findAll(@Args() args: FindManyArgs, @Context('req') req: Request) {
+		req.res.cookie('sample-cookie', 'this is a sample cookie', { httpOnly: true, maxAge: 3600000 });
+		const products = await this.productsService.findAll({ ...args });
+		return products;
 	}
 
 	@Query(() => Product, { name: 'product' })

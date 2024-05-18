@@ -11,7 +11,12 @@ import { PaymentsModule } from 'src/payments/payments.module';
 import { ProductsModule } from 'src/products/products.module';
 
 @Module({
-	imports: [TypeOrmModule.forFeature([User, Order, Payment, Product]), forwardRef(() => UserModule), forwardRef(() => PaymentsModule), forwardRef(() => ProductsModule)],
+	imports: [
+		TypeOrmModule.forFeature([User, Order, Payment, Product]),
+		forwardRef(() => UserModule),
+		forwardRef(() => PaymentsModule),
+		forwardRef(() => ProductsModule),
+	],
 	providers: [OrdersResolver, OrdersService],
 	exports: [OrdersService],
 })
