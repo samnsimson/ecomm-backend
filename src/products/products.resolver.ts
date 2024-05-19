@@ -6,7 +6,7 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Review } from 'src/reviews/entities/review.entity';
 import { ReviewsService } from 'src/reviews/reviews.service';
-import { Request } from 'express';
+import { Response } from 'express';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -21,8 +21,8 @@ export class ProductsResolver {
 	}
 
 	@Query(() => [Product], { name: 'products' })
-	async findAll(@Args() args: FindManyArgs, @Context('req') req: Request) {
-		req.res.cookie('sample-cookie', 'this is a sample cookie', { httpOnly: true, maxAge: 3600000 });
+	async findAll(@Args() args: FindManyArgs, @Context('res') res: Response) {
+		res.cookie('sample-cookie', 'this is a sample cookie', { httpOnly: true, maxAge: 3600000 });
 		const products = await this.productsService.findAll({ ...args });
 		return products;
 	}

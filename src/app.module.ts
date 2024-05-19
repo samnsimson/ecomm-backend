@@ -25,6 +25,8 @@ import { DatabaseModule } from './database/database.module';
 			playground: true,
 			autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
 			context: ({ req, res }) => ({ req, res }),
+			formatError: ({ extensions }) => ({ ...(extensions.originalError as any), time: new Date() }),
+			includeStacktraceInErrorResponses: false,
 		}),
 		UserModule,
 		ProfileModule,
