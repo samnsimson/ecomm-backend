@@ -14,6 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { DatabaseModule } from './database/database.module';
+import { v4 as uuid } from 'uuid';
 
 @Module({
 	imports: [
@@ -25,7 +26,8 @@ import { DatabaseModule } from './database/database.module';
 			playground: true,
 			autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
 			context: ({ req, res }) => ({ req, res }),
-			formatError: ({ extensions }) => ({ ...(extensions.originalError as any), time: new Date() }),
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			formatError: ({ locations, path, ...err }) => ({ transaction: uuid(), time: new Date(), ...err }),
 			includeStacktraceInErrorResponses: false,
 		}),
 		UserModule,
