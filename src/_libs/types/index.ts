@@ -27,8 +27,8 @@ export enum OrderStatus {
 }
 
 export enum UserRole {
-	USER,
-	ADMIN,
+	USER = 'user',
+	ADMIN = 'admin',
 }
 
 export type JwtPayload = {

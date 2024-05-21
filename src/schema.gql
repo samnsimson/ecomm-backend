@@ -141,7 +141,9 @@ type DeltedUser {
 type LoginResponse {
   username: String!
   id: String!
-  role: Float!
+  role: String!
+  email: String!
+  name: String!
   authenticated: Boolean!
   accessToken: String!
   refreshToken: String!

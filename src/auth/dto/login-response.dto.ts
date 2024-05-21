@@ -12,6 +12,12 @@ export class LoginResponse {
 	@Field()
 	role: UserRole;
 
+	@Field()
+	email: string;
+
+	@Field()
+	name: string;
+
 	@Field(() => Boolean)
 	authenticated: boolean;
 

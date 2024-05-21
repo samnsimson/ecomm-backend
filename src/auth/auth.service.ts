@@ -15,8 +15,10 @@ export class AuthService {
 		private readonly jwtService: JwtService,
 	) {}
 
-	private jwtPayload({ id, username, role }: User) {
-		return { id, username, role };
+	private jwtPayload({ id, username, role, email, profile }: User) {
+		const firstName = profile ? profile['firstName'] : null;
+		const lastName = profile ? profile['lastName'] : null;
+		return { id, username, role, email, name: [firstName, lastName].filter(Boolean).join(' ') };
 	}
 
 	async validateUser(username: string, password: string): Promise<User | null> {
