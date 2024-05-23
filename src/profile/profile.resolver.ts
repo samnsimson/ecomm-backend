@@ -4,8 +4,6 @@ import { Profile } from './entities/profile.entity';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { User } from 'src/user/entities/user.entity';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 
 @Resolver(() => Profile)

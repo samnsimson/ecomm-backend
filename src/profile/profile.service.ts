@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProfileInput } from './dto/create-profile.input';
 import { UpdateProfileInput } from './dto/update-profile.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,7 +14,7 @@ export class ProfileService {
 	) {}
 
 	async create(userId: string, createProfileInput: CreateProfileInput) {
-		const profile = await this.profile.save(createProfileInput);
+		const profile = await this.profile.save(this.profile.create(createProfileInput));
 		await this.user.update(userId, { profile });
 		return profile;
 	}
@@ -27,8 +27,10 @@ export class ProfileService {
 		return this.profile.findOneBy({ id });
 	}
 
-	update(id: string, updateProfileInput: UpdateProfileInput) {
-		return this.profile.update(id, updateProfileInput);
+	async update(id: string, updateProfileInput: UpdateProfileInput) {
+		const result = await this.profile.update(id, updateProfileInput);
+		if (result.affected) return await this.findOne(id);
+		else throw new NotFoundException(`profile with ID ${id} not found`);
 	}
 
 	async remove(id: string) {

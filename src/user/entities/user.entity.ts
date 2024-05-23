@@ -5,13 +5,16 @@ import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { Order } from 'src/orders/entities/order.entity';
 import { Profile } from 'src/profile/entities/profile.entity';
 import { Review } from 'src/reviews/entities/review.entity';
-import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne, Unique } from 'typeorm';
 import { UserRole } from 'src/_libs/types';
 
 registerEnumType(UserRole, { name: 'UserRole' });
 
 @ObjectType()
 @Entity({ name: 'user' })
+@Unique(['username'])
+@Unique(['email'])
+@Unique(['phone'])
 export class User extends CoreEntity {
 	@Field()
 	@Column()
@@ -41,7 +44,7 @@ export class User extends CoreEntity {
 	role?: UserRole;
 
 	@Field(() => Profile, { nullable: true })
-	@OneToOne(() => Profile, (profile) => profile.user, { eager: true })
+	@OneToOne(() => Profile, (profile) => profile.user, { eager: true, onDelete: 'SET NULL' })
 	@JoinColumn()
 	profile: Profile;
 
