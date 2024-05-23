@@ -7,6 +7,7 @@ import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Review } from 'src/reviews/entities/review.entity';
 import { ReviewsService } from 'src/reviews/reviews.service';
 import { Response } from 'express';
+import { DimensionsResponse } from './dto/product-response.dto';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -45,5 +46,11 @@ export class ProductsResolver {
 	@ResolveField(() => Review, { name: 'reviews' })
 	async reviews(@Parent() product: Product, @Args() args: FindManyArgs) {
 		return await this.reviewService.findAll({ ...args, where: { product: { id: product.id } } });
+	}
+
+	@ResolveField(() => DimensionsResponse, { name: 'dimensions' })
+	async dimensions(@Parent() product: Product) {
+		const { width, height, depth } = product;
+		return { width, height, depth };
 	}
 }

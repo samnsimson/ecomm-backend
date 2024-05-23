@@ -81,12 +81,15 @@ type Product {
   title: String!
   description: String
   slug: String
-  retailPrice: Float!
-  salePrice: Float!
+  retailPrice: Int!
+  salePrice: Int!
+  brand: String
+  stock: Int!
   categories: [Category!]
   reviews(take: Int = 10, skip: Int = 0): [Review!]
   carts: [Cart!]
   orders: [Order!]
+  dimensions: DimensionsResponse!
 }
 
 type Cart {
@@ -136,6 +139,12 @@ enum UserRole {
 
 type DeltedUser {
   id: ID!
+}
+
+type DimensionsResponse {
+  width: Float!
+  height: Float!
+  depth: Float!
 }
 
 type LoginResponse {
@@ -278,11 +287,25 @@ input UpdatePaymentInput {
 input CreateProductInput {
   title: String!
   description: String!
+  retailPrice: Int!
+  salePrice: Int!
+  brand: String!
+  dimensions: Dimensions
+}
+
+input Dimensions {
+  width: Int
+  height: Int
+  depth: Int
 }
 
 input UpdateProductInput {
   title: String
   description: String
+  retailPrice: Int
+  salePrice: Int
+  brand: String
+  dimensions: Dimensions
   id: ID!
 }
 

@@ -1,4 +1,4 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
@@ -23,13 +23,30 @@ export class Product extends CoreEntity {
 	@Column('text', { default: '' })
 	slug: string;
 
-	@Field()
-	@Column('float', { default: 0 })
+	@Field(() => Int)
+	@Column('int', { default: 0 })
 	retailPrice: number;
 
-	@Field()
-	@Column('float', { default: 0 })
+	@Field(() => Int)
+	@Column('int', { default: 0 })
 	salePrice: number;
+
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column({ default: null })
+	brand: string;
+
+	@Field(() => Int)
+	@Column('int', { default: 0 })
+	stock: number;
+
+	@Column('int', { default: 0 })
+	width: number;
+
+	@Column('int', { default: 0 })
+	height: number;
+
+	@Column('int', { default: 0 })
+	depth: number;
 
 	@Field(() => [Category], { nullable: true })
 	@ManyToMany(() => Category, (category) => category.products)

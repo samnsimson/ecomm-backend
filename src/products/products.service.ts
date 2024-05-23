@@ -10,7 +10,8 @@ export class ProductsService {
 	constructor(@InjectRepository(Product) private readonly product: Repository<Product>) {}
 
 	create(createProductInput: CreateProductInput) {
-		const product = this.product.create(createProductInput);
+		const { dimensions, ...input } = createProductInput;
+		const product = this.product.create({ ...input, ...dimensions });
 		return this.product.save(product);
 	}
 
