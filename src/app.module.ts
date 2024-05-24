@@ -15,6 +15,9 @@ import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { DatabaseModule } from './database/database.module';
 import { v4 as uuid } from 'uuid';
+import { ShippingsModule } from './shippings/shippings.module';
+import { TaxesModule } from './taxes/taxes.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
 	imports: [
@@ -39,6 +42,9 @@ import { v4 as uuid } from 'uuid';
 		PaymentsModule,
 		CartsModule,
 		AuthModule,
+		ShippingsModule,
+		TaxesModule,
+		SettingsModule,
 	],
 	controllers: [],
 	providers: [],

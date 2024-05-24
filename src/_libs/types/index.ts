@@ -38,3 +38,9 @@ export type JwtPayload = {
 };
 
 export type CurrentUserType = JwtPayload;
+
+export enum ShippingTypes {
+	FREE = 'free',
+	FLAT = 'flat',
+	PERCENTAGE = 'percentage',
+}

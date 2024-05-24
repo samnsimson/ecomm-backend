@@ -181,6 +181,34 @@ type SignupResponse {
   refreshToken: String
 }
 
+type Shipping {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String!
+  enabled: Boolean!
+  type: ShippingType!
+  amount: Int!
+  percentage: Int!
+}
+
+enum ShippingType {
+  FREE
+  FLAT
+  PERCENTAGE
+}
+
+type Tax {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Setting {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users(take: Int = 10, skip: Int = 0): [User!]!
   user(id: String!): User!
@@ -198,6 +226,12 @@ type Query {
   category(id: Int!): Category!
   profiles(take: Int, skip: Int): [Profile!]!
   profile(id: String!): Profile!
+  shippings: [Shipping!]!
+  shipping(id: Int!): Shipping!
+  taxes: [Tax!]!
+  tax(id: Int!): Tax!
+  settings: [Setting!]!
+  setting(id: Int!): Setting!
 }
 
 type Mutation {
@@ -227,6 +261,15 @@ type Mutation {
   login(credentials: LoginInput!): LoginResponse!
   signup(signupInput: CreateUserInput!, autoLogin: Boolean = false): SignupResponse!
   refresh(refreshTokenInput: RefreshTokenInput!): RefreshTokenResponse!
+  createShipping(createShippingInput: CreateShippingInput!): Shipping!
+  updateShipping(updateShippingInput: UpdateShippingInput!): Shipping!
+  removeShipping(id: Int!): Shipping!
+  createTax(createTaxInput: CreateTaxInput!): Tax!
+  updateTax(updateTaxInput: UpdateTaxInput!): Tax!
+  removeTax(id: Int!): Tax!
+  createSetting(createSettingInput: CreateSettingInput!): Setting!
+  updateSetting(updateSettingInput: UpdateSettingInput!): Setting!
+  removeSetting(id: Int!): Setting!
 }
 
 input UpdateUserInput {
@@ -365,4 +408,37 @@ input CreateUserInput {
 
 input RefreshTokenInput {
   token: String!
+}
+
+input CreateShippingInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateShippingInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateTaxInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateTaxInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateSettingInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateSettingInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
