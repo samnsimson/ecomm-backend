@@ -44,3 +44,9 @@ export enum ShippingTypes {
 	FLAT = 'flat',
 	PERCENTAGE = 'percentage',
 }
+
+export enum Currency {
+	INR = 'INR',
+	USD = 'USD',
+	CAD = 'CAD',
+}
