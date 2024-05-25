@@ -1,26 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSettingInput } from './dto/create-setting.input';
-import { UpdateSettingInput } from './dto/update-setting.input';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { SettingsInput } from './dto/settings.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Setting } from './entities/setting.entity';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class SettingsService {
-  create(createSettingInput: CreateSettingInput) {
-    return 'This action adds a new setting';
-  }
+	constructor(@InjectRepository(Setting) private readonly settings: Repository<Setting>) {}
 
-  findAll() {
-    return `This action returns all settings`;
-  }
+	async create(settingsInput: Partial<SettingsInput>) {
+		const settings = this.settings.create(settingsInput);
+		return await this.settings.save(settings);
+	}
 
-  findOne(id: number) {
-    return `This action returns a #${id} setting`;
-  }
+	async find(args: FindManyOptions<Setting>) {
+		return await this.settings.find({ ...args });
+	}
 
-  update(id: number, updateSettingInput: UpdateSettingInput) {
-    return `This action updates a #${id} setting`;
-  }
+	async findOne(id: string, args?: FindOneOptions<Setting>) {
+		return await this.settings.findOne({ where: { id }, ...args });
+	}
 
-  remove(id: number) {
-    return `This action removes a #${id} setting`;
-  }
+	async update(id: string, settingsInput: SettingsInput) {
+		const { affected } = await this.settings.update(id, settingsInput);
+		if (!affected) throw new NotFoundException('Unable to update, Settings not found');
+		return await this.findOne(id);
+	}
 }

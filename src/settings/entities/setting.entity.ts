@@ -14,7 +14,7 @@ export class Setting extends CoreEntity {
 
 	@Field(() => String, { nullable: true })
 	@Column('text', { nullable: true, default: null })
-	addressTwo: string;
+	addressTwo?: string;
 
 	@Field(() => String)
 	@Column('text')

@@ -301,9 +301,7 @@ type Mutation {
   createTax(createTaxInput: CreateTaxInput!): Tax!
   updateTax(updateTaxInput: UpdateTaxInput!): Tax!
   removeTax(id: Int!): Tax!
-  createSetting(createSettingInput: CreateSettingInput!): Setting!
-  updateSetting(updateSettingInput: UpdateSettingInput!): Setting!
-  removeSetting(id: Int!): Setting!
+  saveSetting(settingsInput: SettingsInput!): Setting!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   updateCoupon(updateCouponInput: UpdateCouponInput!): Coupon!
   removeCoupon(id: Int!): Coupon!
@@ -472,15 +470,21 @@ input UpdateTaxInput {
   id: Int!
 }
 
-input CreateSettingInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateSettingInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input SettingsInput {
+  id: String
+  addressOne: String
+  addressTwo: String
+  city: String
+  state: String
+  country: String
+  zipcode: String
+  email: String
+  phone: String
+  currency: String
+  taxesEnabled: Boolean
+  couponsEnabled: Boolean
+  shippingEnabled: Boolean
+  discountsEnabled: Boolean
 }
 
 input CreateCouponInput {
