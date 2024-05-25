@@ -8,36 +8,36 @@ registerEnumType(Currency, { name: 'Currency' });
 @ObjectType()
 @Entity({ name: 'settings' })
 export class Setting extends CoreEntity {
-	@Field(() => String)
-	@Column('text')
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { nullable: true, default: null })
 	addressOne: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, defaultValue: null })
 	@Column('text', { nullable: true, default: null })
 	addressTwo?: string;
 
-	@Field(() => String)
-	@Column('text')
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { nullable: true, default: null })
 	city: string;
 
-	@Field(() => String)
-	@Column('text')
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { nullable: true, default: null })
 	state: string;
 
-	@Field(() => String)
-	@Column('text')
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { nullable: true, default: null })
 	country: string;
 
-	@Field(() => String)
-	@Column('text')
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { nullable: true, default: null })
 	zipcode: string;
 
-	@Field(() => String)
-	@Column('text')
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { nullable: true, default: null })
 	email: string;
 
-	@Field(() => String)
-	@Column()
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column({ nullable: true, default: null })
 	phone: string;
 
 	@Field(() => Currency, { defaultValue: Currency.USD })
