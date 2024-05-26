@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsNumber, IsString, Min, MinLength } from 'class-validator';
+import { IsNumber, IsString, IsUUID, Min, MinLength } from 'class-validator';
 
 @InputType()
 export class Dimensions {
@@ -17,6 +17,14 @@ export class Dimensions {
 	@Min(1)
 	@IsNumber()
 	depth?: number;
+}
+
+@InputType()
+export class ShippingMethod {
+	@Field(() => String)
+	@IsString()
+	@IsUUID('4')
+	id: string;
 }
 
 @InputType()
@@ -45,4 +53,7 @@ export class CreateProductInput {
 
 	@Field(() => Dimensions, { nullable: true })
 	dimensions?: Dimensions;
+
+	@Field(() => ShippingMethod, { nullable: true })
+	shipping?: ShippingMethod;
 }

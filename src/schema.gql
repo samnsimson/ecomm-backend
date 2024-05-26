@@ -74,6 +74,25 @@ enum OrderStatus {
   CALCELLED
 }
 
+type Shipping {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String!
+  enabled: Boolean!
+  type: ShippingType!
+  amount: Int!
+  percentage: Int!
+  products: [Product!]
+}
+
+enum ShippingType {
+  FREE
+  FLAT
+  PERCENTAGE
+}
+
 type Product {
   id: ID!
   createdAt: DateTime!
@@ -89,6 +108,7 @@ type Product {
   reviews(take: Int = 10, skip: Int = 0): [Review!]
   carts: [Cart!]
   orders: [Order!]
+  shipping: Shipping
   dimensions: DimensionsResponse!
 }
 
@@ -181,24 +201,6 @@ type SignupResponse {
   refreshToken: String
 }
 
-type Shipping {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  title: String!
-  description: String!
-  enabled: Boolean!
-  type: ShippingType!
-  amount: Int!
-  percentage: Int!
-}
-
-enum ShippingType {
-  FREE
-  FLAT
-  PERCENTAGE
-}
-
 type Tax {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -254,10 +256,10 @@ type Query {
   product(id: String!): Product!
   categories(take: Int = 10, skip: Int = 0): [Category!]!
   category(id: Int!): Category!
+  shippings(take: Int = 10, skip: Int = 0): [Shipping!]!
+  shipping(id: String!): Shipping!
   profiles(take: Int, skip: Int): [Profile!]!
   profile(id: String!): Profile!
-  shippings: [Shipping!]!
-  shipping(id: Int!): Shipping!
   taxes: [Tax!]!
   tax(id: Int!): Tax!
   settings: [Setting!]!
@@ -289,15 +291,15 @@ type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   updateCategory(updateCategoryInput: UpdateCategoryInput!): Category!
   removeCategory(id: Int!): Category!
+  createShipping(createShippingInput: CreateShippingInput!): Shipping!
+  updateShipping(updateShippingInput: UpdateShippingInput!): Shipping!
+  removeShipping(id: String!): Shipping!
   createProfile(userId: String!, createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   removeProfile(id: String!): Profile!
   login(credentials: LoginInput!): LoginResponse!
   signup(signupInput: CreateUserInput!, autoLogin: Boolean = false): SignupResponse!
   refresh(refreshTokenInput: RefreshTokenInput!): RefreshTokenResponse!
-  createShipping(createShippingInput: CreateShippingInput!): Shipping!
-  updateShipping(updateShippingInput: UpdateShippingInput!): Shipping!
-  removeShipping(id: Int!): Shipping!
   createTax(createTaxInput: CreateTaxInput!): Tax!
   updateTax(updateTaxInput: UpdateTaxInput!): Tax!
   removeTax(id: Int!): Tax!
@@ -372,12 +374,17 @@ input CreateProductInput {
   salePrice: Int!
   brand: String!
   dimensions: Dimensions
+  shipping: ShippingMethod
 }
 
 input Dimensions {
   width: Int
   height: Int
   depth: Int
+}
+
+input ShippingMethod {
+  id: String!
 }
 
 input UpdateProductInput {
@@ -387,6 +394,7 @@ input UpdateProductInput {
   salePrice: Int
   brand: String
   dimensions: Dimensions
+  shipping: ShippingMethod
   id: ID!
 }
 
@@ -405,6 +413,25 @@ input UpdateCategoryInput {
   description: String
   products: [ProductIds!]
   id: ID!
+}
+
+input CreateShippingInput {
+  title: String!
+  description: String
+  enabled: Boolean! = false
+  type: ShippingType!
+  amount: Float
+  percentage: Float
+}
+
+input UpdateShippingInput {
+  title: String
+  description: String
+  enabled: Boolean = false
+  type: ShippingType
+  amount: Float
+  percentage: Float
+  id: String!
 }
 
 input CreateProfileInput {
@@ -446,17 +473,6 @@ input CreateUserInput {
 
 input RefreshTokenInput {
   token: String!
-}
-
-input CreateShippingInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateShippingInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }
 
 input CreateTaxInput {

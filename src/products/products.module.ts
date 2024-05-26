@@ -13,15 +13,18 @@ import { ReviewsModule } from 'src/reviews/reviews.module';
 import { OrdersModule } from 'src/orders/orders.module';
 import { PaymentsModule } from 'src/payments/payments.module';
 import { UserModule } from 'src/user/user.module';
+import { Shipping } from 'src/shippings/entities/shipping.entity';
+import { ShippingsModule } from 'src/shippings/shippings.module';
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([Product, Category, Review, Order, Payment, User]),
+		TypeOrmModule.forFeature([Product, Category, Review, Order, Payment, User, Shipping]),
 		forwardRef(() => CategoriesModule),
 		forwardRef(() => ReviewsModule),
 		forwardRef(() => OrdersModule),
 		forwardRef(() => PaymentsModule),
 		forwardRef(() => UserModule),
+		forwardRef(() => ShippingsModule),
 	],
 	providers: [ProductsResolver, ProductsService],
 	exports: [ProductsService],

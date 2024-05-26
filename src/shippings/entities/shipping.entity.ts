@@ -1,7 +1,8 @@
 import { ObjectType, Field, registerEnumType, Int } from '@nestjs/graphql';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { ShippingTypes } from 'src/_libs/types';
-import { Column, Entity } from 'typeorm';
+import { Product } from 'src/products/entities/product.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 registerEnumType(ShippingTypes, { name: 'ShippingType' });
 
@@ -31,4 +32,8 @@ export class Shipping extends CoreEntity {
 	@Field(() => Int, { defaultValue: 0 })
 	@Column('int', { default: 0 })
 	percentage: number;
+
+	@Field(() => [Product], { nullable: true })
+	@OneToMany(() => Product, (product) => product.shipping)
+	products: Product[];
 }

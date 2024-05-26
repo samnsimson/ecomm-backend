@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
 import { Category } from 'src/categories/entities/category.entity';
@@ -7,6 +7,7 @@ import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Cart } from 'src/carts/entities/cart.entity';
 import { Order } from 'src/orders/entities/order.entity';
+import { Shipping } from 'src/shippings/entities/shipping.entity';
 
 @ObjectType()
 @Entity({ name: 'product' })
@@ -63,6 +64,10 @@ export class Product extends CoreEntity {
 	@Field(() => [Order], { nullable: true })
 	@ManyToMany(() => Order, (order) => order.products)
 	orders: Order[];
+
+	@Field(() => Shipping, { nullable: true })
+	@ManyToOne(() => Shipping, (shipping) => shipping.products, { eager: true, onDelete: 'SET NULL' })
+	shipping: Shipping;
 
 	@BeforeInsert()
 	@BeforeUpdate()
