@@ -28,6 +28,14 @@ export class ShippingMethod {
 }
 
 @InputType()
+export class CategoriesInput {
+	@Field(() => String)
+	@IsString()
+	@IsUUID('4')
+	id: string;
+}
+
+@InputType()
 export class CreateProductInput {
 	@Field()
 	@MinLength(3)
@@ -56,4 +64,7 @@ export class CreateProductInput {
 
 	@Field(() => ShippingMethod, { nullable: true })
 	shipping?: ShippingMethod;
+
+	@Field(() => [CategoriesInput], { nullable: true })
+	categories?: Array<CategoriesInput>;
 }

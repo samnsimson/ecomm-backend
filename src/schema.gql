@@ -8,6 +8,7 @@ type Category {
   updatedAt: DateTime!
   title: String!
   description: String
+  slug: String
   products(take: Int = 10, skip: Int = 0): [Product!]
 }
 
@@ -375,6 +376,7 @@ input CreateProductInput {
   brand: String!
   dimensions: Dimensions
   shipping: ShippingMethod
+  categories: [CategoriesInput!]
 }
 
 input Dimensions {
@@ -387,6 +389,10 @@ input ShippingMethod {
   id: String!
 }
 
+input CategoriesInput {
+  id: String!
+}
+
 input UpdateProductInput {
   title: String
   description: String
@@ -395,6 +401,7 @@ input UpdateProductInput {
   brand: String
   dimensions: Dimensions
   shipping: ShippingMethod
+  categories: [CategoriesInput!]
   id: ID!
 }
 

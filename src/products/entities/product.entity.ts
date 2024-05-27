@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
 import { Category } from 'src/categories/entities/category.entity';
@@ -50,7 +50,7 @@ export class Product extends CoreEntity {
 	depth: number;
 
 	@Field(() => [Category], { nullable: true })
-	@ManyToMany(() => Category, (category) => category.products)
+	@ManyToMany(() => Category, (category) => category.products, { onDelete: 'CASCADE', eager: true })
 	categories: Category[];
 
 	@Field(() => [Review], { nullable: true })
@@ -70,7 +70,6 @@ export class Product extends CoreEntity {
 	shipping: Shipping;
 
 	@BeforeInsert()
-	@BeforeUpdate()
 	async generateSlug() {
 		const slug = slugify(this.title, { lower: true, trim: true });
 		this.slug = `${slug}-${uuid().split('-').join('')}`;

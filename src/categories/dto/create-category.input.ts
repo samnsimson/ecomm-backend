@@ -12,8 +12,8 @@ export class CreateCategoryInput {
 	title: string;
 
 	@Field({ nullable: true })
-	description: string;
+	description?: string;
 
 	@Field(() => [ProductIds], { nullable: true })
-	products: ProductIds[];
+	products?: ProductIds[];
 }

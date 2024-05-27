@@ -16,7 +16,7 @@ export class ProductsService {
 	}
 
 	async findAll(args: FindManyOptions<Product>) {
-		return await this.product.find(args);
+		return await this.product.find({ ...args, order: { createdAt: 'DESC' } });
 	}
 
 	findOne(id: string, options?: FindOneOptions<Product>) {
