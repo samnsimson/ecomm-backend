@@ -19,8 +19,8 @@ export class ProductsService {
 		return await this.product.find({ ...args, order: { createdAt: 'DESC' } });
 	}
 
-	findOne(id: string, options?: FindOneOptions<Product>) {
-		return this.product.findOne({ where: { id }, ...options });
+	findOne(id?: string, slug?: string, options?: FindOneOptions<Product>) {
+		return this.product.findOne({ where: [{ id }, { slug }], ...options });
 	}
 
 	update(id: string, updateProductInput: UpdateProductInput) {

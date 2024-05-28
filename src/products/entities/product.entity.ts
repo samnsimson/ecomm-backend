@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { BeforeInsert, Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, Index, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import slugify from 'slugify';
 import { v4 as uuid } from 'uuid';
 import { Category } from 'src/categories/entities/category.entity';
@@ -11,6 +11,7 @@ import { Shipping } from 'src/shippings/entities/shipping.entity';
 
 @ObjectType()
 @Entity({ name: 'product' })
+@Index(['slug'])
 export class Product extends CoreEntity {
 	@Field()
 	@Column()
@@ -71,7 +72,7 @@ export class Product extends CoreEntity {
 
 	@BeforeInsert()
 	async generateSlug() {
-		const slug = slugify(this.title, { lower: true, trim: true });
+		const slug = slugify(this.title, { lower: true, trim: true, remove: /[*+~.()'"!:@]/g });
 		this.slug = `${slug}-${uuid().split('-').join('')}`;
 	}
 }

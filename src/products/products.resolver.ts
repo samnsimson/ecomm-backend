@@ -8,6 +8,8 @@ import { Review } from 'src/reviews/entities/review.entity';
 import { ReviewsService } from 'src/reviews/reviews.service';
 import { Response } from 'express';
 import { DimensionsResponse } from './dto/product-response.dto';
+import { Public } from 'src/_decorator';
+import { BadRequestException } from '@nestjs/common';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -21,6 +23,7 @@ export class ProductsResolver {
 		return this.productsService.create(createProductInput);
 	}
 
+	@Public()
 	@Query(() => [Product], { name: 'products' })
 	async findAll(@Args() args: FindManyArgs, @Context('res') res: Response) {
 		res.cookie('sample-cookie', 'this is a sample cookie', { httpOnly: true, maxAge: 3600000 });
@@ -28,9 +31,11 @@ export class ProductsResolver {
 		return products;
 	}
 
+	@Public()
 	@Query(() => Product, { name: 'product' })
-	findOne(@Args('id', { type: () => String }) id: string) {
-		return this.productsService.findOne(id);
+	findOne(@Args('id', { type: () => String, nullable: true }) id?: string, @Args('slug', { type: () => String, nullable: true }) slug?: string) {
+		if (!id && !slug) throw new BadRequestException('Either id or slug must be provided to query a product');
+		return this.productsService.findOne(id, slug);
 	}
 
 	@Mutation(() => Product)

@@ -254,7 +254,7 @@ type Query {
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
   payment(id: Int!): Payment!
   products(take: Int = 10, skip: Int = 0): [Product!]!
-  product(id: String!): Product!
+  product(id: String, slug: String): Product!
   categories(take: Int = 10, skip: Int = 0): [Category!]!
   category(id: Int!): Category!
   shippings(take: Int = 10, skip: Int = 0): [Shipping!]!

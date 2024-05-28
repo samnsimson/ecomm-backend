@@ -27,7 +27,7 @@ export class Category extends CoreEntity {
 
 	@BeforeInsert()
 	generateSlug() {
-		const slug = slugify(this.title, { lower: true, trim: true });
+		const slug = slugify(this.title, { lower: true, trim: true, remove: /[*+~.()'"!:@]/g });
 		this.slug = `${slug}-${uuid().split('-').join('')}`;
 	}
 }
