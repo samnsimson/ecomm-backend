@@ -53,8 +53,7 @@ export class User extends CoreEntity {
 	reviews: Review[];
 
 	@Field(() => Cart, { nullable: true })
-	@OneToOne(() => Cart, (cart) => cart.user)
-	@JoinColumn()
+	@OneToOne(() => Cart, (cart) => cart.user, { cascade: true })
 	cart: Cart;
 
 	@Field(() => [Order], { nullable: true })

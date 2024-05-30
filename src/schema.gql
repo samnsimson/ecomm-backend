@@ -107,18 +107,31 @@ type Product {
   stock: Int!
   categories: [Category!]
   reviews(take: Int = 10, skip: Int = 0): [Review!]
-  carts: [Cart!]
   orders: [Order!]
   shipping: Shipping
   dimensions: DimensionsResponse!
+}
+
+type CartItem {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  cart: Cart!
+  product: Product!
+  quantity: Int!
+  price: Int!
+  total: Int
 }
 
 type Cart {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  products: [Product!]!
   user: User!
+  items: [CartItem!]!
+  subTotal: Int!
+  discount: Int!
+  total: Int!
 }
 
 type Profile {
@@ -160,6 +173,21 @@ enum UserRole {
 
 type DeltedUser {
   id: ID!
+}
+
+type ProductOutput {
+  id: String!
+  title: String!
+  slug: String!
+  quantity: Int!
+  salePrice: Int!
+  retailPrice: Int!
+  total: Int!
+}
+
+type CartProductOutput {
+  total: Int!
+  products: [ProductOutput!]!
 }
 
 type DimensionsResponse {
@@ -247,8 +275,9 @@ type Query {
   user(id: String!): User!
   reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
+  cartProducts(input: [ProductInfo!]!): CartProductOutput!
   carts: [Cart!]!
-  cart(id: Int!): Cart!
+  cart(cartId: String, userId: String): Cart!
   orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: Int!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
@@ -271,6 +300,11 @@ type Query {
   discount(id: Int!): Discount!
 }
 
+input ProductInfo {
+  id: String!
+  quantity: Int!
+}
+
 type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): DeltedUser!
@@ -278,7 +312,6 @@ type Mutation {
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
   removeReview(id: Int!): Review!
   createCart(createCartInput: CreateCartInput!): Cart!
-  updateCart(updateCartInput: UpdateCartInput!): Cart!
   removeCart(id: Int!): Cart!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
@@ -330,14 +363,13 @@ input UpdateReviewInput {
 }
 
 input CreateCartInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  items: [Item!]!
 }
 
-input UpdateCartInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+input Item {
+  id: String!
+  quantity: Int!
+  price: Int!
 }
 
 input CreateOrderInput {

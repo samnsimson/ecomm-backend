@@ -1,18 +1,18 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
-import { Product } from 'src/products/entities/product.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Entity, JoinTable, ManyToMany, OneToOne } from 'typeorm';
+import { Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { CartItem } from './cart-item.entity';
 
 @ObjectType()
 @Entity({ name: 'cart' })
 export class Cart extends CoreEntity {
-	@Field(() => [Product])
-	@ManyToMany(() => Product, (product) => product.carts)
-	@JoinTable({ name: 'products_in_carts' })
-	products: Product[];
-
 	@Field(() => User)
-	@OneToOne(() => User, (user) => user.cart)
+	@OneToOne(() => User, (user) => user.cart, { eager: true })
+	@JoinColumn()
 	user: User;
+
+	@Field(() => [CartItem])
+	@OneToMany(() => CartItem, (cartItem) => cartItem.cart, { cascade: true, eager: true })
+	items: CartItem[];
 }
