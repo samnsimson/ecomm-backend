@@ -6,6 +6,7 @@ import { JwtAuthGuard } from './auth/auth.guard';
 async function bootstrap() {
 	const logger = new Logger('Bootstrap');
 	const app = await NestFactory.create(AppModule);
+
 	app.enableCors({ origin: 'http://localhost:3000', credentials: true });
 	app.useGlobalPipes(new ValidationPipe());
 	app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });

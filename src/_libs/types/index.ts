@@ -35,6 +35,9 @@ export type JwtPayload = {
 	id: string;
 	username: string;
 	role: UserRole;
+	email: string;
+	name: string;
+	[x: string]: any;
 };
 
 export type CurrentUserType = JwtPayload;

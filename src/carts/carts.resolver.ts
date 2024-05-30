@@ -20,8 +20,7 @@ export class CartsResolver {
 
 	@Public()
 	@Query(() => CartProductOutput, { name: 'cartProducts' })
-	async getCartProducts(@Args('input', { type: () => [ProductInfo] }) products: Array<ProductInfo>) {
-		console.log('🚀 ~ CartsResolver ~ getCartProducts ~ products:', products);
+	async getCartProducts(@Args('input', { type: () => [ProductInfo] }) products: Array<ProductInfo>, @CurrentUser() user: CurrentUserType) {
 		const pdts = await this.productService.findAll({ where: { id: In(products.map((x) => x.id)) } });
 		const output: CartProductOutput['products'] = [];
 		for (const product of products) {
