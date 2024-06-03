@@ -129,9 +129,6 @@ type Cart {
   updatedAt: DateTime!
   user: User!
   items: [CartItem!]!
-  subTotal: Int!
-  discount: Int!
-  total: Int!
 }
 
 type Profile {
@@ -275,9 +272,7 @@ type Query {
   user(id: String!): User!
   reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
-  cartProducts(input: [ProductInfo!]!): CartProductOutput!
-  carts: [Cart!]!
-  cart(cartId: String, userId: String): Cart!
+  cart(input: [ProductInfo!]!): CartProductOutput!
   orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: Int!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
@@ -311,8 +306,6 @@ type Mutation {
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
   removeReview(id: Int!): Review!
-  createCart(createCartInput: CreateCartInput!): Cart!
-  removeCart(id: Int!): Cart!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
   removeOrder(id: Int!): Order!
@@ -360,16 +353,6 @@ input CreateReviewInput {
 
 input UpdateReviewInput {
   id: String!
-}
-
-input CreateCartInput {
-  items: [Item!]!
-}
-
-input Item {
-  id: String!
-  quantity: Int!
-  price: Int!
 }
 
 input CreateOrderInput {
