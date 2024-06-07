@@ -6,30 +6,30 @@ import { UpdateTaxInput } from './dto/update-tax.input';
 
 @Resolver(() => Tax)
 export class TaxesResolver {
-  constructor(private readonly taxesService: TaxesService) {}
+	constructor(private readonly taxesService: TaxesService) {}
 
-  @Mutation(() => Tax)
-  createTax(@Args('createTaxInput') createTaxInput: CreateTaxInput) {
-    return this.taxesService.create(createTaxInput);
-  }
+	@Mutation(() => Tax)
+	createTax(@Args('createTaxInput') createTaxInput: CreateTaxInput) {
+		return this.taxesService.create(createTaxInput);
+	}
 
-  @Query(() => [Tax], { name: 'taxes' })
-  findAll() {
-    return this.taxesService.findAll();
-  }
+	@Query(() => [Tax], { name: 'taxes' })
+	findAll() {
+		return this.taxesService.findAll();
+	}
 
-  @Query(() => Tax, { name: 'tax' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.taxesService.findOne(id);
-  }
+	@Query(() => Tax, { name: 'tax' })
+	findOne(@Args('id', { type: () => Int }) id: string) {
+		return this.taxesService.findOne({ where: { id } });
+	}
 
-  @Mutation(() => Tax)
-  updateTax(@Args('updateTaxInput') updateTaxInput: UpdateTaxInput) {
-    return this.taxesService.update(updateTaxInput.id, updateTaxInput);
-  }
+	@Mutation(() => Tax)
+	updateTax(@Args('updateTaxInput') updateTaxInput: UpdateTaxInput) {
+		return this.taxesService.update(updateTaxInput.id, updateTaxInput);
+	}
 
-  @Mutation(() => Tax)
-  removeTax(@Args('id', { type: () => Int }) id: number) {
-    return this.taxesService.remove(id);
-  }
+	@Mutation(() => Tax)
+	removeTax(@Args('id', { type: () => Int }) id: string) {
+		return this.taxesService.remove(id);
+	}
 }

@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
 import { EntityManager, FindManyOptions, FindOneOptions, In, Repository } from 'typeorm';
 import { CartItem } from './entities/cart-item.entity';
 import { ProductInfo } from './dto/cart-products.input';
-import { CartProductOutput } from './dto/cart-products.output';
+import { CartProductOutput, CartTaxes, ProductOutput } from './dto/cart-products.output';
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/products/entities/product.entity';
+import { SettingsService } from 'src/settings/settings.service';
 
 @Injectable()
 export class CartsService {
@@ -14,6 +15,7 @@ export class CartsService {
 		@InjectEntityManager() private readonly entityManager: EntityManager,
 		@InjectRepository(Cart) private readonly cart: Repository<Cart>,
 		private readonly productService: ProductsService,
+		private readonly settingsService: SettingsService,
 	) {}
 
 	async getCartForGuest(input: Array<ProductInfo>): Promise<CartProductOutput['products']> {
@@ -44,14 +46,14 @@ export class CartsService {
 	}
 
 	private createOrUpdatecart(input: ProductInfo[], productsMap: Map<string, Product>, itemsMap: Map<string, CartItem>, em: EntityManager, cart: Cart) {
-		const output = [];
+		const output: CartProductOutput['products'] = [];
 		const newItems = [];
 		const updatePromises = [];
 
 		for (const pdt of input) {
 			const { title, slug, salePrice, retailPrice } = productsMap.get(pdt.id);
 			const total = pdt.quantity * salePrice;
-			output.push({ ...pdt, title, slug, salePrice, retailPrice, price: salePrice, total });
+			output.push({ ...pdt, title, slug, salePrice, retailPrice, total });
 			if (itemsMap.has(pdt.id)) {
 				const item = itemsMap.get(pdt.id);
 				updatePromises.push(em.update(CartItem, item.id, { quantity: pdt.quantity, price: total }));
@@ -70,7 +72,30 @@ export class CartsService {
 		return cart ?? (await em.save(Cart, em.create(Cart, { user: { id } })));
 	}
 
-	async findAll(args: FindManyOptions<Cart>) {
+	calculateCartTotal = (products: Array<ProductOutput>) => {
+		return products.reduce((a, b) => a + b.total, 0);
+	};
+
+	async calculateTaxes(products: Array<ProductOutput>): Promise<CartTaxes | null> {
+		const result = await this.settingsService.find({ order: { createdAt: 'DESC' }, take: 1 });
+		const settings = result.pop();
+		if (!settings) throw new UnprocessableEntityException('Unable to process the request');
+		const { taxesEnabled } = settings;
+		if (!taxesEnabled) return null;
+		const cartTotal = this.calculateCartTotal(products);
+		const taxPercentage = 10;
+		const taxAmount = Math.round(cartTotal * (10 / 100));
+		return {
+			total: taxAmount,
+			percentage: taxPercentage,
+			breakup: [
+				{ name: 'Service Tax', percentage: Math.round(taxPercentage / 2), total: Math.round(taxAmount / 2) },
+				{ name: 'Sales Tax', percentage: Math.round(taxPercentage / 2), total: Math.round(taxAmount / 2) },
+			],
+		};
+	}
+
+	async findAll(args?: FindManyOptions<Cart>) {
 		return await this.cart.find(args);
 	}
 
