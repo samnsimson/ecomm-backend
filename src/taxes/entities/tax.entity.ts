@@ -1,11 +1,12 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { TaxTypes } from 'src/_libs/types';
-import { Column } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 registerEnumType(TaxTypes, { name: 'TaxTypes' });
 
 @ObjectType()
+@Entity({ name: 'taxes' })
 export class Tax extends CoreEntity {
 	@Field(() => String)
 	@Column('text')

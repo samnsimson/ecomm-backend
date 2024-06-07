@@ -3,6 +3,7 @@ import { TaxesService } from './taxes.service';
 import { Tax } from './entities/tax.entity';
 import { CreateTaxInput } from './dto/create-tax.input';
 import { UpdateTaxInput } from './dto/update-tax.input';
+import { Public } from 'src/_decorator';
 
 @Resolver(() => Tax)
 export class TaxesResolver {
@@ -13,11 +14,13 @@ export class TaxesResolver {
 		return this.taxesService.create(createTaxInput);
 	}
 
+	@Public()
 	@Query(() => [Tax], { name: 'taxes' })
 	findAll() {
 		return this.taxesService.findAll();
 	}
 
+	@Public()
 	@Query(() => Tax, { name: 'tax' })
 	findOne(@Args('id', { type: () => Int }) id: string) {
 		return this.taxesService.findOne({ where: { id } });

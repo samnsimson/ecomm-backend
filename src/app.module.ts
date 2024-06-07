@@ -20,12 +20,12 @@ import { TaxesModule } from './taxes/taxes.module';
 import { SettingsModule } from './settings/settings.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { DiscountsModule } from './discounts/discounts.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}` }),
-		DatabaseModule,
-		PassportModule,
+		CacheModule.register({ isGlobal: true, ttl: 1000 * 60 * 24 }),
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			playground: true,
@@ -35,6 +35,8 @@ import { DiscountsModule } from './discounts/discounts.module';
 			formatError: ({ locations, path, ...err }) => ({ transaction: uuid(), time: new Date(), ...err }),
 			includeStacktraceInErrorResponses: false,
 		}),
+		DatabaseModule,
+		PassportModule,
 		UserModule,
 		ProfileModule,
 		ProductsModule,

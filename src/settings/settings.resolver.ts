@@ -32,7 +32,7 @@ export class SettingsResolver {
 	async find(@Args('id', { type: () => Int, nullable: true }) id?: string) {
 		if (id) return await this.settingsService.findOne(id);
 		const result = await this.settingsService.find({ order: { createdAt: 'DESC' }, take: 1 });
-		const settings = result.pop();
+		const settings = result[0];
 		if (!settings) throw new NotFoundException('Settings not found');
 		return settings;
 	}
