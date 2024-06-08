@@ -27,9 +27,15 @@ export class ProductOutput {
 @ObjectType()
 export class CartTaxBreakup {
 	@Field(() => String)
-	name: string;
+	title: string;
 
-	@Field(() => Int)
+	@Field(() => String)
+	description: string;
+
+	@Field(() => Int, { nullable: true })
+	amount: number;
+
+	@Field(() => Int, { nullable: true })
 	percentage: number;
 
 	@Field(() => Int)
@@ -38,9 +44,6 @@ export class CartTaxBreakup {
 
 @ObjectType()
 export class CartTaxes {
-	@Field(() => Int)
-	percentage: number;
-
 	@Field(() => Int)
 	total: number;
 

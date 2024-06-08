@@ -9,23 +9,23 @@ export class CreateTaxInput {
 	@IsNotEmpty()
 	title: string;
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	@IsString()
-	@IsNotEmpty()
+	@IsOptional()
 	description: string;
 
-	@Field(() => TaxTypes)
+	@Field(() => TaxTypes, { nullable: true })
 	@IsEnum(TaxTypes)
 	@IsOptional()
 	type?: TaxTypes;
 
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	@IsInt()
 	@Min(0)
 	@IsOptional()
 	amount?: number;
 
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	@IsInt()
 	@Min(0)
 	@IsOptional()

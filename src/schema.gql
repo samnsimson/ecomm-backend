@@ -197,6 +197,23 @@ enum Currency {
   CAD
 }
 
+type Tax {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String!
+  type: TaxTypes!
+  amount: Int
+  percentage: Int
+  enabled: Boolean
+}
+
+enum TaxTypes {
+  FLAT
+  PERCENTAGE
+}
+
 type ProductOutput {
   id: String!
   title: String!
@@ -208,13 +225,14 @@ type ProductOutput {
 }
 
 type CartTaxBreakup {
-  name: String!
-  percentage: Int!
+  title: String!
+  description: String!
+  amount: Int
+  percentage: Int
   total: Int!
 }
 
 type CartTaxes {
-  percentage: Int!
   total: Int!
   breakup: [CartTaxBreakup!]!
 }
@@ -267,23 +285,6 @@ type SignupResponse {
   refreshToken: String
 }
 
-type Tax {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  title: String!
-  description: String!
-  type: TaxTypes!
-  amount: Int
-  percentage: Int
-  enabled: Boolean
-}
-
-enum TaxTypes {
-  FLAT
-  PERCENTAGE
-}
-
 type Coupon {
   """Example field (placeholder)"""
   exampleField: Int!
@@ -312,10 +313,10 @@ type Query {
   shipping(id: String!): Shipping!
   settings: [Setting!]!
   setting(id: Int): Setting!
-  profiles(take: Int, skip: Int): [Profile!]!
-  profile(id: String!): Profile!
   taxes: [Tax!]!
   tax(id: Int!): Tax!
+  profiles(take: Int, skip: Int): [Profile!]!
+  profile(id: String!): Profile!
   coupons: [Coupon!]!
   coupon(id: Int!): Coupon!
   discounts: [Discount!]!
@@ -349,15 +350,15 @@ type Mutation {
   updateShipping(updateShippingInput: UpdateShippingInput!): Shipping!
   removeShipping(id: String!): Shipping!
   saveSetting(settingsInput: SettingsInput!): Setting!
+  createTax(createTaxInput: CreateTaxInput!): Tax!
+  updateTax(updateTaxInput: UpdateTaxInput!): Tax!
+  removeTax(id: Int!): Tax!
   createProfile(userId: String!, createProfileInput: CreateProfileInput!): Profile!
   updateProfile(updateProfileInput: UpdateProfileInput!): Profile!
   removeProfile(id: String!): Profile!
   login(credentials: LoginInput!): LoginResponse!
   signup(signupInput: CreateUserInput!, autoLogin: Boolean = false): SignupResponse!
   refresh(refreshTokenInput: RefreshTokenInput!): RefreshTokenResponse!
-  createTax(createTaxInput: CreateTaxInput!): Tax!
-  updateTax(updateTaxInput: UpdateTaxInput!): Tax!
-  removeTax(id: Int!): Tax!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   updateCoupon(updateCouponInput: UpdateCouponInput!): Coupon!
   removeCoupon(id: Int!): Coupon!
@@ -500,6 +501,25 @@ input SettingsInput {
   discountsEnabled: Boolean
 }
 
+input CreateTaxInput {
+  title: String!
+  description: String
+  type: TaxTypes
+  amount: Int
+  percentage: Int
+  enabled: Boolean!
+}
+
+input UpdateTaxInput {
+  title: String
+  description: String
+  type: TaxTypes
+  amount: Int
+  percentage: Int
+  enabled: Boolean
+  id: String!
+}
+
 input CreateProfileInput {
   firstName: String!
   lastName: String
@@ -539,25 +559,6 @@ input CreateUserInput {
 
 input RefreshTokenInput {
   token: String!
-}
-
-input CreateTaxInput {
-  title: String!
-  description: String!
-  type: TaxTypes!
-  amount: Int!
-  percentage: Int!
-  enabled: Boolean!
-}
-
-input UpdateTaxInput {
-  title: String
-  description: String
-  type: TaxTypes
-  amount: Int
-  percentage: Int
-  enabled: Boolean
-  id: String!
 }
 
 input CreateCouponInput {

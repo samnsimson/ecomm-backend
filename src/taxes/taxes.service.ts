@@ -7,6 +7,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { getCacheKey } from 'src/_libs/utils/cache-key';
+import { TaxTypes } from 'src/_libs/types';
 
 @Injectable()
 export class TaxesService {
@@ -19,6 +20,7 @@ export class TaxesService {
 
 	create(createTaxInput: CreateTaxInput) {
 		const tax = this.tax.create(createTaxInput);
+		this.cacheManager.reset();
 		return this.tax.save(tax);
 	}
 
@@ -50,5 +52,19 @@ export class TaxesService {
 	async remove(id: string) {
 		await this.cacheManager.reset();
 		return await this.tax.delete(id);
+	}
+
+	async taxBreakup(cartTotal: number) {
+		const taxes = await this.findAll({ where: { enabled: true } });
+		if (!taxes.length) return null;
+		return taxes.map(({ title, description, amount, percentage, type }) => {
+			let total = 0;
+			const isFlat = type === TaxTypes.FLAT;
+			const isPercent = type === TaxTypes.PERCENTAGE;
+			if (isFlat) total = amount;
+			if (isPercent) total = Math.round(cartTotal * (percentage / 100));
+			const base = { title, description, type, total };
+			return { ...base, amount: isFlat ? amount : null, percentage: isPercent ? percentage : null };
+		});
 	}
 }

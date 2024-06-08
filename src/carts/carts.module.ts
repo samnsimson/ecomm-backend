@@ -8,6 +8,7 @@ import { UserModule } from 'src/user/user.module';
 import { CartItem } from './entities/cart-item.entity';
 import { ProductsModule } from 'src/products/products.module';
 import { SettingsModule } from 'src/settings/settings.module';
+import { TaxesModule } from 'src/taxes/taxes.module';
 
 @Module({
 	imports: [
@@ -15,6 +16,7 @@ import { SettingsModule } from 'src/settings/settings.module';
 		forwardRef(() => UserModule),
 		forwardRef(() => ProductsModule),
 		forwardRef(() => SettingsModule),
+		forwardRef(() => TaxesModule),
 	],
 	providers: [CartsResolver, CartsService],
 	exports: [CartsService],

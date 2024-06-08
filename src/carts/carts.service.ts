@@ -8,6 +8,7 @@ import { CartProductOutput, CartTaxes, ProductOutput } from './dto/cart-products
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/products/entities/product.entity';
 import { SettingsService } from 'src/settings/settings.service';
+import { TaxesService } from 'src/taxes/taxes.service';
 
 @Injectable()
 export class CartsService {
@@ -16,6 +17,7 @@ export class CartsService {
 		@InjectRepository(Cart) private readonly cart: Repository<Cart>,
 		private readonly productService: ProductsService,
 		private readonly settingsService: SettingsService,
+		private readonly taxesService: TaxesService,
 	) {}
 
 	async getCartForGuest(input: Array<ProductInfo>): Promise<CartProductOutput['products']> {
@@ -77,22 +79,13 @@ export class CartsService {
 	};
 
 	async calculateTaxes(products: Array<ProductOutput>): Promise<CartTaxes | null> {
-		const result = await this.settingsService.find({ order: { createdAt: 'DESC' }, take: 1 });
-		const settings = result.pop();
+		const [settings] = await this.settingsService.find({ order: { createdAt: 'DESC' }, take: 1 });
 		if (!settings) throw new UnprocessableEntityException('Unable to process the request');
-		const { taxesEnabled } = settings;
-		if (!taxesEnabled) return null;
+		if (!settings.taxesEnabled) return null;
 		const cartTotal = this.calculateCartTotal(products);
-		const taxPercentage = 10;
-		const taxAmount = Math.round(cartTotal * (10 / 100));
-		return {
-			total: taxAmount,
-			percentage: taxPercentage,
-			breakup: [
-				{ name: 'Service Tax', percentage: Math.round(taxPercentage / 2), total: Math.round(taxAmount / 2) },
-				{ name: 'Sales Tax', percentage: Math.round(taxPercentage / 2), total: Math.round(taxAmount / 2) },
-			],
-		};
+		const taxBreakup = await this.taxesService.taxBreakup(cartTotal);
+		if (!taxBreakup) return null;
+		return { total: taxBreakup.reduce((a, b) => a + b.total, 0), breakup: taxBreakup };
 	}
 
 	async findAll(args?: FindManyOptions<Cart>) {
