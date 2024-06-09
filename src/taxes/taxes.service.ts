@@ -28,7 +28,7 @@ export class TaxesService {
 		const cacheKey = getCacheKey(this.cacheKey, args);
 		const cached = await this.cacheManager.get<Array<Tax>>(cacheKey);
 		if (cached) return cached;
-		const taxes = await this.tax.find(args);
+		const taxes = await this.tax.find({ ...args, order: { createdAt: 'ASC' } });
 		await this.cacheManager.set(cacheKey, taxes);
 		return taxes;
 	}
