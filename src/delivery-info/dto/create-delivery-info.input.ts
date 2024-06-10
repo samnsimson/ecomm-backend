@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class AddressComponent {
@@ -54,6 +54,11 @@ export class ShippingInfoInput extends AddressComponent {}
 
 @InputType()
 export class CreateDeliveryInfoInput {
+	@Field(() => String)
+	@IsUUID()
+	@IsNotEmpty()
+	userId: string;
+
 	@Field(() => BillingInfoInput)
 	billingAddress: BillingInfoInput;
 

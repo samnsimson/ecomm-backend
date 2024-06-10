@@ -34,10 +34,10 @@ export class DeliveryInfoService {
 	};
 
 	async create(createDeliveryInfoInput: CreateDeliveryInfoInput) {
-		const { billingAddress, shippingAddress } = createDeliveryInfoInput;
+		const { billingAddress, shippingAddress, userId: id } = createDeliveryInfoInput;
 		const billinginfo = this.extractBillingInfo(billingAddress);
 		const shippingInfo = this.extractShippingInfo(shippingAddress);
-		const deliveryInfo = this.deliveryInfo.create({ ...billinginfo, ...shippingInfo });
+		const deliveryInfo = this.deliveryInfo.create({ ...billinginfo, ...shippingInfo, user: { id } });
 		return await this.deliveryInfo.save(deliveryInfo);
 	}
 
@@ -46,7 +46,9 @@ export class DeliveryInfoService {
 	}
 
 	async findOne(args: FindOneOptions<DeliveryInfo>) {
-		return await this.deliveryInfo.findOne(args);
+		const info = await this.deliveryInfo.findOne(args);
+		if (!info) throw new NotFoundException(`delivery info not found`);
+		return info;
 	}
 
 	async update(id: string, updateDeliveryInfoInput: UpdateDeliveryInfoInput) {

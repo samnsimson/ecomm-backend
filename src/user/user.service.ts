@@ -22,8 +22,8 @@ export class UserService {
 		return this.user.find({ take, skip, ...rest });
 	}
 
-	findOne(id: string, options?: FindOneOptions<User>) {
-		return this.user.findOne({ where: { id }, ...options });
+	findOne(args?: FindOneOptions<User>) {
+		return this.user.findOne({ ...args });
 	}
 
 	findOneBy(args: FindOneOptions<User>) {

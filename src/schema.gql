@@ -168,6 +168,26 @@ type DeliveryInfo {
   shippingZipcode: String
 }
 
+type BillingInfoDto {
+  addressOne: String!
+  addressTwo: String!
+  city: String!
+  state: String!
+  country: String!
+  zipcode: String!
+  email: String!
+  phone: String!
+}
+
+type DeliveryInfoDto {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  billingAddress: BillingInfoDto
+  shippingAddress: BillingInfoDto
+}
+
 type User {
   id: ID!
   createdAt: DateTime!
@@ -182,7 +202,7 @@ type User {
   reviews: [Review!]!
   cart: Cart
   orders: [Order!]
-  deliveryInfo: DeliveryInfo
+  deliveryInfo: DeliveryInfoDto
 }
 
 enum UserRole {
@@ -302,7 +322,7 @@ type SignupResponse {
   reviews: [Review!]!
   cart: Cart
   orders: [Order!]
-  deliveryInfo: DeliveryInfo
+  deliveryInfo: DeliveryInfoDto
   authenticated: Boolean
   accessToken: String
   refreshToken: String
@@ -344,7 +364,8 @@ type Query {
   coupon(id: Int!): Coupon!
   discounts: [Discount!]!
   discount(id: Int!): Discount!
-  deliveryInfo(id: Int!): DeliveryInfo!
+  deliveryInfos(take: Int = 10, skip: Int = 0): [DeliveryInfoDto!]!
+  deliveryInfo(id: String!): DeliveryInfoDto!
 }
 
 input ProductInfo {
@@ -389,9 +410,9 @@ type Mutation {
   createDiscount(createDiscountInput: CreateDiscountInput!): Discount!
   updateDiscount(updateDiscountInput: UpdateDiscountInput!): Discount!
   removeDiscount(id: Int!): Discount!
-  createDeliveryInfo(createDeliveryInfoInput: CreateDeliveryInfoInput!): DeliveryInfo!
+  createDeliveryInfo(createDeliveryInfoInput: CreateDeliveryInfoInput!): DeliveryInfoDto!
   updateDeliveryInfo(updateDeliveryInfoInput: UpdateDeliveryInfoInput!): DeliveryInfo!
-  removeDeliveryInfo(id: Int!): DeliveryInfo!
+  removeDeliveryInfo(id: String!): DeliveryInfo!
 }
 
 input UpdateUserInput {
@@ -611,6 +632,7 @@ input UpdateDiscountInput {
 }
 
 input CreateDeliveryInfoInput {
+  userId: String!
   billingAddress: BillingInfoInput!
   shippingAddress: ShippingInfoInput!
 }
@@ -636,6 +658,7 @@ input ShippingInfoInput {
 }
 
 input UpdateDeliveryInfoInput {
+  userId: String
   billingAddress: BillingInfoInput
   shippingAddress: ShippingInfoInput
   id: String!

@@ -23,7 +23,7 @@ export class UserResolver {
 
 	@Query(() => User, { name: 'user' })
 	findOne(@Args('id') id: string) {
-		return this.userService.findOne(id);
+		return this.userService.findOne({ where: { id } });
 	}
 
 	@Mutation(() => User)

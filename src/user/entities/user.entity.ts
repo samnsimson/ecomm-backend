@@ -8,6 +8,7 @@ import { Review } from 'src/reviews/entities/review.entity';
 import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne, Unique } from 'typeorm';
 import { UserRole } from 'src/_libs/types';
 import { DeliveryInfo } from 'src/delivery-info/entities/delivery-info.entity';
+import { DeliveryInfoDto } from 'src/delivery-info/dto/delivery-return-type.dto';
 
 registerEnumType(UserRole, { name: 'UserRole' });
 
@@ -61,7 +62,7 @@ export class User extends CoreEntity {
 	@OneToMany(() => Order, (order) => order.user)
 	orders: Order[];
 
-	@Field(() => DeliveryInfo, { nullable: true })
+	@Field(() => DeliveryInfoDto, { nullable: true })
 	@OneToOne(() => DeliveryInfo, (deliveryInfo) => deliveryInfo.user, { eager: true, onDelete: 'SET NULL' })
 	@JoinColumn()
 	deliveryInfo: DeliveryInfo;
