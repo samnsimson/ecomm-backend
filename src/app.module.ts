@@ -21,6 +21,7 @@ import { SettingsModule } from './settings/settings.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { DiscountsModule } from './discounts/discounts.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { DeliveryInfoModule } from './delivery-info/delivery-info.module';
 
 @Module({
 	imports: [
@@ -51,6 +52,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 		SettingsModule,
 		CouponsModule,
 		DiscountsModule,
+		DeliveryInfoModule,
 	],
 	controllers: [],
 	providers: [],

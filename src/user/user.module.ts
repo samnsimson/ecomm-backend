@@ -13,6 +13,7 @@ import { CartsModule } from 'src/carts/carts.module';
 import { OrdersModule } from 'src/orders/orders.module';
 import { PaymentsModule } from 'src/payments/payments.module';
 import { ProductsModule } from 'src/products/products.module';
+import { DeliveryInfo } from 'src/delivery-info/entities/delivery-info.entity';
 
 @Module({
 	imports: [
@@ -22,6 +23,7 @@ import { ProductsModule } from 'src/products/products.module';
 		forwardRef(() => OrdersModule),
 		forwardRef(() => PaymentsModule),
 		forwardRef(() => ProductsModule),
+		forwardRef(() => DeliveryInfo),
 	],
 	providers: [UserResolver, UserService],
 	exports: [UserService],

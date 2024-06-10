@@ -7,6 +7,7 @@ import { Profile } from 'src/profile/entities/profile.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne, Unique } from 'typeorm';
 import { UserRole } from 'src/_libs/types';
+import { DeliveryInfo } from 'src/delivery-info/entities/delivery-info.entity';
 
 registerEnumType(UserRole, { name: 'UserRole' });
 
@@ -59,6 +60,11 @@ export class User extends CoreEntity {
 	@Field(() => [Order], { nullable: true })
 	@OneToMany(() => Order, (order) => order.user)
 	orders: Order[];
+
+	@Field(() => DeliveryInfo, { nullable: true })
+	@OneToOne(() => DeliveryInfo, (deliveryInfo) => deliveryInfo.user, { eager: true, onDelete: 'SET NULL' })
+	@JoinColumn()
+	deliveryInfo: DeliveryInfo;
 
 	@BeforeInsert()
 	hashPassword() {
