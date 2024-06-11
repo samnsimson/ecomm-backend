@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrderInput } from './dto/create-order.input';
+import { CreateOrderInput, OrderItemsInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
@@ -7,6 +7,10 @@ import { EntityManager, FindManyOptions, FindOneOptions, Repository } from 'type
 import { PaymentsService } from 'src/payments/payments.service';
 import { UserService } from 'src/user/user.service';
 import { ProductsService } from 'src/products/products.service';
+import { BillingInfoInput, ShippingInfoInput } from 'src/delivery-info/dto/create-delivery-info.input';
+import { OrderItem } from './entities/order-items.entity';
+import { CreatePaymentInput } from 'src/payments/dto/create-payment.input';
+import { Payment } from 'src/payments/entities/payment.entity';
 
 @Injectable()
 export class OrdersService {
@@ -18,8 +22,47 @@ export class OrdersService {
 		private readonly userService: UserService,
 	) {}
 
+	private getBillingAddress = (billing: BillingInfoInput) => ({
+		billingAddressOne: billing.addressOne,
+		billingAddressTwo: billing.addressTwo,
+		billingCity: billing.city,
+		billingState: billing.state,
+		billingCountry: billing.country,
+		billingZipcode: billing.zipcode,
+		billingEmail: billing.email,
+		billingPhone: billing.phone,
+	});
+
+	private getShippingAddress = (shipping: ShippingInfoInput) => ({
+		shippingAddressOne: shipping.addressOne,
+		shippingAddressTwo: shipping.addressTwo,
+		shippingCity: shipping.city,
+		shippingState: shipping.state,
+		shippingCountry: shipping.country,
+		shippingZipcode: shipping.zipcode,
+	});
+
+	private async createOrderItems(em: EntityManager, orderId: string, items: OrderItemsInput[]) {
+		const orderItems = items.map(({ id, ...item }) => em.create(OrderItem, { ...item, order: { id: orderId }, product: { id } }));
+		return await em.save(OrderItem, orderItems);
+	}
+
+	private async createPayment(em: EntityManager, orderId: string, paymentInput: CreatePaymentInput) {
+		const payment = em.create(Payment, { order: { id: orderId }, ...paymentInput });
+		return await em.save(Payment, payment);
+	}
+
 	async create(createOrderInput: CreateOrderInput & { userId: string }) {
-		console.log('🚀 ~ OrdersService ~ create ~ createOrderInput:', createOrderInput);
+		return await this.entityManager.transaction(async (em) => {
+			const { items, billingAddress, shippingAddress, userId, paymentProvider, paymentType, ...rest } = createOrderInput;
+			const billing = this.getBillingAddress(billingAddress);
+			const shipping = this.getShippingAddress(shippingAddress);
+			const orderData = em.create(Order, { user: { id: userId }, ...billing, ...shipping, ...rest });
+			const order = await em.save(Order, orderData);
+			await this.createOrderItems(em, order.id, items);
+			await this.createPayment(em, order.id, { amount: rest.total, type: paymentType, provider: paymentProvider });
+			return await em.findOne(Order, { where: { id: order.id }, relations: { user: true } });
+		});
 	}
 
 	async findAll(args: FindManyOptions<Order>) {

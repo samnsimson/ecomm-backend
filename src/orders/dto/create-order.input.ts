@@ -4,6 +4,7 @@ import { PaymentProvider, PaymentType } from 'src/_libs/types';
 import { BillingInfoInput, ShippingInfoInput } from 'src/delivery-info/dto/create-delivery-info.input';
 
 registerEnumType(PaymentType, { name: 'PaymentType' });
+
 @InputType()
 export class OrderItemsInput {
 	@Field(() => String)
@@ -51,7 +52,7 @@ export class CreateOrderInput {
 	@IsEnum(PaymentType)
 	paymentType: PaymentType;
 
-	@Field()
+	@Field(() => PaymentProvider)
 	@IsEnum(PaymentProvider)
 	@IsNotEmpty()
 	paymentProvider: PaymentProvider;

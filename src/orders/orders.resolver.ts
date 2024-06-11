@@ -8,6 +8,7 @@ import { Payment } from 'src/payments/entities/payment.entity';
 import { PaymentsService } from 'src/payments/payments.service';
 import { CurrentUser } from 'src/_decorator';
 import { CurrentUserType, UserRole } from 'src/_libs/types';
+import { BillingInfoDto, ShippingInfoDto } from 'src/delivery-info/dto/delivery-return-type.dto';
 
 @Resolver(() => Order)
 export class OrdersResolver {
@@ -45,5 +46,31 @@ export class OrdersResolver {
 	@ResolveField(() => Payment, { name: 'payment' })
 	async payment(@Parent() order: Order) {
 		return await this.paymentService.findOne(order.payment.id);
+	}
+
+	@ResolveField(() => BillingInfoDto, { name: 'billingAddress' })
+	async billingAddress(@Parent() order: Order) {
+		return {
+			addressOne: order.billingAddressOne,
+			addressTwo: order.billingAddressTwo,
+			city: order.billingCity,
+			state: order.billingState,
+			country: order.billingCountry,
+			zipcode: order.billingZipcode,
+			email: order.billingEmail,
+			phone: order.billingPhone,
+		};
+	}
+
+	@ResolveField(() => ShippingInfoDto, { name: 'shippingAddress' })
+	async shippingAddress(@Parent() order: Order) {
+		return {
+			addressOne: order.shippingAddressOne,
+			addressTwo: order.shippingAddressTwo,
+			city: order.shippingCity,
+			state: order.shippingState,
+			country: order.shippingCountry,
+			zipcode: order.shippingZipcode,
+		};
 	}
 }

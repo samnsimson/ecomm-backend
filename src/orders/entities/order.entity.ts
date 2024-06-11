@@ -32,59 +32,46 @@ export class Order extends CoreEntity {
 	@JoinColumn()
 	payment: Payment;
 
-	@Field(() => String)
 	@Column('text')
 	billingEmail: string;
 
-	@Field(() => String)
 	@Column('text')
 	billingPhone: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	billingAddressOne: string;
 
-	@Field(() => String, { nullable: true })
+	// @Field(() => String, { nullable: true })
 	@Column('text', { nullable: true, default: null })
 	billingAddressTwo?: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	billingCity: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	billingState: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	billingCountry: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	billingZipcode: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	shippingAddressOne: string;
 
-	@Field(() => String, { nullable: true })
 	@Column('text', { nullable: true, default: null })
 	shippingAddressTwo?: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	shippingCity: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	shippingState: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	shippingCountry: string;
 
-	@Field(() => String)
 	@Column('text', { default: null })
 	shippingZipcode: string;
 

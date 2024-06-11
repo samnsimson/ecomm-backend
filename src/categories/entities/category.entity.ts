@@ -22,7 +22,7 @@ export class Category extends CoreEntity {
 
 	@Field(() => [Product], { nullable: true })
 	@ManyToMany(() => Product, (product) => product.categories, { onDelete: 'CASCADE' })
-	@JoinTable({ name: 'category_products' })
+	@JoinTable({ name: 'categories_products' })
 	products: Product[];
 
 	@BeforeInsert()
