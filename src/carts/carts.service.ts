@@ -95,4 +95,8 @@ export class CartsService {
 	async findOne(args: FindOneOptions<Cart>) {
 		return await this.cart.findOne(args);
 	}
+
+	async clearUserCart(id: string) {
+		return await this.cart.delete({ user: { id } });
+	}
 }

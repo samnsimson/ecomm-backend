@@ -80,4 +80,10 @@ export class CreateOrderInput {
 	@IsOptional()
 	@Min(0)
 	shippingAmount?: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@IsNumber()
+	@IsOptional()
+	@Min(0)
+	taxAmount?: number;
 }

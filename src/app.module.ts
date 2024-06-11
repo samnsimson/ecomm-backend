@@ -23,6 +23,7 @@ import { DiscountsModule } from './discounts/discounts.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { DeliveryInfoModule } from './delivery-info/delivery-info.module';
 import { StripeModule } from './stripe/stripe.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
 	imports: [
@@ -56,6 +57,7 @@ import { StripeModule } from './stripe/stripe.module';
 		DiscountsModule,
 		DeliveryInfoModule,
 		StripeModule,
+		EmailModule,
 	],
 	controllers: [],
 	providers: [],

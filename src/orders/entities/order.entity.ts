@@ -3,7 +3,7 @@ import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { OrderStatus } from 'src/_libs/types';
 import { Payment } from 'src/payments/entities/payment.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import { BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { OrderItem } from './order-items.entity';
 
 registerEnumType(OrderStatus, { name: 'OrderStatus' });
@@ -22,6 +22,22 @@ export class Order extends CoreEntity {
 	@Field(() => Int)
 	@Column('int')
 	total: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Column('int', { nullable: true, default: 0 })
+	discountAmount: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Column('int', { nullable: true, default: 0 })
+	couponAmount: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Column('int', { nullable: true, default: 0 })
+	shippingAmount: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Column('int', { nullable: true, default: 0 })
+	taxAmount: number;
 
 	@Field(() => OrderStatus)
 	@Column('enum', { enum: OrderStatus, default: OrderStatus.CREATED })
@@ -90,4 +106,24 @@ export class Order extends CoreEntity {
 	@Field(() => String, { nullable: true, defaultValue: null })
 	@Column('timestamp', { nullable: true, default: null })
 	cancelledAt?: Date;
+
+	@BeforeUpdate()
+	manageDates() {
+		switch (this.status) {
+			case OrderStatus.PROCESSING:
+				this.processedAt = new Date();
+				break;
+			case OrderStatus.SHIPPED:
+				this.shippedAt = new Date();
+				break;
+			case OrderStatus.FULLFILLED:
+				this.fulfilledAt = new Date();
+				break;
+			case OrderStatus.CALCELLED:
+				this.cancelledAt = new Date();
+				break;
+			default:
+				break;
+		}
+	}
 }

@@ -10,6 +10,9 @@ import { UserModule } from 'src/user/user.module';
 import { PaymentsModule } from 'src/payments/payments.module';
 import { ProductsModule } from 'src/products/products.module';
 import { OrderItem } from './entities/order-items.entity';
+import { CartsModule } from 'src/carts/carts.module';
+import { EmailModule } from 'src/email/email.module';
+import { OrderSubscriber } from 'src/_subscribers/order.subscriber';
 
 @Module({
 	imports: [
@@ -17,8 +20,10 @@ import { OrderItem } from './entities/order-items.entity';
 		forwardRef(() => UserModule),
 		forwardRef(() => PaymentsModule),
 		forwardRef(() => ProductsModule),
+		forwardRef(() => CartsModule),
+		forwardRef(() => EmailModule),
 	],
-	providers: [OrdersResolver, OrdersService],
+	providers: [OrdersResolver, OrdersService, OrderSubscriber],
 	exports: [OrdersService],
 })
 export class OrdersModule {}

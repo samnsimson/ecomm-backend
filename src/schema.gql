@@ -130,6 +130,10 @@ type Order {
   user: User!
   items: [OrderItem!]!
   total: Int!
+  discountAmount: Int
+  couponAmount: Int
+  shippingAmount: Int
+  taxAmount: Int
   status: OrderStatus!
   payment: Payment!
   processedAt: String
@@ -477,6 +481,7 @@ input CreateOrderInput {
   discountAmount: Int = 0
   couponAmount: Int = 0
   shippingAmount: Int = 0
+  taxAmount: Int = 0
 }
 
 input OrderItemsInput {
@@ -516,6 +521,7 @@ input UpdateOrderInput {
   discountAmount: Int = 0
   couponAmount: Int = 0
   shippingAmount: Int = 0
+  taxAmount: Int = 0
   id: String!
 }
 
