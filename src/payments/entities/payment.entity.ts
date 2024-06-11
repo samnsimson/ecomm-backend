@@ -28,7 +28,7 @@ export class Payment extends CoreEntity {
 	status: PaymentStatus;
 
 	@Field(() => Order)
-	@OneToOne(() => Order, (order) => order.payment)
+	@OneToOne(() => Order, (order) => order.payment, { onDelete: 'SET NULL' })
 	order: Order;
 
 	@Field(() => String, { nullable: true, defaultValue: null })

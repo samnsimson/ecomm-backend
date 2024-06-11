@@ -22,11 +22,13 @@ import { CouponsModule } from './coupons/coupons.module';
 import { DiscountsModule } from './discounts/discounts.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { DeliveryInfoModule } from './delivery-info/delivery-info.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}` }),
+		ConfigModule.forRoot({ envFilePath: `.env.${process.env.NODE_ENV}`, isGlobal: true }),
 		CacheModule.register({ isGlobal: true, ttl: 1000 * 60 * 24 }),
+		StripeModule.forRoot({ apiKey: process.env.STRIPE_API_KEY }),
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
 			playground: true,
@@ -53,6 +55,7 @@ import { DeliveryInfoModule } from './delivery-info/delivery-info.module';
 		CouponsModule,
 		DiscountsModule,
 		DeliveryInfoModule,
+		StripeModule,
 	],
 	controllers: [],
 	providers: [],

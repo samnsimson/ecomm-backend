@@ -27,54 +27,6 @@ type Review {
   product: Product!
 }
 
-type Payment {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  amount: Int!
-  type: PaymentType!
-  provider: PaymentProvider!
-  status: PaymentStatus!
-  order: Order!
-  failedReason: String
-}
-
-enum PaymentType {
-  CARD
-  CASH
-}
-
-enum PaymentProvider {
-  STRIPE
-}
-
-enum PaymentStatus {
-  PAID
-  PENDING
-  PROCESSING
-  FAILED
-  CANCELLED
-  REFUNDED
-}
-
-type Order {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  user: User!
-  products: [Product!]!
-  total: Float!
-  quantity: Int!
-  status: OrderStatus!
-  payment: Payment!
-}
-
-enum OrderStatus {
-  PLACED
-  DELIVERED
-  CALCELLED
-}
-
 type Shipping {
   id: ID!
   createdAt: DateTime!
@@ -107,7 +59,6 @@ type Product {
   stock: Int!
   categories: [Category!]
   reviews(take: Int = 10, skip: Int = 0): [Review!]
-  orders: [Order!]
   shipping: Shipping
   dimensions: DimensionsResponse!
 }
@@ -129,6 +80,84 @@ type Cart {
   updatedAt: DateTime!
   user: User!
   items: [CartItem!]!
+}
+
+type Payment {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  amount: Int!
+  type: PaymentType!
+  provider: PaymentProvider!
+  status: PaymentStatus!
+  order: Order!
+  failedReason: String
+}
+
+enum PaymentType {
+  CARD
+  CASH
+}
+
+enum PaymentProvider {
+  STRIPE
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  PROCESSING
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+type OrderItem {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  order: Order!
+  product: Product!
+  quantity: Int!
+  price: Int!
+  total: Int
+}
+
+type Order {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  items: [OrderItem!]!
+  total: Int!
+  status: OrderStatus!
+  payment: Payment!
+  billingEmail: String!
+  billingPhone: String!
+  billingAddressOne: String!
+  billingAddressTwo: String
+  billingCity: String!
+  billingState: String!
+  billingCountry: String!
+  billingZipcode: String!
+  shippingAddressOne: String!
+  shippingAddressTwo: String
+  shippingCity: String!
+  shippingState: String!
+  shippingCountry: String!
+  shippingZipcode: String!
+  processedAt: String
+  shippedAt: String
+  fulfilledAt: String
+  cancelledAt: String
+}
+
+enum OrderStatus {
+  CREATED
+  PROCESSING
+  SHIPPED
+  FULLFILLED
+  CALCELLED
 }
 
 type Profile {
@@ -338,6 +367,10 @@ type Discount {
   exampleField: Int!
 }
 
+type PaymentIntentOutput {
+  clientSecret: String!
+}
+
 type Query {
   users(take: Int = 10, skip: Int = 0): [User!]!
   user(id: String!): User!
@@ -374,6 +407,7 @@ input ProductInfo {
 }
 
 type Mutation {
+  createPaymentIntent(paymentInput: PaymentIntentInput!): PaymentIntentOutput!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: String!): DeltedUser!
   createReview(createReviewInput: CreateReviewInput!): Review!
@@ -415,6 +449,11 @@ type Mutation {
   removeDeliveryInfo(id: String!): DeliveryInfo!
 }
 
+input PaymentIntentInput {
+  orderId: String!
+  total: Int!
+}
+
 input UpdateUserInput {
   username: String
   email: String
@@ -432,15 +471,54 @@ input UpdateReviewInput {
 }
 
 input CreateOrderInput {
-  productIds: [String!]!
-  total: Float!
+  items: [OrderItemsInput!]!
+  billingAddress: BillingInfoInput!
+  shippingAddress: ShippingInfoInput!
+  paymentType: PaymentType!
+  paymentProvider: String!
+  total: Int!
+  discountAmount: Int = 0
+  couponAmount: Int = 0
+  shippingAmount: Int = 0
+}
+
+input OrderItemsInput {
+  id: String!
   quantity: Int!
+  price: Int!
+  total: Int!
+}
+
+input BillingInfoInput {
+  addressOne: String!
+  addressTwo: String!
+  city: String!
+  state: String!
+  country: String!
+  zipcode: String!
+  email: String!
+  phone: String!
+}
+
+input ShippingInfoInput {
+  addressOne: String!
+  addressTwo: String!
+  city: String!
+  state: String!
+  country: String!
+  zipcode: String!
 }
 
 input UpdateOrderInput {
-  productIds: [String!]
-  total: Float
-  quantity: Int
+  items: [OrderItemsInput!]
+  billingAddress: BillingInfoInput
+  shippingAddress: ShippingInfoInput
+  paymentType: PaymentType
+  paymentProvider: String
+  total: Int
+  discountAmount: Int = 0
+  couponAmount: Int = 0
+  shippingAmount: Int = 0
   id: String!
 }
 
@@ -635,26 +713,6 @@ input CreateDeliveryInfoInput {
   userId: String!
   billingAddress: BillingInfoInput!
   shippingAddress: ShippingInfoInput!
-}
-
-input BillingInfoInput {
-  addressOne: String!
-  addressTwo: String!
-  city: String!
-  state: String!
-  country: String!
-  zipcode: String!
-  email: String!
-  phone: String!
-}
-
-input ShippingInfoInput {
-  addressOne: String!
-  addressTwo: String!
-  city: String!
-  state: String!
-  country: String!
-  zipcode: String!
 }
 
 input UpdateDeliveryInfoInput {

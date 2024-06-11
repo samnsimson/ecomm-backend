@@ -5,7 +5,6 @@ import { v4 as uuid } from 'uuid';
 import { Category } from 'src/categories/entities/category.entity';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { Review } from 'src/reviews/entities/review.entity';
-import { Order } from 'src/orders/entities/order.entity';
 import { Shipping } from 'src/shippings/entities/shipping.entity';
 
 @ObjectType()
@@ -56,10 +55,6 @@ export class Product extends CoreEntity {
 	@Field(() => [Review], { nullable: true })
 	@OneToMany(() => Review, (review) => review.product)
 	reviews: Review[];
-
-	@Field(() => [Order], { nullable: true })
-	@ManyToMany(() => Order, (order) => order.products)
-	orders: Order[];
 
 	@Field(() => Shipping, { nullable: true })
 	@ManyToOne(() => Shipping, (shipping) => shipping.products, { eager: true, onDelete: 'SET NULL' })

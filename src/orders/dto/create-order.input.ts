@@ -1,22 +1,82 @@
-import { InputType, Field, Float, Int } from '@nestjs/graphql';
-import { IsArray, IsNotEmpty, IsNumber, IsUUID, Min } from 'class-validator';
+import { InputType, Field, Int, registerEnumType } from '@nestjs/graphql';
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsUUID, Min } from 'class-validator';
+import { PaymentProvider, PaymentType } from 'src/_libs/types';
+import { BillingInfoInput, ShippingInfoInput } from 'src/delivery-info/dto/create-delivery-info.input';
 
+registerEnumType(PaymentType, { name: 'PaymentType' });
 @InputType()
-export class CreateOrderInput {
-	@Field(() => [String])
-	@IsArray()
-	@IsUUID('4', { each: true })
-	productIds: Array<string>;
-
-	@Field(() => Float)
-	@IsNumber()
+export class OrderItemsInput {
+	@Field(() => String)
+	@IsUUID()
 	@IsNotEmpty()
-	@Min(0, { message: 'total cannot be a negative value' })
-	total: number;
+	id: string;
 
 	@Field(() => Int)
 	@IsNumber()
 	@IsNotEmpty()
-	@Min(1, { message: 'quantity cannot be 0 or a negative value' })
+	@Min(1)
 	quantity: number;
+
+	@Field(() => Int)
+	@IsNumber()
+	@IsNotEmpty()
+	@Min(0)
+	price: number;
+
+	@Field(() => Int)
+	@IsNumber()
+	@IsNotEmpty()
+	@Min(0)
+	total: number;
+}
+
+@InputType()
+export class CreateOrderInput {
+	@Field(() => [OrderItemsInput])
+	@IsArray()
+	@IsNotEmpty()
+	items: Array<OrderItemsInput>;
+
+	@Field()
+	@IsObject()
+	@IsNotEmpty()
+	billingAddress: BillingInfoInput;
+
+	@Field()
+	@IsObject()
+	@IsNotEmpty()
+	shippingAddress: ShippingInfoInput;
+
+	@Field(() => PaymentType)
+	@IsEnum(PaymentType)
+	paymentType: PaymentType;
+
+	@Field()
+	@IsEnum(PaymentProvider)
+	@IsNotEmpty()
+	paymentProvider: PaymentProvider;
+
+	@Field(() => Int)
+	@IsNumber()
+	@IsNotEmpty()
+	@Min(0)
+	total: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@IsNumber()
+	@IsOptional()
+	@Min(0)
+	discountAmount?: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@IsNumber()
+	@IsOptional()
+	@Min(0)
+	couponAmount?: number;
+
+	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@IsNumber()
+	@IsOptional()
+	@Min(0)
+	shippingAmount?: number;
 }

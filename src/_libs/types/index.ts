@@ -21,8 +21,10 @@ export enum PaymentStatus {
 }
 
 export enum OrderStatus {
-	PLACED = 'placed',
-	DELIVERED = 'delivered',
+	CREATED = 'created',
+	PROCESSING = 'processing',
+	SHIPPED = 'shipped',
+	FULLFILLED = 'fulfilled',
 	CALCELLED = 'cancelled',
 }
 

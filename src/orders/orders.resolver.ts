@@ -23,8 +23,8 @@ export class OrdersResolver {
 
 	@Query(() => [Order], { name: 'orders' })
 	findAll(@Args() args: FindManyArgs, @CurrentUser() user: CurrentUserType) {
-		if (user.role === UserRole.ADMIN) return this.ordersService.findAll({ ...args, relations: { user: { profile: true }, payment: true, products: true } });
-		return this.ordersService.findAll({ ...args, where: { user: { id: user.id } }, relations: { user: { profile: true }, payment: true, products: true } });
+		if (user.role === UserRole.ADMIN) return this.ordersService.findAll({ ...args, relations: { user: { profile: true }, payment: true } });
+		return this.ordersService.findAll({ ...args, where: { user: { id: user.id } }, relations: { user: { profile: true }, payment: true } });
 	}
 
 	@Query(() => Order, { name: 'order' })
