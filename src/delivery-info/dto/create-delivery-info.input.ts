@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, IsUUID } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, IsUUID } from 'class-validator';
 
 @InputType()
 export class AddressComponent {
@@ -8,10 +8,10 @@ export class AddressComponent {
 	@IsNotEmpty()
 	addressOne: string;
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	@IsString()
-	@IsNotEmpty()
-	addressTwo: string;
+	@IsOptional()
+	addressTwo?: string;
 
 	@Field(() => String)
 	@IsString()

@@ -12,7 +12,7 @@ import { ProductsModule } from 'src/products/products.module';
 import { OrderItem } from './entities/order-items.entity';
 import { CartsModule } from 'src/carts/carts.module';
 import { EmailModule } from 'src/email/email.module';
-import { OrderSubscriber } from 'src/_subscribers/order.subscriber';
+import { OrderSubscriber } from './orders.subscriber';
 
 @Module({
 	imports: [

@@ -493,7 +493,7 @@ input OrderItemsInput {
 
 input BillingInfoInput {
   addressOne: String!
-  addressTwo: String!
+  addressTwo: String
   city: String!
   state: String!
   country: String!
@@ -504,7 +504,7 @@ input BillingInfoInput {
 
 input ShippingInfoInput {
   addressOne: String!
-  addressTwo: String!
+  addressTwo: String
   city: String!
   state: String!
   country: String!
