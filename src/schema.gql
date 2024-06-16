@@ -92,6 +92,7 @@ type Payment {
   status: PaymentStatus!
   order: Order!
   failedReason: String
+  paymentIntentId: String
 }
 
 enum PaymentType {
@@ -130,11 +131,12 @@ type Order {
   user: User!
   items: [OrderItem!]!
   total: Int!
+  subTotal: Int!
   discountAmount: Int
   couponAmount: Int
   shippingAmount: Int
   taxAmount: Int
-  status: OrderStatus!
+  status: OrderStatus
   payment: Payment!
   processedAt: String
   shippedAt: String
@@ -477,7 +479,9 @@ input CreateOrderInput {
   shippingAddress: ShippingInfoInput!
   paymentType: PaymentType!
   paymentProvider: PaymentProvider!
+  status: OrderStatus
   total: Int!
+  subTotal: Int!
   discountAmount: Int = 0
   couponAmount: Int = 0
   shippingAmount: Int = 0
@@ -517,7 +521,9 @@ input UpdateOrderInput {
   shippingAddress: ShippingInfoInput
   paymentType: PaymentType
   paymentProvider: PaymentProvider
+  status: OrderStatus
   total: Int
+  subTotal: Int
   discountAmount: Int = 0
   couponAmount: Int = 0
   shippingAmount: Int = 0
@@ -529,14 +535,16 @@ input CreatePaymentInput {
   amount: Float!
   type: String
   provider: String
-  status: String
+  status: PaymentStatus
+  paymentIntentId: String
 }
 
 input UpdatePaymentInput {
   amount: Float
   type: String
   provider: String
-  status: String
+  status: PaymentStatus
+  paymentIntentId: String
   id: String!
 }
 

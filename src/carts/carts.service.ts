@@ -1,7 +1,7 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
-import { EntityManager, FindManyOptions, FindOneOptions, In, Repository } from 'typeorm';
+import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In, Repository } from 'typeorm';
 import { CartItem } from './entities/cart-item.entity';
 import { ProductInfo } from './dto/cart-products.input';
 import { CartProductOutput, CartTaxes, ProductOutput } from './dto/cart-products.output';
@@ -96,7 +96,7 @@ export class CartsService {
 		return await this.cart.findOne(args);
 	}
 
-	async clearUserCart(id: string) {
-		return await this.cart.delete({ user: { id } });
+	async clearUserCart(args: string | FindOptionsWhere<Cart>) {
+		return await this.cart.delete(args);
 	}
 }

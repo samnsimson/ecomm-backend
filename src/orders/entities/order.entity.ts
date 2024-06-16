@@ -19,9 +19,13 @@ export class Order extends CoreEntity {
 	@OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true, eager: true })
 	items: OrderItem[];
 
-	@Field(() => Int)
-	@Column('int')
+	@Field(() => Int, { defaultValue: 0 })
+	@Column('int', { default: 0 })
 	total: number;
+
+	@Field(() => Int, { defaultValue: 0 })
+	@Column('int', { default: 0 })
+	subTotal: number;
 
 	@Field(() => Int, { nullable: true, defaultValue: 0 })
 	@Column('int', { nullable: true, default: 0 })
@@ -39,8 +43,8 @@ export class Order extends CoreEntity {
 	@Column('int', { nullable: true, default: 0 })
 	taxAmount: number;
 
-	@Field(() => OrderStatus)
-	@Column('enum', { enum: OrderStatus, default: OrderStatus.CREATED })
+	@Field(() => OrderStatus, { nullable: true, defaultValue: OrderStatus.PROCESSING })
+	@Column('enum', { enum: OrderStatus, default: OrderStatus.PROCESSING })
 	status: OrderStatus;
 
 	@Field(() => Payment)

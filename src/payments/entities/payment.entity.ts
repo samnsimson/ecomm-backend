@@ -34,4 +34,8 @@ export class Payment extends CoreEntity {
 	@Field(() => String, { nullable: true, defaultValue: null })
 	@Column('text', { default: null })
 	failedReason?: string;
+
+	@Field(() => String, { nullable: true, defaultValue: null })
+	@Column('text', { default: null })
+	paymentIntentId?: string;
 }

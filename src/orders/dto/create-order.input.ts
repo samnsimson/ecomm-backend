@@ -1,9 +1,10 @@
 import { InputType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsUUID, Min } from 'class-validator';
-import { PaymentProvider, PaymentType } from 'src/_libs/types';
+import { OrderStatus, PaymentProvider, PaymentType } from 'src/_libs/types';
 import { BillingInfoInput, ShippingInfoInput } from 'src/delivery-info/dto/create-delivery-info.input';
 
 registerEnumType(PaymentType, { name: 'PaymentType' });
+registerEnumType(OrderStatus, { name: 'OrderStatus' });
 
 @InputType()
 export class OrderItemsInput {
@@ -57,11 +58,22 @@ export class CreateOrderInput {
 	@IsNotEmpty()
 	paymentProvider: PaymentProvider;
 
+	@Field(() => OrderStatus, { nullable: true })
+	@IsEnum(OrderStatus)
+	@IsOptional()
+	status?: OrderStatus;
+
 	@Field(() => Int)
 	@IsNumber()
 	@IsNotEmpty()
 	@Min(0)
 	total: number;
+
+	@Field(() => Int)
+	@IsNumber()
+	@IsNotEmpty()
+	@Min(0)
+	subTotal: number;
 
 	@Field(() => Int, { nullable: true, defaultValue: 0 })
 	@IsNumber()

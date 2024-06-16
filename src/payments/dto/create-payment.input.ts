@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { PaymentProvider, PaymentStatus, PaymentType } from 'src/_libs/types';
 
 @InputType()
@@ -19,8 +19,13 @@ export class CreatePaymentInput {
 	@IsNotEmpty({ message: 'provider is required' })
 	provider?: PaymentProvider;
 
-	@Field({ nullable: true })
+	@Field(() => PaymentStatus, { nullable: true })
 	@IsEnum(PaymentStatus)
 	@IsNotEmpty({ message: 'status is required' })
 	status?: PaymentStatus;
+
+	@Field({ nullable: true })
+	@IsOptional()
+	@IsString()
+	paymentIntentId?: string;
 }

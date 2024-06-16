@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreatePaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
 export class PaymentsService {
@@ -23,10 +23,12 @@ export class PaymentsService {
 	}
 
 	async update(id: string, updatePaymentInput: UpdatePaymentInput) {
-		return this.payment.update(id, updatePaymentInput);
+		const { affected } = await this.payment.update(id, updatePaymentInput);
+		if (!affected) throw new UnprocessableEntityException('Payment resource not found');
+		return await this.findOne(id);
 	}
 
-	async remove(id: string) {
-		return await this.payment.delete(id);
+	async remove(args: string | FindOptionsWhere<Payment>) {
+		return await this.payment.delete(args);
 	}
 }
