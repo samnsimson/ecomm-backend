@@ -381,7 +381,7 @@ type Query {
   review(id: Int!): Review!
   cart(input: [ProductInfo!]!): CartProductOutput!
   orders(take: Int = 10, skip: Int = 0): [Order!]!
-  order(id: Int!): Order!
+  order(id: String!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
   payment(id: Int!): Payment!
   products(take: Int = 10, skip: Int = 0): [Product!]!
@@ -418,7 +418,7 @@ type Mutation {
   removeReview(id: Int!): Review!
   createOrder(createOrderInput: CreateOrderInput!): Order!
   updateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  removeOrder(id: Int!): Order!
+  removeOrder(id: String!): Order!
   createPayment(createPaymentInput: CreatePaymentInput!): Payment!
   updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
   removePayment(id: Int!): Payment!
