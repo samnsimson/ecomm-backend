@@ -4,9 +4,6 @@ import { UpdateOrderInput } from './dto/update-order.input';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { EntityManager, FindManyOptions, FindOneOptions, Repository } from 'typeorm';
-import { PaymentsService } from 'src/payments/payments.service';
-import { UserService } from 'src/user/user.service';
-import { ProductsService } from 'src/products/products.service';
 import { BillingInfoInput, ShippingInfoInput } from 'src/delivery-info/dto/create-delivery-info.input';
 import { OrderItem } from './entities/order-items.entity';
 import { CreatePaymentInput } from 'src/payments/dto/create-payment.input';
@@ -17,9 +14,6 @@ export class OrdersService {
 	constructor(
 		@InjectEntityManager() private readonly entityManager: EntityManager,
 		@InjectRepository(Order) private readonly order: Repository<Order>,
-		private readonly productService: ProductsService,
-		private readonly paymentService: PaymentsService,
-		private readonly userService: UserService,
 	) {}
 
 	private getBillingAddress = (billing: BillingInfoInput) => ({
@@ -61,12 +55,12 @@ export class OrdersService {
 			const order = await em.save(Order, orderData);
 			await this.createOrderItems(em, order.id, items);
 			await this.createPayment(em, order.id, { amount: rest.total, type: paymentType, provider: paymentProvider });
-			return await em.findOne(Order, { where: { id: order.id }, relations: { user: true } });
+			return await em.findOne(Order, { where: { id: order.id }, relations: { user: true }, order: { createdAt: 'DESC' } });
 		});
 	}
 
 	async findAll(args: FindManyOptions<Order>) {
-		return await this.order.find({ ...args });
+		return await this.order.find({ ...args, order: { createdAt: 'DESC' } });
 	}
 
 	async findOne(id: string, options?: FindOneOptions<Order>) {

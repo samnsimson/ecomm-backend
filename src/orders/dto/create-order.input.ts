@@ -75,25 +75,25 @@ export class CreateOrderInput {
 	@Min(0)
 	subTotal: number;
 
-	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Field(() => Int, { nullable: true })
 	@IsNumber()
 	@IsOptional()
 	@Min(0)
 	discountAmount?: number;
 
-	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Field(() => Int, { nullable: true })
 	@IsNumber()
 	@IsOptional()
 	@Min(0)
 	couponAmount?: number;
 
-	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Field(() => Int, { nullable: true })
 	@IsNumber()
 	@IsOptional()
 	@Min(0)
 	shippingAmount?: number;
 
-	@Field(() => Int, { nullable: true, defaultValue: 0 })
+	@Field(() => Int, { nullable: true })
 	@IsNumber()
 	@IsOptional()
 	@Min(0)
