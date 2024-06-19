@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -23,8 +23,11 @@ export class ProductsService {
 		return this.product.findOne({ where: [{ id }, { slug }], ...options });
 	}
 
-	update(id: string, updateProductInput: UpdateProductInput) {
-		return this.product.update(id, updateProductInput);
+	async update(id: string, updateProductInput: UpdateProductInput) {
+		const { dimensions, ...input } = updateProductInput;
+		const { affected } = await this.product.update(id, { ...input, ...dimensions });
+		if (!affected) throw new UnprocessableEntityException('Product update failed');
+		return await this.findOne(id);
 	}
 
 	remove(id: string) {
