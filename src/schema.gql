@@ -138,10 +138,10 @@ type Order {
   taxAmount: Int
   status: OrderStatus
   payment: Payment!
-  processedAt: String
-  shippedAt: String
-  fulfilledAt: String
-  cancelledAt: String
+  processedAt: DateTime
+  shippedAt: DateTime
+  fulfilledAt: DateTime
+  cancelledAt: DateTime
   billingAddress: BillingInfoDto!
   shippingAddress: ShippingInfoDto!
 }

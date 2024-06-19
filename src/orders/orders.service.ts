@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateOrderInput, OrderItemsInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
@@ -68,9 +68,8 @@ export class OrdersService {
 	}
 
 	async update(id: string, updateOrderInput: UpdateOrderInput) {
-		const { affected } = await this.order.update(id, updateOrderInput);
-		if (!affected) throw new UnprocessableEntityException('Request cannot be proccessed');
-		return await this.findOne(id);
+		const order = this.order.create({ id, ...updateOrderInput });
+		return await this.order.save(order);
 	}
 
 	remove(id: string) {

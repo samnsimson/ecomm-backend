@@ -95,20 +95,20 @@ export class Order extends CoreEntity {
 	@Column('text', { default: null })
 	shippingZipcode: string;
 
-	@Field(() => String, { nullable: true, defaultValue: null })
-	@Column('timestamp', { nullable: true, default: null })
+	@Field(() => Date, { nullable: true, defaultValue: null })
+	@Column('timestamp with time zone', { nullable: true, default: null })
 	processedAt?: Date;
 
-	@Field(() => String, { nullable: true, defaultValue: null })
-	@Column('timestamp', { nullable: true, default: null })
+	@Field(() => Date, { nullable: true, defaultValue: null })
+	@Column('timestamp with time zone', { nullable: true, default: null })
 	shippedAt?: Date;
 
-	@Field(() => String, { nullable: true, defaultValue: null })
-	@Column('timestamp', { nullable: true, default: null })
+	@Field(() => Date, { nullable: true, defaultValue: null })
+	@Column('timestamp with time zone', { nullable: true, default: null })
 	fulfilledAt?: Date;
 
-	@Field(() => String, { nullable: true, defaultValue: null })
-	@Column('timestamp', { nullable: true, default: null })
+	@Field(() => Date, { nullable: true, defaultValue: null })
+	@Column('timestamp with time zone', { nullable: true, default: null })
 	cancelledAt?: Date;
 
 	@BeforeUpdate()
