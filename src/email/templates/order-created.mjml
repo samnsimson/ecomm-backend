@@ -38,12 +38,12 @@
 					<tr>
 						<td>{{itemName}}</td>
 						<td>{{quantity}}</td>
-						<td>${{price}}</td>
+						<td>{{price}}</td>
 					</tr>
 					{{/each}}
 					<tr>
 						<td colspan="2" style="text-align: right; padding-top: 20px">Total:</td>
-						<td style="padding-top: 20px">${{orderTotal}}</td>
+						<td style="padding-top: 20px">{{orderTotal}}</td>
 					</tr>
 				</mj-table>
 			</mj-column>

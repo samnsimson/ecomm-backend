@@ -63,6 +63,8 @@ export enum Currency {
 
 export enum EmailTemplate {
 	ORDER_CREATED = 'order-created',
+	ORDER_SHIPPED = 'order-shipped',
+	ORDER_CANCELLED = 'order-cancelled',
 }
 
 export type OrderConfirmationContext = {
