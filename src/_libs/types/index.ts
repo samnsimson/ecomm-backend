@@ -60,3 +60,28 @@ export enum Currency {
 	USD = 'USD',
 	CAD = 'CAD',
 }
+
+export enum EmailTemplate {
+	ORDER_CREATED = 'order-created',
+}
+
+export type OrderConfirmationContext = {
+	firstName: string;
+	lastName: string;
+	orderTotal: string;
+	email: string;
+	phone: string;
+	orderItems: Array<{
+		itemName: string;
+		quantity: number;
+		price: string;
+	}>;
+	shippingAddress: {
+		addressOne: string;
+		addressTwo?: string;
+		city: string;
+		state: string;
+		country: string;
+		zipcode: string;
+	};
+};

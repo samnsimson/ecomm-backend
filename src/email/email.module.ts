@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 			imports: [ConfigModule],
 			inject: [ConfigService],
 			useFactory: async (configService: ConfigService) => ({
+				defaults: { from: 'eComm Website Admin <samnsimson@gmail.com>' },
 				transport: {
 					host: configService.get<string>('SMTP_SERVER'),
 					auth: {

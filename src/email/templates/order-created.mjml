@@ -20,7 +20,7 @@
 
 		<mj-section background-color="#ffffff">
 			<mj-column>
-				<mj-text mj-class="body-text">Hello, {{customerName}}!</mj-text>
+				<mj-text mj-class="body-text">Hello, {{firstName}} {{lastName}}!</mj-text>
 				<mj-text mj-class="body-text">Thank you for your order. We are pleased to confirm your purchase as follows:</mj-text>
 			</mj-column>
 		</mj-section>
@@ -36,7 +36,7 @@
 					</tr>
 					{{#each orderItems}}
 					<tr>
-						<td>{{name}}</td>
+						<td>{{itemName}}</td>
 						<td>{{quantity}}</td>
 						<td>${{price}}</td>
 					</tr>
@@ -53,9 +53,9 @@
 			<mj-column>
 				<mj-text mj-class="body-text" font-weight="bold">Customer Information:</mj-text>
 				<mj-text mj-class="body-text">
-					<strong>Name:</strong> {{customerName}}<br />
-					<strong>Email:</strong> {{customerEmail}}<br />
-					<strong>Phone:</strong> {{customerPhone}}
+					<strong>Name:</strong> {{firstName}} {{lastName}}<br />
+					<strong>Email:</strong> {{email}}<br />
+					<strong>Phone:</strong> {{phone}}
 				</mj-text>
 			</mj-column>
 		</mj-section>
@@ -64,9 +64,9 @@
 			<mj-column>
 				<mj-text mj-class="body-text" font-weight="bold">Shipping Address:</mj-text>
 				<mj-text mj-class="body-text">
-					{{shippingAddress.street}}<br />
-					{{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br />
-					{{shippingAddress.country}}
+					{{shippingAddress.addressOne}}<br />
+					{{#if shippingAddress.addressTwo}}{{shippingAddress.addressTwo}}<br />{{/if}} {{shippingAddress.city}}, {{shippingAddress.state}}
+					{{shippingAddress.country}} - {{shippingAddress.zipcode}}
 				</mj-text>
 			</mj-column>
 		</mj-section>
