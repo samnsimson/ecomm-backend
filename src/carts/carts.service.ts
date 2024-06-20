@@ -1,4 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In, Repository } from 'typeorm';
@@ -80,8 +80,7 @@ export class CartsService {
 
 	async calculateTaxes(products: Array<ProductOutput>): Promise<CartTaxes | null> {
 		const [settings] = await this.settingsService.find({ order: { createdAt: 'DESC' }, take: 1 });
-		if (!settings) throw new UnprocessableEntityException('Unable to process the request');
-		if (!settings.taxesEnabled) return null;
+		if (!settings || !settings.taxesEnabled) return null;
 		const cartTotal = this.calculateCartTotal(products);
 		const taxBreakup = await this.taxesService.taxBreakup(cartTotal);
 		if (!taxBreakup) return null;

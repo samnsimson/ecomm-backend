@@ -22,13 +22,9 @@ export class GqlAuthGuard extends AuthGuard('local') {
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
 	canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-		const ctx = GqlExecutionContext.create(context);
-		const { req } = ctx.getContext();
-		const token = req.headers['authorization'];
 		const isPublic = decoratorType(IS_PUBLIC_KEY, context);
 		const isRefreshJwt = decoratorType(IS_REFRESH_JWT_KEY, context);
-		const isGuest = isPublic && !!!token;
-		if (isGuest || isRefreshJwt) return true;
+		if (isPublic || isRefreshJwt) return true;
 		return super.canActivate(context);
 	}
 
