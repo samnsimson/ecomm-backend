@@ -25,7 +25,7 @@ export class OrderSubscriber implements EntitySubscriberInterface<Order> {
 		if (entity && entity.status === OrderStatus.CREATED) {
 			const order = await event.manager.findOne(Order, { where: { id: entity.id }, relations: { user: true } });
 			await this.cartService.clearUserCart({ user: { id: order.user.id } });
-			this.emailService.sendEmail();
+			this.emailService.sendEmail(OrderStatus.CREATED);
 		}
 	}
 

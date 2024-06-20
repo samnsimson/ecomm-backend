@@ -1,0 +1,90 @@
+<mjml>
+	<mj-head>
+		<mj-attributes>
+			<mj-all font-family="Arial, sans-serif"></mj-all>
+			<mj-class name="header" color="#ffffff" background-color="#4CAF50" font-size="20px" padding="20px 0"></mj-class>
+			<mj-class name="body-text" color="#555555" font-size="16px" padding="10px 25px"></mj-class>
+			<mj-class name="footer-text" color="#999999" font-size="12px" padding="20px 25px"></mj-class>
+		</mj-attributes>
+		<mj-style>
+			.order-details th { padding: 10px; background-color: #f2f2f2; border-bottom: 1px solid #dddddd; } .order-details td { padding: 10px; border-bottom:
+			1px solid #dddddd; }
+		</mj-style>
+	</mj-head>
+	<mj-body background-color="#f0f0f0">
+		<mj-section mj-class="header">
+			<mj-column>
+				<mj-text align="center" mj-class="header">Order Confirmation</mj-text>
+			</mj-column>
+		</mj-section>
+
+		<mj-section background-color="#ffffff">
+			<mj-column>
+				<mj-text mj-class="body-text">Hello, {{customerName}}!</mj-text>
+				<mj-text mj-class="body-text">Thank you for your order. We are pleased to confirm your purchase as follows:</mj-text>
+			</mj-column>
+		</mj-section>
+
+		<mj-section background-color="#ffffff">
+			<mj-column>
+				<mj-text mj-class="body-text" font-weight="bold">Order Details:</mj-text>
+				<mj-table mj-class="order-details">
+					<tr>
+						<th>Item</th>
+						<th>Quantity</th>
+						<th>Price</th>
+					</tr>
+					{{#each orderItems}}
+					<tr>
+						<td>{{name}}</td>
+						<td>{{quantity}}</td>
+						<td>${{price}}</td>
+					</tr>
+					{{/each}}
+					<tr>
+						<td colspan="2" style="text-align: right; padding-top: 20px">Total:</td>
+						<td style="padding-top: 20px">${{orderTotal}}</td>
+					</tr>
+				</mj-table>
+			</mj-column>
+		</mj-section>
+
+		<mj-section background-color="#ffffff">
+			<mj-column>
+				<mj-text mj-class="body-text" font-weight="bold">Customer Information:</mj-text>
+				<mj-text mj-class="body-text">
+					<strong>Name:</strong> {{customerName}}<br />
+					<strong>Email:</strong> {{customerEmail}}<br />
+					<strong>Phone:</strong> {{customerPhone}}
+				</mj-text>
+			</mj-column>
+		</mj-section>
+
+		<mj-section background-color="#ffffff">
+			<mj-column>
+				<mj-text mj-class="body-text" font-weight="bold">Shipping Address:</mj-text>
+				<mj-text mj-class="body-text">
+					{{shippingAddress.street}}<br />
+					{{shippingAddress.city}}, {{shippingAddress.state}} {{shippingAddress.zip}}<br />
+					{{shippingAddress.country}}
+				</mj-text>
+			</mj-column>
+		</mj-section>
+
+		<mj-section background-color="#ffffff">
+			<mj-column>
+				<mj-text mj-class="body-text">
+					If you have any questions about your order, please feel free to contact us at <a href="mailto:support@example.com">support@example.com</a>.
+				</mj-text>
+				<mj-text mj-class="body-text"> Thank you for shopping with us! </mj-text>
+			</mj-column>
+		</mj-section>
+
+		<mj-section background-color="#f0f0f0">
+			<mj-column>
+				<mj-text mj-class="footer-text" align="center"> &copy; 2024 Your Company. All rights reserved. </mj-text>
+				<mj-text mj-class="footer-text" align="center"> Your Company, 1234 Your Street, Your City, Your State, 12345 </mj-text>
+			</mj-column>
+		</mj-section>
+	</mj-body>
+</mjml>
