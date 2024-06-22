@@ -25,19 +25,24 @@ export class OrderSubscriber implements EntitySubscriberInterface<Order> {
 		if (entity && entity.status === OrderStatus.CREATED) {
 			const order = await event.manager.findOne(Order, { where: { id: entity.id }, relations: { user: true } });
 			await this.cartService.clearUserCart({ user: { id: order.user.id } });
-			const userData = { firstName: order.user.profile.firstName, lastName: order.user.profile.lastName };
-			const orderItems = order.items.map((item) => ({ itemName: item.product.title, quantity: item.quantity, price: `$${item.price}` }));
-			const addressComponent = { addressOne: order.shippingAddressOne, addressTwo: order.shippingAddressTwo };
-			const locationComponet = { city: order.shippingCity, state: order.shippingState, country: order.shippingCountry, zipcode: order.shippingZipcode };
-			const shippingAddress = { ...addressComponent, ...locationComponet };
-			const contact = { email: order.billingEmail, phone: order.billingPhone };
-			const context = { ...userData, orderItems, shippingAddress, orderTotal: `$${order.total}`, ...contact };
-			this.emailService.sendEmail<OrderConfirmationContext>(EmailTemplate.ORDER_CREATED, context);
+			this.emailService.sendEmail<OrderConfirmationContext>(this.composeOrderConfirmationEmail(order));
 		}
 	}
 
 	async afterRemove(event: RemoveEvent<Order>): Promise<void> {
 		const entity = event.entity as Order;
 		await this.paymentService.remove({ order: { id: entity.id }, status: PaymentStatus.PENDING });
+	}
+
+	private composeOrderConfirmationEmail<T>(order: Order): T {
+		const userData = { firstName: order.user.profile.firstName, lastName: order.user.profile.lastName };
+		const orderItems = order.items.map((item) => ({ itemName: item.product.title, quantity: item.quantity, price: `$${item.price}` }));
+		const addressComponent = { addressOne: order.shippingAddressOne, addressTwo: order.shippingAddressTwo };
+		const locationComponet = { city: order.shippingCity, state: order.shippingState, country: order.shippingCountry, zipcode: order.shippingZipcode };
+		const shippingAddress = { ...addressComponent, ...locationComponet };
+		const contact = { email: order.billingEmail, phone: order.billingPhone };
+		const context = { ...userData, orderItems, shippingAddress, orderTotal: `$${order.total}`, ...contact };
+		const subject = 'Your order is placed';
+		return { template: EmailTemplate.ORDER_CREATED, subject, mailto: order.billingEmail, context } as T;
 	}
 }

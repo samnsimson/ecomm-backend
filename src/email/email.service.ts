@@ -6,6 +6,13 @@ import * as Handlebars from 'handlebars';
 import * as path from 'path';
 import * as fs from 'fs';
 
+type SendEmailProps<T> = {
+	template: EmailTemplate;
+	mailto: string;
+	subject: string;
+	context: T;
+};
+
 @Injectable()
 export class EmailService {
 	private readonly logger: Logger = new Logger(EmailService.name);
@@ -25,12 +32,8 @@ export class EmailService {
 		return template(context);
 	}
 
-	async sendEmail<T>(template: EmailTemplate, context: T) {
+	async sendEmail<T>({ template, mailto: to, subject, context }: SendEmailProps<T>) {
 		this.logger.log(`Sending email. Template => ${template}`);
-		await this.mailer.sendMail({
-			to: 'samnsimson@gmail.com',
-			subject: 'Order status update',
-			html: this.renderTemplate<T>(template, context),
-		});
+		await this.mailer.sendMail({ to, subject, html: this.renderTemplate<T>(template, context) });
 	}
 }
