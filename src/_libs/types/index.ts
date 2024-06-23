@@ -87,3 +87,13 @@ export type OrderConfirmationContext = {
 		zipcode: string;
 	};
 };
+
+export enum CouponType {
+	FLAT = 'FLAT',
+	PERCENTAGE = 'PERCENTAGE',
+}
+
+export enum CouponUsageType {
+	MULTI_USE = 'MULTI_USE',
+	SINGLE_USE = 'SINGLE_USE',
+}

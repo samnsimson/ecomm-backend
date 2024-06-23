@@ -361,8 +361,30 @@ type SignupResponse {
 }
 
 type Coupon {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  code: String!
+  title: String!
+  description: String
+  type: CouponType
+  usageType: CouponUsageType
+  lastUsedAt: DateTime
+  validFrom: DateTime
+  validThrough: DateTime
+  amount: Int
+  percentage: Int
+  enabled: Boolean
+}
+
+enum CouponType {
+  FLAT
+  PERCENTAGE
+}
+
+enum CouponUsageType {
+  MULTI_USE
+  SINGLE_USE
 }
 
 type Discount {
@@ -396,8 +418,8 @@ type Query {
   tax(id: Int!): Tax!
   profiles(take: Int, skip: Int): [Profile!]!
   profile(id: String!): Profile!
-  coupons: [Coupon!]!
-  coupon(id: Int!): Coupon!
+  coupons(take: Int = 10, skip: Int = 0): [Coupon!]!
+  coupon(id: String!): Coupon!
   discounts: [Discount!]!
   discount(id: Int!): Discount!
   deliveryInfos(take: Int = 10, skip: Int = 0): [DeliveryInfoDto!]!
@@ -443,7 +465,8 @@ type Mutation {
   refresh(refreshTokenInput: RefreshTokenInput!): RefreshTokenResponse!
   createCoupon(createCouponInput: CreateCouponInput!): Coupon!
   updateCoupon(updateCouponInput: UpdateCouponInput!): Coupon!
-  removeCoupon(id: Int!): Coupon!
+  removeCoupon(id: String!): Coupon!
+  applyCoupon(applyCouponInput: ApplyCouponDto!): String!
   createDiscount(createDiscountInput: CreateDiscountInput!): Discount!
   updateDiscount(updateDiscountInput: UpdateDiscountInput!): Discount!
   removeDiscount(id: Int!): Discount!
@@ -699,14 +722,35 @@ input RefreshTokenInput {
 }
 
 input CreateCouponInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  code: String!
+  title: String!
+  description: String!
+  type: CouponType!
+  usageType: CouponUsageType!
+  validFrom: DateTime!
+  validThrough: DateTime!
+  amount: Int!
+  percentage: Int!
+  enabled: Boolean!
 }
 
 input UpdateCouponInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  code: String
+  title: String
+  description: String
+  type: CouponType
+  usageType: CouponUsageType
+  validFrom: DateTime
+  validThrough: DateTime
+  amount: Int
+  percentage: Int
+  enabled: Boolean
+  id: String!
+}
+
+input ApplyCouponDto {
+  orderId: String!
+  code: String!
 }
 
 input CreateDiscountInput {
