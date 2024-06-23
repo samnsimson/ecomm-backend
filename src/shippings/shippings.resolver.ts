@@ -4,6 +4,7 @@ import { Shipping } from './entities/shipping.entity';
 import { CreateShippingInput } from './dto/create-shipping.input';
 import { UpdateShippingInput } from './dto/update-shipping.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
+import { Public } from 'src/_decorator';
 
 @Resolver(() => Shipping)
 export class ShippingsResolver {
@@ -14,11 +15,13 @@ export class ShippingsResolver {
 		return this.shippingsService.create(createShippingInput);
 	}
 
+	@Public()
 	@Query(() => [Shipping], { name: 'shippings' })
 	findAll(@Args() args: FindManyArgs) {
 		return this.shippingsService.findAll(args);
 	}
 
+	@Public()
 	@Query(() => Shipping, { name: 'shipping' })
 	findOne(@Args('id', { type: () => String }) id: string) {
 		return this.shippingsService.findOne(id);

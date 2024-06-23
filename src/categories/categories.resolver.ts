@@ -6,6 +6,7 @@ import { UpdateCategoryInput } from './dto/update-category.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { Product } from 'src/products/entities/product.entity';
 import { ProductsService } from 'src/products/products.service';
+import { Public } from 'src/_decorator';
 
 @Resolver(() => Category)
 export class CategoriesResolver {
@@ -19,11 +20,13 @@ export class CategoriesResolver {
 		return this.categoriesService.create(createCategoryInput);
 	}
 
+	@Public()
 	@Query(() => [Category], { name: 'categories' })
 	async findAll(@Args() args: FindManyArgs) {
 		return await this.categoriesService.findAll(args);
 	}
 
+	@Public()
 	@Query(() => Category, { name: 'category' })
 	findOne(@Args('id', { type: () => Int }) id: string) {
 		return this.categoriesService.findOne(id);
