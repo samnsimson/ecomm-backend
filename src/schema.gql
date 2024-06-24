@@ -724,14 +724,14 @@ input RefreshTokenInput {
 input CreateCouponInput {
   code: String!
   title: String!
-  description: String!
-  type: CouponType!
-  usageType: CouponUsageType!
-  validFrom: DateTime!
-  validThrough: DateTime!
-  amount: Int!
-  percentage: Int!
-  enabled: Boolean!
+  description: String
+  type: CouponType
+  usageType: CouponUsageType
+  validFrom: DateTime
+  validThrough: DateTime
+  amount: Int
+  percentage: Int
+  enabled: Boolean
 }
 
 input UpdateCouponInput {

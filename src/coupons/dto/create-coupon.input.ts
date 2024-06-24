@@ -30,48 +30,48 @@ export class CreateCouponInput {
 	@IsNotEmpty()
 	title: string;
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	@IsString()
 	@IsOptional()
 	description?: string;
 
-	@Field(() => CouponType)
+	@Field(() => CouponType, { nullable: true })
 	@IsOptional()
 	@IsEnum(CouponType)
 	type?: CouponType;
 
-	@Field(() => CouponUsageType)
+	@Field(() => CouponUsageType, { nullable: true })
 	@IsOptional()
 	@IsEnum(CouponUsageType)
 	usageType?: CouponUsageType;
 
-	@Field(() => Date)
+	@Field(() => Date, { nullable: true })
 	@IsOptional()
 	@IsDateString()
 	@Type(() => Date)
 	@MinDate(new Date())
 	validFrom?: Date;
 
-	@Field(() => Date)
+	@Field(() => Date, { nullable: true })
 	@IsOptional()
 	@IsDateString()
 	@Type(() => Date)
 	@MinDate(new Date())
 	validThrough?: Date;
 
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	@IsOptional()
 	@IsNumber()
 	@Min(0)
 	amount?: number;
 
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	@IsOptional()
 	@IsNumber()
 	@Min(0)
 	percentage?: number;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { nullable: true })
 	@IsOptional()
 	@IsBoolean()
 	enabled?: boolean;
