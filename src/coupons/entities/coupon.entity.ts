@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { CouponType, CouponUsageType } from 'src/_libs/types';
+import { dateTransformer, endOfDayTransformer, startOfDayTransformer } from 'src/_libs/utils/entity-transformers';
 import { Column, Entity, Index, Unique } from 'typeorm';
 
 registerEnumType(CouponUsageType, { name: 'CouponUsageType' });
@@ -32,15 +33,15 @@ export class Coupon extends CoreEntity {
 	usageType?: CouponUsageType;
 
 	@Field(() => Date, { nullable: true, defaultValue: null })
-	@Column('time with time zone', { nullable: true, default: null })
+	@Column('date', { nullable: true, default: null, transformer: dateTransformer })
 	lastUsedAt?: Date;
 
 	@Field(() => Date, { nullable: true, defaultValue: null })
-	@Column('time with time zone', { nullable: true, default: null })
+	@Column('date', { nullable: true, default: null, transformer: startOfDayTransformer })
 	validFrom?: Date;
 
 	@Field(() => Date, { nullable: true, defaultValue: null })
-	@Column('time with time zone', { nullable: true, default: null })
+	@Column('date', { nullable: true, default: null, transformer: endOfDayTransformer })
 	validThrough?: Date;
 
 	@Field(() => Int, { nullable: true, defaultValue: 0 })

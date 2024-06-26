@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -35,7 +36,6 @@ import { EmailModule } from './email/email.module';
 			playground: true,
 			autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
 			context: ({ req, res }) => ({ req, res }),
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			formatError: ({ locations, path, ...err }) => ({ transaction: uuid(), time: new Date(), ...err }),
 			includeStacktraceInErrorResponses: false,
 		}),

@@ -5,24 +5,22 @@ import { CreateCouponInput } from './dto/create-coupon.input';
 import { UpdateCouponInput } from './dto/update-coupon.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
 import { BadRequestException } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import { ApplyCouponDto } from './dto/apply-coupon.dto';
 
 @Resolver(() => Coupon)
 export class CouponsResolver {
-	constructor(
-		private readonly couponsService: CouponsService,
-		private readonly dataSource: DataSource,
-	) {}
+	constructor(private readonly couponsService: CouponsService) {}
 
 	@Mutation(() => Coupon)
-	createCoupon(@Args('createCouponInput') createCouponInput: CreateCouponInput) {
-		return this.couponsService.create(createCouponInput);
+	async createCoupon(@Args('createCouponInput') createCouponInput: CreateCouponInput) {
+		const resp = await this.couponsService.create(createCouponInput);
+		return resp;
 	}
 
 	@Query(() => [Coupon], { name: 'coupons' })
-	findAll(@Args() args: FindManyArgs) {
-		return this.couponsService.findAll(args);
+	async findAll(@Args() args: FindManyArgs) {
+		const coupons = await this.couponsService.findAll(args);
+		return coupons;
 	}
 
 	@Query(() => Coupon, { name: 'coupon' })

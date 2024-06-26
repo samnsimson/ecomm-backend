@@ -1,19 +1,6 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { Transform, Type } from 'class-transformer';
-import {
-	IsAlphanumeric,
-	IsBoolean,
-	IsDateString,
-	IsEnum,
-	IsNotEmpty,
-	IsNumber,
-	IsOptional,
-	IsString,
-	MaxLength,
-	Min,
-	MinDate,
-	MinLength,
-} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsAlphanumeric, IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min, MinDate, MinLength } from 'class-validator';
 import { CouponType, CouponUsageType } from 'src/_libs/types';
 
 @InputType()
@@ -47,15 +34,13 @@ export class CreateCouponInput {
 
 	@Field(() => Date, { nullable: true })
 	@IsOptional()
-	@IsDateString()
-	@Type(() => Date)
+	@IsDate()
 	@MinDate(new Date())
 	validFrom?: Date;
 
 	@Field(() => Date, { nullable: true })
 	@IsOptional()
-	@IsDateString()
-	@Type(() => Date)
+	@IsDate()
 	@MinDate(new Date())
 	validThrough?: Date;
 
