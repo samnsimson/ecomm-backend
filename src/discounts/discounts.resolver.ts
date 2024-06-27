@@ -4,6 +4,7 @@ import { Discount } from './entities/discount.entity';
 import { CreateDiscountInput } from './dto/create-discount.input';
 import { UpdateDiscountInput } from './dto/update-discount.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
+import { Public } from 'src/_decorator';
 
 @Resolver(() => Discount)
 export class DiscountsResolver {
@@ -14,11 +15,13 @@ export class DiscountsResolver {
 		return this.discountsService.create(createDiscountInput);
 	}
 
+	@Public()
 	@Query(() => [Discount], { name: 'discounts' })
 	findAll(@Args() args: FindManyArgs) {
 		return this.discountsService.findAll(args);
 	}
 
+	@Public()
 	@Query(() => Discount, { name: 'discount' })
 	findOne(@Args('id') id: string) {
 		return this.discountsService.findOne({ where: { id } });

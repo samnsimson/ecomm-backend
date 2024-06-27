@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int, registerEnumType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { DiscountType } from 'src/_libs/types';
+import { dateTransformer } from 'src/_libs/utils/entity-transformers';
 import { Column, Entity } from 'typeorm';
 
 registerEnumType(DiscountType, { name: 'DiscountType' });
@@ -29,11 +30,11 @@ export class Discount extends CoreEntity {
 	percentage?: number;
 
 	@Field(() => Date, { nullable: true, defaultValue: null })
-	@Column('date', { nullable: true, default: null })
+	@Column('date', { nullable: true, default: null, transformer: dateTransformer })
 	validFrom?: Date;
 
 	@Field(() => Date, { nullable: true, defaultValue: null })
-	@Column('date', { nullable: true, default: null })
+	@Column('date', { nullable: true, default: null, transformer: dateTransformer })
 	validThrough?: Date;
 
 	@Field(() => Boolean, { nullable: true, defaultValue: null })

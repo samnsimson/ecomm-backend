@@ -8,7 +8,7 @@ export class CreateDiscountInput {
 	@IsString()
 	title: string;
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	@IsString()
 	@IsOptional()
 	description?: string;
@@ -17,27 +17,27 @@ export class CreateDiscountInput {
 	@IsEnum(DiscountType)
 	type: DiscountType;
 
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	@IsOptional()
 	@Min(0)
 	amount?: number;
 
-	@Field(() => Int)
+	@Field(() => Int, { nullable: true })
 	@IsOptional()
 	@Min(0)
 	percentage?: number;
 
-	@Field(() => Date)
+	@Field(() => Date, { nullable: true })
 	@IsOptional()
 	@IsDate()
 	validFrom?: Date;
 
-	@Field(() => Date)
+	@Field(() => Date, { nullable: true })
 	@IsOptional()
 	@IsDate()
 	validThrough?: Date;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { nullable: true })
 	@IsOptional()
 	@IsBoolean()
 	enabled?: boolean;

@@ -769,13 +769,13 @@ input ApplyCouponDto {
 
 input CreateDiscountInput {
   title: String!
-  description: String!
+  description: String
   type: DiscountType!
-  amount: Int!
-  percentage: Int!
-  validFrom: DateTime!
-  validThrough: DateTime!
-  enabled: Boolean!
+  amount: Int
+  percentage: Int
+  validFrom: DateTime
+  validThrough: DateTime
+  enabled: Boolean
 }
 
 input UpdateDiscountInput {
