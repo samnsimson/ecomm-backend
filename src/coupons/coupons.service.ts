@@ -37,11 +37,11 @@ export class CouponsService {
 	}
 
 	async findAll(args?: FindManyOptions<Coupon>) {
-		return await this.coupon.find(args);
+		return await this.coupon.find({ ...args, order: { createdAt: 'DESC' } });
 	}
 
 	async findOne(args: FindOneOptions<Coupon>) {
-		return await this.coupon.findOne(args);
+		return await this.coupon.findOne({ ...args, order: { createdAt: 'DESC' } });
 	}
 
 	async update(id: string, updateCouponInput: UpdateCouponInput) {

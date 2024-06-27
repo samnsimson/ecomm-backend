@@ -29,8 +29,9 @@ export class CouponsResolver {
 	}
 
 	@Mutation(() => Coupon)
-	updateCoupon(@Args('updateCouponInput') updateCouponInput: UpdateCouponInput) {
-		return this.couponsService.update(updateCouponInput.id, updateCouponInput);
+	async updateCoupon(@Args('updateCouponInput') updateCouponInput: UpdateCouponInput) {
+		const coupon = await this.couponsService.update(updateCouponInput.id, updateCouponInput);
+		return await this.couponsService.findOne({ where: { id: coupon.id } });
 	}
 
 	@Mutation(() => Coupon)

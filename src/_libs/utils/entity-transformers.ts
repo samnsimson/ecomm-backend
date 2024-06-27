@@ -4,8 +4,7 @@ export const dateTransformer = {
 	to: (value: Date) => value,
 	from: (value: string) => {
 		if (!value) return null;
-		const date = new Date(value);
-		return date;
+		return new Date(value);
 	},
 };
 
