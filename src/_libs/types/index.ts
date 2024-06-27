@@ -97,3 +97,8 @@ export enum CouponUsageType {
 	MULTI_USE = 'MULTI_USE',
 	SINGLE_USE = 'SINGLE_USE',
 }
+
+export enum DiscountType {
+	FLAT = 'FLAT',
+	PERCENTAGE = 'PERCENTAGE',
+}

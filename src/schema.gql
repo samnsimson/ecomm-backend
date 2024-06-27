@@ -388,8 +388,22 @@ enum CouponUsageType {
 }
 
 type Discount {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String
+  type: DiscountType!
+  amount: Int
+  percentage: Int
+  validFrom: DateTime
+  validThrough: DateTime
+  enabled: Boolean
+}
+
+enum DiscountType {
+  FLAT
+  PERCENTAGE
 }
 
 type PaymentIntentOutput {
@@ -420,8 +434,8 @@ type Query {
   profile(id: String!): Profile!
   coupons(take: Int = 10, skip: Int = 0): [Coupon!]!
   coupon(id: String!): Coupon!
-  discounts: [Discount!]!
-  discount(id: Int!): Discount!
+  discounts(take: Int = 10, skip: Int = 0): [Discount!]!
+  discount(id: String!): Discount!
   deliveryInfos(take: Int = 10, skip: Int = 0): [DeliveryInfoDto!]!
   deliveryInfo(id: String!): DeliveryInfoDto!
 }
@@ -469,7 +483,7 @@ type Mutation {
   applyCoupon(applyCouponInput: ApplyCouponDto!): String!
   createDiscount(createDiscountInput: CreateDiscountInput!): Discount!
   updateDiscount(updateDiscountInput: UpdateDiscountInput!): Discount!
-  removeDiscount(id: Int!): Discount!
+  removeDiscount(id: String!): Discount!
   createDeliveryInfo(createDeliveryInfoInput: CreateDeliveryInfoInput!): DeliveryInfoDto!
   updateDeliveryInfo(updateDeliveryInfoInput: UpdateDeliveryInfoInput!): DeliveryInfo!
   removeDeliveryInfo(id: String!): DeliveryInfo!
@@ -754,14 +768,26 @@ input ApplyCouponDto {
 }
 
 input CreateDiscountInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  title: String!
+  description: String!
+  type: DiscountType!
+  amount: Int!
+  percentage: Int!
+  validFrom: DateTime!
+  validThrough: DateTime!
+  enabled: Boolean!
 }
 
 input UpdateDiscountInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  title: String
+  description: String
+  type: DiscountType
+  amount: Int
+  percentage: Int
+  validFrom: DateTime
+  validThrough: DateTime
+  enabled: Boolean
+  id: String!
 }
 
 input CreateDeliveryInfoInput {

@@ -1,35 +1,37 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { DiscountsService } from './discounts.service';
 import { Discount } from './entities/discount.entity';
 import { CreateDiscountInput } from './dto/create-discount.input';
 import { UpdateDiscountInput } from './dto/update-discount.input';
+import { FindManyArgs } from 'src/_libs/dto/base.args';
 
 @Resolver(() => Discount)
 export class DiscountsResolver {
-  constructor(private readonly discountsService: DiscountsService) {}
+	constructor(private readonly discountsService: DiscountsService) {}
 
-  @Mutation(() => Discount)
-  createDiscount(@Args('createDiscountInput') createDiscountInput: CreateDiscountInput) {
-    return this.discountsService.create(createDiscountInput);
-  }
+	@Mutation(() => Discount)
+	createDiscount(@Args('createDiscountInput') createDiscountInput: CreateDiscountInput) {
+		return this.discountsService.create(createDiscountInput);
+	}
 
-  @Query(() => [Discount], { name: 'discounts' })
-  findAll() {
-    return this.discountsService.findAll();
-  }
+	@Query(() => [Discount], { name: 'discounts' })
+	findAll(@Args() args: FindManyArgs) {
+		return this.discountsService.findAll(args);
+	}
 
-  @Query(() => Discount, { name: 'discount' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.discountsService.findOne(id);
-  }
+	@Query(() => Discount, { name: 'discount' })
+	findOne(@Args('id') id: string) {
+		return this.discountsService.findOne({ where: { id } });
+	}
 
-  @Mutation(() => Discount)
-  updateDiscount(@Args('updateDiscountInput') updateDiscountInput: UpdateDiscountInput) {
-    return this.discountsService.update(updateDiscountInput.id, updateDiscountInput);
-  }
+	@Mutation(() => Discount)
+	async updateDiscount(@Args('updateDiscountInput') updateDiscountInput: UpdateDiscountInput) {
+		const coupon = await this.discountsService.update(updateDiscountInput.id, updateDiscountInput);
+		return await this.discountsService.findOne({ where: { id: coupon.id } });
+	}
 
-  @Mutation(() => Discount)
-  removeDiscount(@Args('id', { type: () => Int }) id: number) {
-    return this.discountsService.remove(id);
-  }
+	@Mutation(() => Discount)
+	removeDiscount(@Args('id') id: string) {
+		return this.discountsService.remove(id);
+	}
 }
