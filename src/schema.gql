@@ -61,6 +61,7 @@ type Product {
   reviews(take: Int = 10, skip: Int = 0): [Review!]
   shipping: Shipping
   dimensions: DimensionsResponse!
+  realtedProducts: [Product!]!
 }
 
 type CartItem {

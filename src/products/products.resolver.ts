@@ -56,4 +56,10 @@ export class ProductsResolver {
 		const { width, height, depth } = product;
 		return { width, height, depth };
 	}
+
+	@ResolveField(() => [Product], { name: 'realtedProducts' })
+	async relatedProducts(@Parent() { id, brand }: Product) {
+		const products = await this.productsService.findRelatedProducts(id, brand);
+		return products;
+	}
 }

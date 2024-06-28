@@ -3,11 +3,14 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { DataSource, FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductsService {
-	constructor(@InjectRepository(Product) private readonly product: Repository<Product>) {}
+	constructor(
+		@InjectRepository(Product) private readonly product: Repository<Product>,
+		private readonly dataSource: DataSource,
+	) {}
 
 	create(createProductInput: CreateProductInput) {
 		const { dimensions, ...input } = createProductInput;
@@ -21,6 +24,17 @@ export class ProductsService {
 
 	findOne(id?: string, slug?: string, options?: FindOneOptions<Product>) {
 		return this.product.findOne({ where: [{ id }, { slug }], ...options });
+	}
+
+	async findRelatedProducts(id: string, brand: string, options?: FindManyOptions<Product>) {
+		const take = options?.take ?? 4;
+		return await this.dataSource
+			.getRepository(Product)
+			.createQueryBuilder('product')
+			.where('product.brand = :brand', { brand })
+			.andWhere('product.id != :id', { id })
+			.take(take)
+			.getMany();
 	}
 
 	async update(id: string, updateProductInput: UpdateProductInput) {
