@@ -3,7 +3,7 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { DataSource, FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { DataSource, FindManyOptions, FindOneOptions, Not, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductsService {
@@ -27,14 +27,7 @@ export class ProductsService {
 	}
 
 	async findRelatedProducts(id: string, brand: string, options?: FindManyOptions<Product>) {
-		const take = options?.take ?? 4;
-		return await this.dataSource
-			.getRepository(Product)
-			.createQueryBuilder('product')
-			.where('product.brand = :brand', { brand })
-			.andWhere('product.id != :id', { id })
-			.take(take)
-			.getMany();
+		return await this.product.find({ where: { brand, id: Not(id) }, take: 4, ...options });
 	}
 
 	async update(id: string, updateProductInput: UpdateProductInput) {
