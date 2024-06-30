@@ -63,7 +63,13 @@ export class CartProductOutput {
 	isDeductionsEligible: boolean;
 
 	@Field(() => CartTaxes, { nullable: true })
-	taxes: CartTaxes;
+	taxes?: CartTaxes;
+
+	@Field(() => Int, { nullable: true })
+	discount?: number;
+
+	@Field(() => Int, { nullable: true })
+	coupon?: number;
 
 	@Field(() => [ProductOutput])
 	products: Array<ProductOutput>;

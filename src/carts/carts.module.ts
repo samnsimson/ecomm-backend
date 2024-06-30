@@ -9,6 +9,8 @@ import { CartItem } from './entities/cart-item.entity';
 import { ProductsModule } from 'src/products/products.module';
 import { SettingsModule } from 'src/settings/settings.module';
 import { TaxesModule } from 'src/taxes/taxes.module';
+import { DiscountsModule } from 'src/discounts/discounts.module';
+import { CouponsModule } from 'src/coupons/coupons.module';
 
 @Module({
 	imports: [
@@ -17,6 +19,8 @@ import { TaxesModule } from 'src/taxes/taxes.module';
 		forwardRef(() => ProductsModule),
 		forwardRef(() => SettingsModule),
 		forwardRef(() => TaxesModule),
+		forwardRef(() => DiscountsModule),
+		forwardRef(() => CouponsModule),
 	],
 	providers: [CartsResolver, CartsService],
 	exports: [CartsService],

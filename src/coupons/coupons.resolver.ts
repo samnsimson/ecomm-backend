@@ -4,7 +4,6 @@ import { Coupon } from './entities/coupon.entity';
 import { CreateCouponInput } from './dto/create-coupon.input';
 import { UpdateCouponInput } from './dto/update-coupon.input';
 import { FindManyArgs } from 'src/_libs/dto/base.args';
-import { BadRequestException } from '@nestjs/common';
 import { ApplyCouponDto } from './dto/apply-coupon.dto';
 
 @Resolver(() => Coupon)
@@ -39,11 +38,9 @@ export class CouponsResolver {
 		return this.couponsService.remove(id);
 	}
 
-	@Mutation(() => String)
+	@Mutation(() => Coupon)
 	async applyCoupon(@Args('applyCouponInput') applyCouponInput: ApplyCouponDto) {
-		const coupon = await this.couponsService.getValidCoupon(applyCouponInput.code);
-		if (!coupon) throw new BadRequestException(`Coupon "${applyCouponInput.code}" is invalid`);
-		const appliedCoupon = await this.couponsService.applyCoupon(coupon);
-		console.log('🚀 ~ CouponsResolver ~ applyCoupon ~ appliedCoupon:', appliedCoupon);
+		const date = new Date();
+		return await this.couponsService.applyCoupon(applyCouponInput.code, date);
 	}
 }

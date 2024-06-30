@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCouponInput } from './dto/create-coupon.input';
 import { UpdateCouponInput } from './dto/update-coupon.input';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,15 +18,14 @@ export class CouponsService {
 		return await this.coupon.save(coupon);
 	}
 
-	async getValidCoupon(code: string) {
-		const currentDate = new Date();
+	async getValidCoupon(code: string, date: Date) {
 		return await this.dataSource
 			.getRepository(Coupon)
 			.createQueryBuilder('coupon')
 			.where('coupon.code = :code', { code })
 			.andWhere('coupon.enabled = :enabled', { enabled: true })
-			.andWhere('(coupon.validFrom <= :currentDate OR coupon.validFrom IS NULL)', { currentDate })
-			.andWhere('(coupon.validThrough >= :currentDate OR coupon.validThrough IS NULL)', { currentDate })
+			.andWhere('(coupon.validFrom <= :currentDate OR coupon.validFrom IS NULL)', { currentDate: date })
+			.andWhere('(coupon.validThrough >= :currentDate OR coupon.validThrough IS NULL)', { currentDate: date })
 			.andWhere('coupon.usageType = :multiUseType', { multiUseType: CouponUsageType.MULTI_USE })
 			.orWhere(
 				new Brackets((qb) => {
@@ -53,12 +52,9 @@ export class CouponsService {
 		return await this.coupon.delete(id);
 	}
 
-	async applyCoupon(coupon: Coupon) {
-		if (coupon.usageType === CouponUsageType.SINGLE_USE) {
-			const singleUseCoupon = this.coupon.create({ id: coupon.id, lastUsedAt: new Date() });
-			return await this.coupon.save(singleUseCoupon);
-		} else {
-			return coupon;
-		}
+	async applyCoupon(code: string, date: Date) {
+		const coupon = await this.getValidCoupon(code, date);
+		if (!coupon) throw new BadRequestException(`Coupon "${coupon}" is invalid or expired`);
+		return await this.coupon.save(this.coupon.create({ id: coupon.id, lastUsedAt: date }));
 	}
 }

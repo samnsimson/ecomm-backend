@@ -1,5 +1,16 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsNumber, IsString, IsUUID, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+
+@InputType()
+export class CartInput {
+	@Field(() => String, { nullable: true })
+	@IsString()
+	@IsOptional()
+	code?: string;
+
+	@Field(() => [ProductInfo])
+	products: ProductInfo[];
+}
 
 @InputType()
 export class ProductInfo {

@@ -9,6 +9,9 @@ import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/products/entities/product.entity';
 import { SettingsService } from 'src/settings/settings.service';
 import { TaxesService } from 'src/taxes/taxes.service';
+import { DiscountsService } from 'src/discounts/discounts.service';
+import { CouponsService } from 'src/coupons/coupons.service';
+import { CouponType, DiscountType } from 'src/_libs/types';
 
 @Injectable()
 export class CartsService {
@@ -18,6 +21,8 @@ export class CartsService {
 		private readonly productService: ProductsService,
 		private readonly settingsService: SettingsService,
 		private readonly taxesService: TaxesService,
+		private readonly discountService: DiscountsService,
+		private readonly couponService: CouponsService,
 	) {}
 
 	async getCartForGuest(input: Array<ProductInfo>): Promise<CartProductOutput['products']> {
@@ -85,6 +90,36 @@ export class CartsService {
 		const taxBreakup = await this.taxesService.taxBreakup(cartTotal);
 		if (!taxBreakup) return null;
 		return { total: taxBreakup.reduce((a, b) => a + b.total, 0), breakup: taxBreakup };
+	}
+
+	async calculateDiscounts(cartTotal: number = 0): Promise<number | null> {
+		const discounts = await this.discountService.findAll({ where: { enabled: true } });
+		const discountAmounts = discounts.map((disc) => {
+			switch (disc.type) {
+				case DiscountType.FLAT:
+					return disc.amount;
+				case DiscountType.PERCENTAGE:
+					const multiplier = disc.percentage / 100;
+					return Math.round(cartTotal * multiplier);
+				default:
+					return 0;
+			}
+		});
+		return Math.max(...discountAmounts);
+	}
+
+	async calculateCoupon(cartTotal: number, couponCode: string | null): Promise<number | null> {
+		if (!couponCode) return null;
+		const coupon = await this.couponService.applyCoupon(couponCode, new Date());
+		switch (coupon.type) {
+			case CouponType.FLAT:
+				return coupon.amount;
+			case CouponType.PERCENTAGE:
+				const multiplier = coupon.percentage / 100;
+				return Math.round(cartTotal * multiplier);
+			default:
+				return 0;
+		}
 	}
 
 	async findAll(args?: FindManyOptions<Cart>) {
