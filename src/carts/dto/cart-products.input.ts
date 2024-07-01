@@ -6,7 +6,7 @@ export class CartInput {
 	@Field(() => String, { nullable: true })
 	@IsString()
 	@IsOptional()
-	code?: string;
+	couponCode?: string;
 
 	@Field(() => [ProductInfo])
 	products: ProductInfo[];

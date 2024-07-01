@@ -55,6 +55,7 @@ export class CouponsService {
 	async applyCoupon(code: string, date: Date) {
 		const coupon = await this.getValidCoupon(code, date);
 		if (!coupon) throw new BadRequestException(`Coupon "${coupon}" is invalid or expired`);
-		return await this.coupon.save(this.coupon.create({ id: coupon.id, lastUsedAt: date }));
+		const { id } = await this.coupon.save(this.coupon.create({ id: coupon.id, lastUsedAt: date }));
+		return await this.findOne({ where: { id } });
 	}
 }

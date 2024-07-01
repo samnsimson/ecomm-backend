@@ -12,13 +12,14 @@ export class CartsResolver {
 
 	@Public()
 	@Query(() => CartProductOutput, { name: 'cart' })
-	async getCart(@Args('input', { type: () => CartInput }) cartInput: CartInput, @CurrentUser() user: CurrentUserType) {
-		const { code, products } = cartInput;
+	async getCart(@Args('cartInput', { type: () => CartInput }) cartInput: CartInput, @CurrentUser() user: CurrentUserType) {
+		console.log('🚀 ~ CartsResolver ~ getCart ~ user:', user);
+		const { couponCode, products } = cartInput;
 		const output = user ? await this.cartsService.getCartForUser(user.id, products) : await this.cartsService.getCartForGuest(products);
 		const subTotal = this.cartsService.calculateCartTotal(output);
 		const taxes = await this.cartsService.calculateTaxes(output);
 		const discount = await this.cartsService.calculateDiscounts(subTotal);
-		const coupon = await this.cartsService.calculateCoupon(subTotal, code);
+		const coupon = await this.cartsService.calculateCoupon(subTotal, couponCode);
 		const isDeductionsEligible = !!user;
 		let total = 0;
 		if (subTotal) total = total + subTotal;

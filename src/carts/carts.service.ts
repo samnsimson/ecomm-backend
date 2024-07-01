@@ -76,6 +76,7 @@ export class CartsService {
 
 	private async getCartOrCreate(em: EntityManager, id: string) {
 		const cart = await em.findOne(Cart, { where: { user: { id } } });
+		console.log('🚀 ~ CartsService ~ getCartOrCreate ~ cart:', cart);
 		return cart ?? (await em.save(Cart, em.create(Cart, { user: { id } })));
 	}
 
@@ -89,7 +90,7 @@ export class CartsService {
 		const cartTotal = this.calculateCartTotal(products);
 		const taxBreakup = await this.taxesService.taxBreakup(cartTotal);
 		if (!taxBreakup) return null;
-		return { total: taxBreakup.reduce((a, b) => a + b.total, 0), breakup: taxBreakup };
+		return { total: taxBreakup.reduce((a, b) => (a + cartTotal ? b.total : 0), 0), breakup: taxBreakup };
 	}
 
 	async calculateDiscounts(cartTotal: number = 0): Promise<number | null> {
@@ -97,7 +98,7 @@ export class CartsService {
 		const discountAmounts = discounts.map((disc) => {
 			switch (disc.type) {
 				case DiscountType.FLAT:
-					return disc.amount;
+					return cartTotal ? disc.amount : 0;
 				case DiscountType.PERCENTAGE:
 					const multiplier = disc.percentage / 100;
 					return Math.round(cartTotal * multiplier);
@@ -113,7 +114,7 @@ export class CartsService {
 		const coupon = await this.couponService.applyCoupon(couponCode, new Date());
 		switch (coupon.type) {
 			case CouponType.FLAT:
-				return coupon.amount;
+				return cartTotal ? coupon.amount : 0;
 			case CouponType.PERCENTAGE:
 				const multiplier = coupon.percentage / 100;
 				return Math.round(cartTotal * multiplier);

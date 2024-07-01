@@ -418,7 +418,7 @@ type Query {
   user(id: String!): User!
   reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
-  cart(input: CartInput!): CartProductOutput!
+  cart(cartInput: CartInput!): CartProductOutput!
   orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: String!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
@@ -444,7 +444,7 @@ type Query {
 }
 
 input CartInput {
-  code: String
+  couponCode: String
   products: [ProductInfo!]!
 }
 
