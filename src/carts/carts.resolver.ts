@@ -6,6 +6,7 @@ import { CreateCartInput } from './dto/create-cart.input';
 import { v4 as uuid } from 'uuid';
 import { UpdateCartItemInput } from './dto/update-cart-item.input';
 import { RemoveCartItemInput } from './dto/remove-item.input';
+import { CreateCartItemInput } from './dto/create-cart-item.input';
 
 @Resolver(() => Cart)
 export class CartsResolver {
@@ -15,17 +16,24 @@ export class CartsResolver {
 	@Mutation(() => Cart)
 	async createCart(@Args('createCartInput') { userId, ...input }: CreateCartInput) {
 		if (!userId) userId = uuid();
-		const cart = await this.cartsService.createCart({ userId, ...input });
-		return cart;
+		return await this.cartsService.createCart({ userId, ...input });
 	}
 
 	@Public()
-	@Query(() => Cart, { name: 'cart' })
+	@Query(() => Cart, { name: 'cart', nullable: true })
 	async getCart(
 		@Args('userId', { type: () => String, nullable: true }) userId?: string,
 		@Args('cartId', { type: () => String, nullable: true }) cartId?: string,
 	) {
-		return await this.cartsService.findOne({ where: [{ user: { id: userId } }, { id: cartId }] });
+		if (!userId && !cartId) return null;
+		const whereCond = [...(userId ? [{ user: { id: userId } }] : []), ...(cartId ? [{ id: cartId }] : [])];
+		const cart = await this.cartsService.findOne({ where: whereCond });
+		return cart;
+	}
+
+	@Mutation(() => Cart)
+	async createCartItem(@Args('createCartItemInput') createCartItemInput: CreateCartItemInput) {
+		return await this.cartsService.createCartItem(createCartItemInput);
 	}
 
 	@Mutation(() => Cart)
@@ -35,7 +43,6 @@ export class CartsResolver {
 
 	@Mutation(() => Cart)
 	async removeCartItem(@Args('removeCartItemInput') removeCartItemInput: RemoveCartItemInput) {
-		console.log('🚀 ~ CartsResolver ~ removeCartItem ~ removeCartItemInput:', removeCartItemInput);
 		return await this.cartsService.removeCartItem(removeCartItemInput);
 	}
 }

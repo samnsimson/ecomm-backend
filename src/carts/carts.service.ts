@@ -9,6 +9,7 @@ import { CreateCartInput, Item } from './dto/create-cart.input';
 import { ShippingsService } from 'src/shippings/shippings.service';
 import { UpdateCartItemInput } from './dto/update-cart-item.input';
 import { RemoveCartItemInput } from './dto/remove-item.input';
+import { CreateCartItemInput } from './dto/create-cart-item.input';
 
 @Injectable()
 export class CartsService {
@@ -35,17 +36,28 @@ export class CartsService {
 			const cart = await em.save(Cart, em.create(Cart, { user: { id: userId }, ...cartDiscounts, ...cartData }));
 			const cartItems = items.map(({ id, ...rest }) => em.create(CartItem, { cart: { id: cart.id }, product: { id }, ...rest }));
 			await em.save(CartItem, cartItems);
-			return await em.find(Cart, { where: { id: cart.id } });
+			return await em.findOne(Cart, { where: { id: cart.id } });
+		});
+	}
+
+	private async udpateCart(em: EntityManager, cartId: string) {
+		const allCartItems = await em.find(CartItem, { where: { cart: { id: cartId } } });
+		const cartDiscounts = await this.getCartDiscounts(allCartItems);
+		const cart = await em.save(Cart, em.create(Cart, { id: cartId, ...cartDiscounts }));
+		return await em.findOne(Cart, { where: { id: cart.id } });
+	}
+
+	async createCartItem({ cartId, productId, price, quantity }: CreateCartItemInput) {
+		return this.entityManager.transaction(async (em) => {
+			await em.save(CartItem, em.create(CartItem, { cart: { id: cartId }, product: { id: productId }, price, quantity }));
+			return await this.udpateCart(em, cartId);
 		});
 	}
 
 	async updateCartItem({ itemId, cartId, ...rest }: UpdateCartItemInput) {
 		return this.entityManager.transaction(async (em) => {
 			await em.save(CartItem, em.create(CartItem, { id: itemId, ...rest }));
-			const allCartItems = await em.find(CartItem, { where: { cart: { id: cartId } } });
-			const cartDiscounts = await this.getCartDiscounts(allCartItems);
-			const cart = await em.save(Cart, em.create(Cart, { id: cartId, ...cartDiscounts }));
-			return em.findOne(Cart, { where: { id: cart.id } });
+			return await this.udpateCart(em, cartId);
 		});
 	}
 
@@ -53,10 +65,7 @@ export class CartsService {
 		return this.entityManager.transaction(async (em) => {
 			const removedItem = await em.delete(CartItem, itemId);
 			if (!removedItem.affected) throw new UnprocessableEntityException('Cannot delete non existing item.');
-			const allCartItems = await em.find(CartItem, { where: { cart: { id: cartId } } });
-			const cartDiscounts = await this.getCartDiscounts(allCartItems);
-			const cart = await em.save(Cart, em.create(Cart, { id: cartId, ...cartDiscounts }));
-			return em.findOne(Cart, { where: { id: cart.id } });
+			return await this.udpateCart(em, cartId);
 		});
 	}
 

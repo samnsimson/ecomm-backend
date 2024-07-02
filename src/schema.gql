@@ -392,7 +392,7 @@ type Query {
   user(id: String!): User!
   reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
-  cart(userId: String, cartId: String): Cart!
+  cart(userId: String, cartId: String): Cart
   orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: String!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
@@ -425,6 +425,7 @@ type Mutation {
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
   removeReview(id: Int!): Review!
   createCart(createCartInput: CreateCartInput!): Cart!
+  createCartItem(createCartItemInput: CreateCartItemInput!): Cart!
   updateCartItem(updateCartItemInput: UpdateCartItemInput!): Cart!
   removeCartItem(removeCartItemInput: RemoveCartItemInput!): Cart!
   createOrder(createOrderInput: CreateOrderInput!): Order!
@@ -492,6 +493,13 @@ input CreateCartInput {
 
 input Item {
   id: String!
+  quantity: Int!
+  price: Int!
+}
+
+input CreateCartItemInput {
+  cartId: String!
+  productId: String!
   quantity: Int!
   price: Int!
 }
