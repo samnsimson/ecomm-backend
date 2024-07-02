@@ -4,6 +4,7 @@ import { UpdateDiscountInput } from './dto/update-discount.input';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 import { Discount } from './entities/discount.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DiscountType } from 'src/_libs/types';
 
 @Injectable()
 export class DiscountsService {
@@ -25,6 +26,17 @@ export class DiscountsService {
 	update(id: string, updateDiscountInput: UpdateDiscountInput) {
 		const discount = this.discount.create({ id, ...updateDiscountInput });
 		return this.discount.save(discount);
+	}
+
+	async calculateDiscount(total: number) {
+		const discounts = await this.findAll({ where: { enabled: true } });
+		return Math.max(
+			...discounts.map((discount) => {
+				if (discount.type === DiscountType.FLAT) return discount.amount;
+				if (discount.type === DiscountType.PERCENTAGE) return Math.round(total * (discount.percentage / 100));
+				return 0;
+			}),
+		);
 	}
 
 	async remove(id: string) {

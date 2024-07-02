@@ -11,6 +11,7 @@ import { SettingsModule } from 'src/settings/settings.module';
 import { TaxesModule } from 'src/taxes/taxes.module';
 import { DiscountsModule } from 'src/discounts/discounts.module';
 import { CouponsModule } from 'src/coupons/coupons.module';
+import { ShippingsModule } from 'src/shippings/shippings.module';
 
 @Module({
 	imports: [
@@ -21,6 +22,7 @@ import { CouponsModule } from 'src/coupons/coupons.module';
 		forwardRef(() => TaxesModule),
 		forwardRef(() => DiscountsModule),
 		forwardRef(() => CouponsModule),
+		forwardRef(() => ShippingsModule),
 	],
 	providers: [CartsResolver, CartsService],
 	exports: [CartsService],

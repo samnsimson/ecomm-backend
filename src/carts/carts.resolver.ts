@@ -1,33 +1,41 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { CartsService } from './carts.service';
 import { Cart } from './entities/cart.entity';
 import { Public } from 'src/_decorator';
-import { CartInput } from './dto/cart-products.input';
-import { CartProductOutput } from './dto/cart-products.output';
+import { CreateCartInput } from './dto/create-cart.input';
+import { v4 as uuid } from 'uuid';
+import { UpdateCartItemInput } from './dto/update-cart-item.input';
+import { RemoveCartItemInput } from './dto/remove-item.input';
 
 @Resolver(() => Cart)
 export class CartsResolver {
 	constructor(private readonly cartsService: CartsService) {}
 
 	@Public()
-	@Query(() => CartProductOutput, { name: 'cart' })
+	@Mutation(() => Cart)
+	async createCart(@Args('createCartInput') { userId, ...input }: CreateCartInput) {
+		if (!userId) userId = uuid();
+		const cart = await this.cartsService.createCart({ userId, ...input });
+		return cart;
+	}
+
+	@Public()
+	@Query(() => Cart, { name: 'cart' })
 	async getCart(
-		@Args('cartInput', { type: () => CartInput }) cartInput: CartInput,
-		@Args('userId', { type: () => String, nullable: true }) userId: string | undefined,
+		@Args('userId', { type: () => String, nullable: true }) userId?: string,
+		@Args('cartId', { type: () => String, nullable: true }) cartId?: string,
 	) {
-		let total = 0;
-		const { couponCode, products, cartId } = cartInput;
-		const output = userId ? await this.cartsService.getCartForUser(userId, products) : await this.cartsService.getCartForGuest(products);
-		const subTotal = this.cartsService.calculateCartTotal(output);
-		const taxes = await this.cartsService.calculateTaxes(output);
-		const discount = await this.cartsService.calculateDiscounts(subTotal);
-		const coupon = await this.cartsService.calculateCoupon(subTotal, couponCode);
-		if (coupon && cartId) await this.cartsService.update({ id: cartId, couponCode });
-		const isDeductionsEligible = !!userId;
-		if (subTotal) total = total + subTotal;
-		if (discount && total >= discount) total = total - discount;
-		if (coupon && coupon.total && total >= coupon.total) total = total - coupon.total;
-		if (taxes && total) total = total + taxes.total;
-		return { products: output, subTotal, total, isDeductionsEligible, taxes, discount, coupon };
+		return await this.cartsService.findOne({ where: [{ user: { id: userId } }, { id: cartId }] });
+	}
+
+	@Mutation(() => Cart)
+	async updateCartItem(@Args('updateCartItemInput') updateCartItemInput: UpdateCartItemInput) {
+		return await this.cartsService.updateCartItem(updateCartItemInput);
+	}
+
+	@Mutation(() => Cart)
+	async removeCartItem(@Args('removeCartItemInput') removeCartItemInput: RemoveCartItemInput) {
+		console.log('🚀 ~ CartsResolver ~ removeCartItem ~ removeCartItemInput:', removeCartItemInput);
+		return await this.cartsService.removeCartItem(removeCartItemInput);
 	}
 }

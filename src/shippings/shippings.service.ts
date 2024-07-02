@@ -4,6 +4,7 @@ import { UpdateShippingInput } from './dto/update-shipping.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Shipping } from './entities/shipping.entity';
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
+import { ShippingTypes } from 'src/_libs/types';
 
 @Injectable()
 export class ShippingsService {
@@ -28,6 +29,18 @@ export class ShippingsService {
 		const { affected } = await this.shipping.update(id, updateShippingInput);
 		if (affected) return await this.findOne(id);
 		else throw new NotFoundException(`Shipping with id "${id}" not found`);
+	}
+
+	async calculateShipping(cartTotal: number) {
+		const shippings = await this.findAll({ where: { enabled: true } });
+		return Math.min(
+			...shippings.map((shipping) => {
+				if (shipping.type === ShippingTypes.FREE) return 0;
+				if (shipping.type === ShippingTypes.FLAT) return shipping.amount;
+				if (shipping.type === ShippingTypes.PERCENTAGE) return Math.round(cartTotal * (shipping.percentage / 100));
+				return 0;
+			}),
+		);
 	}
 
 	async remove(id: string) {

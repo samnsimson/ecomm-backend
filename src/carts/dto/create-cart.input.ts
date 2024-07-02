@@ -19,6 +19,10 @@ export class Item {
 
 @InputType()
 export class CreateCartInput {
+	@Field(() => String)
+	@IsUUID()
+	userId: string;
+
 	@Field(() => [Item])
-	items: Array<Item>;
+	items: Item[];
 }
