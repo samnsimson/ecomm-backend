@@ -1,8 +1,8 @@
-import { CreateCartInput } from './create-cart.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { CartInput } from './cart-products.input';
+import { InputType, Field, PartialType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateCartInput extends PartialType(CreateCartInput) {
-	@Field(() => Int)
-	id: number;
+export class UpdateCartInput extends PartialType(CartInput) {
+	@Field(() => String)
+	id: string;
 }

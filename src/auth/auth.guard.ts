@@ -27,12 +27,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 		if (isPublic || isRefreshJwt) return true;
 		return super.canActivate(context);
 	}
-
-	getRequest(context: ExecutionContext) {
-		const ctx = GqlExecutionContext.create(context);
-		const { req } = ctx.getContext();
-		return req;
-	}
 }
 
 @Injectable()

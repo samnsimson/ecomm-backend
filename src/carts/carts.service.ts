@@ -4,7 +4,7 @@ import { Cart } from './entities/cart.entity';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In, Repository } from 'typeorm';
 import { CartItem } from './entities/cart-item.entity';
 import { ProductInfo } from './dto/cart-products.input';
-import { CartProductOutput, CartTaxes, ProductOutput } from './dto/cart-products.output';
+import { CartProductOutput, CartTaxes, CouponDTO, ProductOutput } from './dto/cart-products.output';
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/products/entities/product.entity';
 import { SettingsService } from 'src/settings/settings.service';
@@ -12,6 +12,7 @@ import { TaxesService } from 'src/taxes/taxes.service';
 import { DiscountsService } from 'src/discounts/discounts.service';
 import { CouponsService } from 'src/coupons/coupons.service';
 import { CouponType, DiscountType } from 'src/_libs/types';
+import { UpdateCartInput } from './dto/update-cart.input';
 
 @Injectable()
 export class CartsService {
@@ -25,10 +26,10 @@ export class CartsService {
 		private readonly couponService: CouponsService,
 	) {}
 
-	async getCartForGuest(input: Array<ProductInfo>): Promise<CartProductOutput['products']> {
-		const data = await this.productService.findAll({ where: { id: In(input.map((x) => x.id)) } });
+	async getCartForGuest(productInfo: Array<ProductInfo>): Promise<CartProductOutput['products']> {
+		const data = await this.productService.findAll({ where: { id: In(productInfo.map((x) => x.id)) } });
 		const output: CartProductOutput['products'] = [];
-		for (const product of input) {
+		for (const product of productInfo) {
 			const pdt = data.find((x) => x.id === product.id);
 			if (!pdt) continue;
 			const { title, slug, salePrice, retailPrice } = pdt;
@@ -38,26 +39,26 @@ export class CartsService {
 		return output;
 	}
 
-	async getCartForUser(id: string, input: Array<ProductInfo>): Promise<CartProductOutput['products']> {
+	async getCartForUser(id: string, productInfo: Array<ProductInfo>): Promise<CartProductOutput['products']> {
 		return this.entityManager.transaction(async (em) => {
-			const products = await em.find(Product, { where: { id: In(input.map((x) => x.id)) } });
+			const products = await em.find(Product, { where: { id: In(productInfo.map((x) => x.id)) } });
 			const cart = await this.getCartOrCreate(em, id);
 			const items = cart.items ?? (await em.find(CartItem, { where: { cart: { id: cart.id } } }));
 			const productsMap = new Map(products.map((product) => [product.id, product]));
 			const itemsMap = new Map(items.map((item) => [item.product.id, item]));
-			const { output, newItems, updatePromises } = this.createOrUpdatecart(input, productsMap, itemsMap, em, cart);
+			const { output, newItems, updatePromises } = this.createOrUpdatecart(productInfo, productsMap, itemsMap, em, cart);
 			newItems.length && (await em.save(CartItem, newItems));
 			updatePromises.length && (await Promise.all(updatePromises));
 			return output;
 		});
 	}
 
-	private createOrUpdatecart(input: ProductInfo[], productsMap: Map<string, Product>, itemsMap: Map<string, CartItem>, em: EntityManager, cart: Cart) {
+	private createOrUpdatecart(productInfo: ProductInfo[], productsMap: Map<string, Product>, itemsMap: Map<string, CartItem>, em: EntityManager, cart: Cart) {
 		const output: CartProductOutput['products'] = [];
 		const newItems = [];
 		const updatePromises = [];
 
-		for (const pdt of input) {
+		for (const pdt of productInfo) {
 			const { title, slug, salePrice, retailPrice } = productsMap.get(pdt.id);
 			const total = pdt.quantity * salePrice;
 			output.push({ ...pdt, title, slug, salePrice, retailPrice, total });
@@ -76,7 +77,6 @@ export class CartsService {
 
 	private async getCartOrCreate(em: EntityManager, id: string) {
 		const cart = await em.findOne(Cart, { where: { user: { id } } });
-		console.log('🚀 ~ CartsService ~ getCartOrCreate ~ cart:', cart);
 		return cart ?? (await em.save(Cart, em.create(Cart, { user: { id } })));
 	}
 
@@ -109,18 +109,13 @@ export class CartsService {
 		return Math.max(...discountAmounts);
 	}
 
-	async calculateCoupon(cartTotal: number, couponCode: string | null): Promise<number | null> {
+	async calculateCoupon(cartTotal: number, couponCode: string | null): Promise<CouponDTO | null> {
 		if (!couponCode) return null;
+		let total = 0;
 		const coupon = await this.couponService.applyCoupon(couponCode, new Date());
-		switch (coupon.type) {
-			case CouponType.FLAT:
-				return cartTotal ? coupon.amount : 0;
-			case CouponType.PERCENTAGE:
-				const multiplier = coupon.percentage / 100;
-				return Math.round(cartTotal * multiplier);
-			default:
-				return 0;
-		}
+		if (coupon.type === CouponType.FLAT) total = cartTotal ? coupon.amount : 0;
+		if (coupon.type === CouponType.PERCENTAGE) total = Math.round(cartTotal * (coupon.percentage / 100));
+		return { code: coupon.code, total };
 	}
 
 	async findAll(args?: FindManyOptions<Cart>) {
@@ -129,6 +124,12 @@ export class CartsService {
 
 	async findOne(args: FindOneOptions<Cart>) {
 		return await this.cart.findOne(args);
+	}
+
+	async update(input: UpdateCartInput) {
+		const { id, ...rest } = input;
+		const cart = await this.cart.save(this.cart.create({ id, ...rest }));
+		return await this.cart.findOne({ where: { id: cart.id } });
 	}
 
 	async clearUserCart(args: string | FindOptionsWhere<Cart>) {

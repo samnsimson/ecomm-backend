@@ -80,6 +80,7 @@ type Cart {
   createdAt: DateTime!
   updatedAt: DateTime!
   user: User!
+  couponCode: String
   items: [CartItem!]!
 }
 
@@ -358,13 +359,18 @@ type CartTaxes {
   breakup: [CartTaxBreakup!]!
 }
 
+type CouponDTO {
+  code: String!
+  total: Int!
+}
+
 type CartProductOutput {
   total: Int!
   subTotal: Int!
   isDeductionsEligible: Boolean!
   taxes: CartTaxes
   discount: Int
-  coupon: Int
+  coupon: CouponDTO
   products: [ProductOutput!]!
 }
 
@@ -418,7 +424,7 @@ type Query {
   user(id: String!): User!
   reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
-  cart(cartInput: CartInput!): CartProductOutput!
+  cart(cartInput: CartInput!, userId: String): CartProductOutput!
   orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: String!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
@@ -444,6 +450,7 @@ type Query {
 }
 
 input CartInput {
+  cartId: String
   couponCode: String
   products: [ProductInfo!]!
 }

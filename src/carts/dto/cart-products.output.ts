@@ -52,6 +52,15 @@ export class CartTaxes {
 }
 
 @ObjectType()
+export class CouponDTO {
+	@Field(() => String)
+	code: string;
+
+	@Field(() => Int)
+	total: number;
+}
+
+@ObjectType()
 export class CartProductOutput {
 	@Field(() => Int)
 	total: number;
@@ -68,8 +77,8 @@ export class CartProductOutput {
 	@Field(() => Int, { nullable: true })
 	discount?: number;
 
-	@Field(() => Int, { nullable: true })
-	coupon?: number;
+	@Field(() => CouponDTO, { nullable: true })
+	coupon?: CouponDTO;
 
 	@Field(() => [ProductOutput])
 	products: Array<ProductOutput>;
