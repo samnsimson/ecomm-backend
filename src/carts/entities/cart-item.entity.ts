@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Cart } from './cart.entity';
 import { Product } from 'src/products/entities/product.entity';
 
@@ -26,10 +26,4 @@ export class CartItem extends CoreEntity {
 	@Field(() => Int, { nullable: true })
 	@Column('int', { nullable: true })
 	total: number;
-
-	@BeforeInsert()
-	@BeforeUpdate()
-	calculateTotal() {
-		this.total = this.quantity * this.price;
-	}
 }

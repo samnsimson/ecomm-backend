@@ -80,11 +80,11 @@ type Cart {
   createdAt: DateTime!
   updatedAt: DateTime!
   user: User!
-  subTotal: String!
+  subTotal: Int!
   coupon: String
   couponAmount: Int
   discountAmount: Int
-  shippingAmonunt: Int
+  shippingAmount: Int
   taxAmount: Int
   total: Int!
   items: [CartItem!]!
@@ -505,8 +505,8 @@ input CreateCartItemInput {
 }
 
 input UpdateCartItemInput {
-  quantity: Int
-  price: Int
+  quantity: Int!
+  price: Int!
   itemId: String!
   cartId: String!
 }

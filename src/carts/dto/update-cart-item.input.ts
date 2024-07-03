@@ -1,9 +1,9 @@
-import { Field, InputType, PartialType } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { CartItemInput } from './cart-item.input';
 import { IsUUID } from 'class-validator';
 
 @InputType()
-export class UpdateCartItemInput extends PartialType(CartItemInput) {
+export class UpdateCartItemInput extends CartItemInput {
 	@Field(() => String)
 	@IsUUID()
 	itemId: string;

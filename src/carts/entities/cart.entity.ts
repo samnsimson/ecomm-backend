@@ -12,9 +12,9 @@ export class Cart extends CoreEntity {
 	@JoinColumn()
 	user: User;
 
-	@Field(() => String)
+	@Field(() => Int)
 	@Column('int', { nullable: true, default: 0 })
-	subTotal: string;
+	subTotal: number;
 
 	@Field(() => String, { nullable: true })
 	@Column('character varying', { nullable: true, default: null })
@@ -30,7 +30,7 @@ export class Cart extends CoreEntity {
 
 	@Field(() => Int, { nullable: true })
 	@Column('int', { nullable: true, default: 0 })
-	shippingAmonunt?: number;
+	shippingAmount?: number;
 
 	@Field(() => Int, { nullable: true })
 	@Column('int', { nullable: true, default: 0 })
