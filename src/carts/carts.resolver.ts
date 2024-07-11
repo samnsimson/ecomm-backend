@@ -14,9 +14,9 @@ export class CartsResolver {
 
 	@Public()
 	@Mutation(() => Cart)
-	async createCart(@Args('createCartInput') { userId, ...input }: CreateCartInput) {
-		if (!userId) userId = uuid();
-		return await this.cartsService.createCart({ userId, ...input });
+	async createCart(@Args('createCartInput') { userId, guestId, items }: CreateCartInput) {
+		if (!userId) guestId = guestId ?? uuid();
+		return await this.cartsService.createCart({ userId, guestId, items });
 	}
 
 	@Public()
@@ -24,23 +24,30 @@ export class CartsResolver {
 	async getCart(
 		@Args('userId', { type: () => String, nullable: true }) userId?: string,
 		@Args('cartId', { type: () => String, nullable: true }) cartId?: string,
+		@Args('guestId', { type: () => String, nullable: true }) guestId?: string,
 	) {
-		if (!userId && !cartId) return null;
-		const whereCond = [...(userId ? [{ user: { id: userId } }] : []), ...(cartId ? [{ id: cartId }] : [])];
+		if (!userId && !cartId && !guestId) return null;
+		const whereCond = [];
+		if (cartId) whereCond.push({ id: cartId });
+		if (userId) whereCond.push({ user: { id: userId } });
+		if (guestId) whereCond.push({ guestId });
 		const cart = await this.cartsService.findOne({ where: whereCond });
 		return cart;
 	}
 
+	@Public()
 	@Mutation(() => Cart)
 	async createCartItem(@Args('createCartItemInput') createCartItemInput: CreateCartItemInput) {
 		return await this.cartsService.createCartItem(createCartItemInput);
 	}
 
+	@Public()
 	@Mutation(() => Cart)
 	async updateCartItem(@Args('updateCartItemInput') updateCartItemInput: UpdateCartItemInput) {
 		return await this.cartsService.updateCartItem(updateCartItemInput);
 	}
 
+	@Public()
 	@Mutation(() => Cart)
 	async removeCartItem(@Args('removeCartItemInput') removeCartItemInput: RemoveCartItemInput) {
 		return await this.cartsService.removeCartItem(removeCartItemInput);

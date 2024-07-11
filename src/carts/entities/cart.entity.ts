@@ -1,16 +1,21 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { CoreEntity } from 'src/_libs/entity/core.entity';
 import { User } from 'src/user/entities/user.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import { CartItem } from './cart-item.entity';
 
 @ObjectType()
 @Entity({ name: 'cart' })
+@Index(['guestId'])
 export class Cart extends CoreEntity {
-	@Field(() => User)
+	@Field(() => User, { nullable: true })
 	@OneToOne(() => User, (user) => user.cart, { eager: true })
 	@JoinColumn()
-	user: User;
+	user?: User;
+
+	@Field(() => String, { nullable: true })
+	@Column('character varying', { nullable: true, default: null })
+	guestId?: string;
 
 	@Field(() => Int)
 	@Column('int', { nullable: true, default: 0 })

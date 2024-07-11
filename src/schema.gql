@@ -79,7 +79,8 @@ type Cart {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  user: User!
+  user: User
+  guestId: String
   subTotal: Int!
   coupon: String
   couponAmount: Int
@@ -392,7 +393,7 @@ type Query {
   user(id: String!): User!
   reviews(take: Int = 10, skip: Int = 0): [Review!]!
   review(id: Int!): Review!
-  cart(userId: String, cartId: String): Cart
+  cart(userId: String, cartId: String, guestId: String): Cart
   orders(take: Int = 10, skip: Int = 0): [Order!]!
   order(id: String!): Order!
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
@@ -487,7 +488,8 @@ input UpdateReviewInput {
 }
 
 input CreateCartInput {
-  userId: String!
+  userId: String
+  guestId: String
   items: [Item!]!
 }
 
