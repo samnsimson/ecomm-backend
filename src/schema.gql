@@ -399,6 +399,7 @@ type Query {
   payments(take: Int = 10, skip: Int = 0): [Payment!]!
   payment(id: Int!): Payment!
   products(take: Int = 10, skip: Int = 0): [Product!]!
+  categoryProducts(input: FindByCategoryInput!): [Product!]!
   product(id: String, slug: String): Product!
   categories(take: Int = 10, skip: Int = 0): [Category!]!
   category(id: Int!): Category!
@@ -416,6 +417,10 @@ type Query {
   profile(id: String!): Profile!
   deliveryInfos(take: Int = 10, skip: Int = 0): [DeliveryInfoDto!]!
   deliveryInfo(id: String!): DeliveryInfoDto!
+}
+
+input FindByCategoryInput {
+  categoryId: String!
 }
 
 type Mutation {

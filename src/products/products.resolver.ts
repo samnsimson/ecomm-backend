@@ -9,6 +9,7 @@ import { ReviewsService } from 'src/reviews/reviews.service';
 import { DimensionsResponse } from './dto/product-response.dto';
 import { Public } from 'src/_decorator';
 import { BadRequestException } from '@nestjs/common';
+import { FindByCategoryInput } from './dto/find-by-category.input';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -27,6 +28,12 @@ export class ProductsResolver {
 	async findAll(@Args() args: FindManyArgs) {
 		const products = await this.productsService.findAll({ ...args });
 		return products;
+	}
+
+	@Public()
+	@Query(() => [Product], { name: 'categoryProducts' })
+	async findAllProductsByCategory(@Args('input') input: FindByCategoryInput) {
+		return await this.productsService.findAll({ where: { categories: { id: input.categoryId } } });
 	}
 
 	@Public()
